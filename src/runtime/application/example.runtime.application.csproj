@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>example.runtime.application</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\adapters\events\example.adapters.events.csproj" />
+    <ProjectReference Include="..\..\adapters\rest\example.adapters.rest.csproj" />
+    <ProjectReference Include="..\..\adapters\zeebe\example.adapters.zeebe.csproj" />
+  </ItemGroup>
+
+</Project>

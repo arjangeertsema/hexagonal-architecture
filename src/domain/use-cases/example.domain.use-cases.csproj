@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>example.domain.use_cases</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\abstractions\example.domain.abstractions.csproj" />
+    <ProjectReference Include="..\core\example.domain.core.csproj" />
+  </ItemGroup>
+
+</Project>
