@@ -10,7 +10,6 @@ namespace example.domain.abstractions
 
     public interface IOutputPort<TQuery, TResponse>
          where TQuery : IQuery<TResponse>
-         where TResponse : struct
     { 
          Task<TResponse> Execute(TQuery query);
     }

@@ -12,10 +12,12 @@ namespace example.domain.use_cases
     {
         private readonly IHasPermissonPort hasPermissionPort;
         private readonly IRegisterCommandPort registerCommandPort;
+        private readonly ISaveStatePort saveStatePort;
 
         public RegisterQuestionUseCase(
             IHasPermissonPort hasPermissionPort,
-            IRegisterCommandPort registerCommandPort
+            IRegisterCommandPort registerCommandPort,
+            ISaveStatePort saveStatePort
         )
         {
             if (hasPermissionPort is null)
@@ -28,8 +30,14 @@ namespace example.domain.use_cases
                 throw new ArgumentNullException(nameof(registerCommandPort));
             }
 
+            if (saveStatePort is null)
+            {
+                throw new ArgumentNullException(nameof(saveStatePort));
+            }
+
             this.hasPermissionPort = hasPermissionPort;
             this.registerCommandPort = registerCommandPort;
+            this.saveStatePort = saveStatePort;
         }
 
         public async Task Execute(IRegisterQuestionUseCase.Command command)
@@ -49,7 +57,7 @@ namespace example.domain.use_cases
                         sender: command.Sender
                     );
 
-                    //TODO: save state
+                    await saveStatePort.Execute(Map(process));
 
                     scope.Complete();
                 }
@@ -67,6 +75,12 @@ namespace example.domain.use_cases
             {
                 throw new UnauthorizedAccessException();
             }
+        }
+
+        private ISaveStatePort.Command Map(AnswerQuestionsProcess process)
+        {
+            throw new NotImplementedException();
+            //return new ISaveStatePort.Command(process.Id, process.State());
         }
     }
 }
