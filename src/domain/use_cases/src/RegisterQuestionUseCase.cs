@@ -50,14 +50,14 @@ namespace Reference.Domain.UseCases
 
                     await registerCommandPort.Execute(command);
 
-                    var process = AnswerQuestionsProcess.Start
+                    var aggregateRoot = AnswerQuestionsAggregateRoot.Start
                     (
                         subject: command.Subject,
                         question: command.Question,
                         sender: command.Sender
                     );
 
-                    await saveAggregateRootPort.Execute(Map(process));
+                    await saveAggregateRootPort.Execute(new ISaveAggregateRootPort.Command(Guid.NewGuid(), aggregateRoot));
 
                     scope.Complete();
                 }
@@ -75,11 +75,6 @@ namespace Reference.Domain.UseCases
             {
                 throw new UnauthorizedAccessException();
             }
-        }
-
-        private ISaveAggregateRootPort.Command Map(AnswerQuestionsProcess process)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -1,10 +1,10 @@
-using Reference.Adapters.Rest.Configuration;
 using Reference.Adapters.Zeebe.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Example.Adapters.DDD.Configuration;
+using Reference.Adapters.Rest.Configuration;
 using Reference.Domain.UseCases.Configuration;
 
 namespace application

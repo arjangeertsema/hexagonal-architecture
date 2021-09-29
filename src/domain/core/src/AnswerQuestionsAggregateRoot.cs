@@ -41,7 +41,7 @@ namespace Reference.Domain.Core
             AskedBy = sender;
             Asked = DateTime.Now;
             
-            RaiseEvent(new QuestionRegisteredEvent(Id, Subject, Question, AskedBy, Asked));
+            RaiseEvent(new QuestionRecievedEvent(Id, Subject, Question, AskedBy, Asked));
         }
 
         public AnswerQuestionsAggregateRoot(IEnumerable<KeyValuePair<string, string>> state)
@@ -64,7 +64,7 @@ namespace Reference.Domain.Core
         private DateTime? Modified { get; set; }
         private DateTime? Sent { get; set; }
 
-        public void AnswerQuestion(string answer, string answeredBy)
+        public void AnswerQuestion(long taskId, string answer, string answeredBy)
         {
             if (string.IsNullOrWhiteSpace(answer))
             {
@@ -85,10 +85,10 @@ namespace Reference.Domain.Core
             AnsweredBy = answeredBy;
             Answered = DateTime.Now;
 
-            RaiseEvent(new QuestionAnsweredEvent(Id, Answer, AnsweredBy, Answered.Value));
+            RaiseEvent(new QuestionAnsweredEvent(Id, taskId, Answer, AnsweredBy, Answered.Value));
         }
 
-        public void AcceptAnswer(string acceptedBy)
+        public void AcceptAnswer(long taskId, string acceptedBy)
         {
             if (string.IsNullOrWhiteSpace(acceptedBy))
             {
@@ -113,10 +113,10 @@ namespace Reference.Domain.Core
             AcceptedBy = acceptedBy;
             Accepted = DateTime.Now;
 
-            RaiseEvent(new AnswerAcceptedEvent(Id, AcceptedBy, Accepted.Value));
+            RaiseEvent(new AnswerAcceptedEvent(Id, taskId, AcceptedBy, Accepted.Value));
         }
 
-        public void RejectAnswer(string rejection, string rejectedBy)
+        public void RejectAnswer(long taskId, string rejection, string rejectedBy)
         {
             if (string.IsNullOrWhiteSpace(rejection))
             {
@@ -147,11 +147,10 @@ namespace Reference.Domain.Core
             RejectedBy = rejectedBy;
             Rejected = DateTime.Now;
             
-            RaiseEvent(new AnswerRejectedEvent(Id, Rejection, RejectedBy, Rejected.Value));
-        }
-        
+            RaiseEvent(new AnswerRejectedEvent(Id, taskId, Rejection, RejectedBy, Rejected.Value));
+        }        
 
-        public void ModifyAnswer(string answer, string modifiedBy)
+        public void ModifyAnswer(long taskId, string answer, string modifiedBy)
         {
             if (string.IsNullOrWhiteSpace(answer))
             {
@@ -187,7 +186,7 @@ namespace Reference.Domain.Core
             ModifiedBy = modifiedBy;
             Modified = DateTime.Now;
 
-            RaiseEvent(new AnswerModifiedEvent(Id, Answer, ModifiedBy, Modified.Value));
+            RaiseEvent(new AnswerModifiedEvent(Id, taskId, Answer, ModifiedBy, Modified.Value));
         }
         public void SendAnswer()
         {

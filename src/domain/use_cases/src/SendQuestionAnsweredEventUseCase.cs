@@ -1,26 +1,20 @@
 using System;
 using System.Threading.Tasks;
 using System.Transactions;
-using Reference.Domain.Abstractions.DDD;
 using Reference.Domain.Abstractions.Ports.Input;
 using Reference.Domain.Abstractions.Ports.Output;
 using Reference.Domain.Abstractions.Ports.Output.Exceptions;
-using Reference.Domain.Core;
 
 namespace Reference.Domain.UseCases
 {
-    public class AcceptAnswerUseCase : IAcceptAnswerUseCase
+    public class SendQuestionAnsweredEventUseCase : ISendQuestionAnsweredEventUseCase
     {
         private readonly IHasPermissonPort hasPermissionPort;
         private readonly IRegisterCommandPort registerCommandPort;
-        private readonly IAggregateRootStore aggregateRootStore;
-        private readonly IGetIdentityPort getIdentityPort;
 
-        public AcceptAnswerUseCase(
+        public SendQuestionAnsweredEventUseCase(
             IHasPermissonPort hasPermissionPort,
-            IRegisterCommandPort registerCommandPort,
-            IAggregateRootStore aggregateRootStore,
-            IGetIdentityPort getIdentityPort
+            IRegisterCommandPort registerCommandPort
         )
         {
             if (hasPermissionPort is null)
@@ -33,18 +27,11 @@ namespace Reference.Domain.UseCases
                 throw new ArgumentNullException(nameof(registerCommandPort));
             }
 
-            if (aggregateRootStore is null)
-            {
-                throw new ArgumentNullException(nameof(aggregateRootStore));
-            }
-
             this.hasPermissionPort = hasPermissionPort;
             this.registerCommandPort = registerCommandPort;
-            this.aggregateRootStore = aggregateRootStore;
-            this.getIdentityPort = getIdentityPort ?? throw new ArgumentNullException(nameof(getIdentityPort));
         }
 
-        public async Task Execute(IAcceptAnswerUseCase.Command command)
+        public async Task Execute(ISendQuestionAnsweredEventUseCase.Command command)
         {
             try
             {
@@ -52,16 +39,10 @@ namespace Reference.Domain.UseCases
                 {
                     await CheckPermission();
 
-                    var identity = await getIdentityPort.Execute(new IGetIdentityPort.Query());
-
                     await registerCommandPort.Execute(command);
-                    
-                    var aggregateRoot = await aggregateRootStore.Get<AnswerQuestionsAggregateRoot>(command.QuestionId);
 
-                    aggregateRoot.AcceptAnswer(command.TaskId, identity.Id);
+                    throw new NotImplementedException();
 
-                    await aggregateRootStore.Save(aggregateRoot);
-                    
                     scope.Complete();
                 }
             }

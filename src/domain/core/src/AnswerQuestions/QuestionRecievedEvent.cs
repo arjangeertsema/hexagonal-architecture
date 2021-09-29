@@ -3,9 +3,9 @@ using Reference.Domain.Abstractions.DDD;
 
 namespace Reference.Domain.Core.AnswerQuestions
 {
-    public class QuestionRegisteredEvent : DomainEvent
+    public class QuestionRecievedEvent : DomainEvent
     {
-        public QuestionRegisteredEvent(Guid aggregateId, string subject, string question, string askedBy, DateTime asked) 
+        public QuestionRecievedEvent(Guid aggregateId, string subject, string question, string askedBy, DateTime asked) 
             : base(aggregateId)
         {
             Subject = subject;

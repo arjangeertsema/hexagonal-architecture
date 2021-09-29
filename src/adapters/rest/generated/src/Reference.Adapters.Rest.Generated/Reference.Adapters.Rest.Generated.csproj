@@ -10,7 +10,7 @@
     <OutputType>Library</OutputType>
     <AssemblyName>Reference.Adapters.Rest.Generated</AssemblyName>
     <PackageId>Reference.Adapters.Rest.Generated</PackageId>
-    <UserSecretsId>cf6f7048-7704-4dc0-a5ad-fc48dcd3020f</UserSecretsId>
+    <UserSecretsId>32dd7966-21c5-4fde-a7ab-92b42163c211</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>

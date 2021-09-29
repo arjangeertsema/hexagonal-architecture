@@ -6,7 +6,12 @@ namespace Reference.Domain.Abstractions.Ports.Input
     {
         public class Command : ICommand
         {
-            public Guid CommandId => throw new NotImplementedException();
+            public Command(Guid commandId)
+            {
+                CommandId = commandId;
+            }
+
+            public Guid CommandId { get; }
         }
     }
 }

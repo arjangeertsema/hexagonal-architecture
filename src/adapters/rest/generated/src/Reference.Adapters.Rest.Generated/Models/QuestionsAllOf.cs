@@ -31,7 +31,7 @@ namespace Reference.Adapters.Rest.Generated.Models
         /// </summary>
         [Required]
         [DataMember(Name="items", EmitDefaultValue=false)]
-        public List<QuestionsModelItem> Items { get; set; }
+        public List<QuestionsModel> Items { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

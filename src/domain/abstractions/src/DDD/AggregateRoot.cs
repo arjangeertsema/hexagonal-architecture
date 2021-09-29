@@ -23,6 +23,8 @@ namespace Reference.Domain.Abstractions.DDD
             }
 
             changes = new LinkedList<IDomainEvent>();
+
+            throw new NotImplementedException();
         }
 
         public Guid Id { get; }

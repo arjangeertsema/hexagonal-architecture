@@ -19,7 +19,8 @@ namespace Reference.Domain.UseCases.Configuration
                 .AddSingleton<IModifyAnswerUseCase, ModifyAnswerUseCase>()
                 .AddSingleton<IRegisterQuestionUseCase, RegisterQuestionUseCase>()
                 .AddSingleton<IRejectAnswerUseCase, RejectAnswerUseCase>()
-                .AddSingleton<ISendAnswerUseCase, SendAnswerUseCase>();
+                .AddSingleton<ISendAnswerUseCase, SendAnswerUseCase>()
+                .AddSingleton<ISendQuestionAnsweredEventUseCase, SendQuestionAnsweredEventUseCase>();
         }
     }
 }

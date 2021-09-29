@@ -25,7 +25,7 @@ src/Reference.Adapters.Rest.Generated/Models/PagedResponse.cs
 src/Reference.Adapters.Rest.Generated/Models/PagedResponseAllOf.cs
 src/Reference.Adapters.Rest.Generated/Models/Questions.cs
 src/Reference.Adapters.Rest.Generated/Models/QuestionsAllOf.cs
-src/Reference.Adapters.Rest.Generated/Models/QuestionsModelItem.cs
+src/Reference.Adapters.Rest.Generated/Models/QuestionsModel.cs
 src/Reference.Adapters.Rest.Generated/Models/RegisterQuestion.cs
 src/Reference.Adapters.Rest.Generated/Models/RegisterQuestionAllOf.cs
 src/Reference.Adapters.Rest.Generated/Models/RejectAnswer.cs

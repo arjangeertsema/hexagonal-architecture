@@ -2,10 +2,11 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\domain\abstractions\Reference.Domain.Abstractions.csproj" />
+    <ProjectReference Include="..\..\domain\core\Reference.Domain.Core.csproj" />
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="zb-client-bootstrap" Version="0.0.3" />
+    <PackageReference Include="zb-client-bootstrap" Version="0.0.4" />
   </ItemGroup>
 
   <PropertyGroup>
