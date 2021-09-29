@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
-namespace example.adapters.rest.configuration
+namespace Reference.Adapters.Rest.Configuration
 {
     public static class IApplicationBuilderExtensions
     {

@@ -2,7 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-namespace example.adapters.rest.configuration
+namespace Reference.Adapters.Rest.Configuration
 {
     public static class IServiceCollectionExtensions
     {

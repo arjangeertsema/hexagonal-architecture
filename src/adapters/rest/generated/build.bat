@@ -3,7 +3,7 @@
 
 @echo off
 
-dotnet restore src\example.adapters.rest.generated
-dotnet build src\example.adapters.rest.generated
-echo Now, run the following to start the project: dotnet run -p src\example.adapters.rest.generated\example.adapters.rest.generated.csproj --launch-profile web.
+dotnet restore src\Reference.Adapters.Rest.Generated
+dotnet build src\Reference.Adapters.Rest.Generated
+echo Now, run the following to start the project: dotnet run -p src\Reference.Adapters.Rest.Generated\Reference.Adapters.Rest.Generated.csproj --launch-profile web.
 echo.

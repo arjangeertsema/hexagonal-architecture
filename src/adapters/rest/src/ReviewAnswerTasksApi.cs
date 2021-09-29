@@ -1,12 +1,12 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using example.domain.abstractions.ports.input;
-using example.adapters.rest.generated.Controllers;
-using example.adapters.rest.generated.Models;
+using Reference.Domain.Abstractions.Ports.Input;
+using Reference.Adapters.Rest.Generated.Controllers;
+using Reference.Adapters.Rest.Generated.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace example.adapters.rest
+namespace Reference.Adapters.Rest
 {
     public class ReviewAnswerTasksApi : ReviewAnswerTasksApiController
     {

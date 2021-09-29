@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace example.domain.abstractions
+namespace Reference.Domain.Abstractions
 {
     public interface IOutputPort<TCommand>  
         where TCommand : ICommand

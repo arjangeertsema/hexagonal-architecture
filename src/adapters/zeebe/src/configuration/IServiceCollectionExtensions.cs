@@ -2,7 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Zeebe.Client.Bootstrap.Extensions;
 
-namespace example.adapters.zeebe.configuration
+namespace Reference.Adapters.Zeebe.Configuration
 {
     public static class IServiceCollectionExtensions
     {
@@ -11,7 +11,7 @@ namespace example.adapters.zeebe.configuration
             return services.BootstrapZeebe
             (
                 configuration.GetSection("ZeebeBootstrap"),
-                "example.adapters.zeebe"
+                "Reference.Adapters.Zeebe"
             );
         }
     }

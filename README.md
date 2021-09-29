@@ -1,2 +1,3 @@
-# hexagonal-architecture-
-A .net example implementation of hexagonal architecture
+# Hexagonal Architecture
+
+A .Net example implementation of hexagonal architecture, CQRS and DDD using living documentation.

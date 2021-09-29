@@ -1,6 +1,6 @@
 using System;
 
-namespace example.domain.abstractions
+namespace Reference.Domain.Abstractions
 {
     public interface ICommand
     {

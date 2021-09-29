@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\domain\abstractions\Reference.Domain.Abstractions.csproj" />
+    <ProjectReference Include="generated\src\Reference.Adapters.Rest.Generated\Reference.Adapters.Rest.Generated.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Reference.Adapters.Rest</RootNamespace>
+  </PropertyGroup>
+
+  <Target Name="GenerateRestServer" BeforeTargets="BeforeBuild">
+    <Exec Command="bash generate-rest-server.sh" />
+  </Target>
+</Project>

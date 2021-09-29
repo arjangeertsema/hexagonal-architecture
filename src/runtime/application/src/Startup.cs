@@ -1,9 +1,11 @@
-using example.adapters.rest.configuration;
-using example.adapters.zeebe.configuration;
+using Reference.Adapters.Rest.Configuration;
+using Reference.Adapters.Zeebe.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Example.Adapters.DDD.Configuration;
+using Reference.Domain.UseCases.Configuration;
 
 namespace application
 {
@@ -19,8 +21,10 @@ namespace application
         public void ConfigureServices(IServiceCollection services)
         {
             services
+                .ConfigureDDDAdapterServices(Configuration)
                 .ConfigureZeebeAdapterServices(Configuration)
-                .ConfigureRestAdapterServices(Configuration);
+                .ConfigureRestAdapterServices(Configuration)
+                .ConfigureDomainUseCasesServices(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

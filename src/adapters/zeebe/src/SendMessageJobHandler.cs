@@ -1,11 +1,11 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using example.domain.abstractions.ports.input;
+using Reference.Domain.Abstractions.Ports.Input;
 using Zeebe.Client.Api.Responses;
 using Zeebe.Client.Bootstrap.Abstractions;
 
-namespace example.adapters.zeebe
+namespace Reference.Adapters.Zeebe
 {
     public class SendMessageJobHandler : IAsyncJobHandler<SendMessageJob>
     {

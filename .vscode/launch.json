@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/runtime/application/bin/Debug/net5.0/example.runtime.application.dll",
+            "program": "${workspaceFolder}/src/runtime/application/bin/Debug/net5.0/Reference.Runtime.Application.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/runtime/application",
             "stopAtEntry": false,

@@ -2,12 +2,12 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using example.domain.abstractions.ports.input;
-using example.adapters.rest.generated.Controllers;
-using example.adapters.rest.generated.Models;
+using Reference.Domain.Abstractions.Ports.Input;
+using Reference.Adapters.Rest.Generated.Controllers;
+using Reference.Adapters.Rest.Generated.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace example.adapters.rest
+namespace Reference.Adapters.Rest
 {
     public class QuestionsApi : QuestionsApiController
     {
@@ -65,7 +65,6 @@ namespace example.adapters.rest
         {
             var command = new IRegisterQuestionUseCase.Command(
                 commandId: registerQuestion.CommandId,
-                questionId: registerQuestion.QuestionId,
                 subject: registerQuestion.Subject,
                 question: registerQuestion.Question,
                 sender: registerQuestion.Sender
@@ -90,14 +89,14 @@ namespace example.adapters.rest
             var questions = new Questions();
             questions.Items = response.Items
                 .Select(i => 
-                    new QuestionsAllOfItems()
+                    new QuestionsModelItem()
                     {
                         QuestionId = i.QuestionId,
                         RecievedOn = i.RecievedOn,
                         LastActivityOn = i.LastActivityOn,
                         Subject = i.Subject,
                         Sender = i.Sender,
-                        Status = (QuestionsAllOfItems.StatusEnum) Enum.Parse(typeof(QuestionsAllOfItems.StatusEnum), i.Status.ToString())
+                        Status = (QuestionsModelItem.StatusEnum) Enum.Parse(typeof(QuestionsModelItem.StatusEnum), i.Status.ToString())
                     }
                 )
                 .ToList();
