@@ -12,6 +12,6 @@ namespace example.domain.abstractions
          where TQuery : IQuery<TResponse>
          where TResponse : struct
     { 
-         Task<TQuery> Execute(TQuery query);
+         Task<TResponse> Execute(TQuery query);
     }
 }

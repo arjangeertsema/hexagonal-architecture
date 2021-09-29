@@ -1,36 +1,64 @@
 using System;
 using System.Threading.Tasks;
-using example.domain.abstractions.attributes;
+using System.Transactions;
 using example.domain.abstractions.ports.input;
-using example.domain.abstractions;
+using example.domain.abstractions.ports.output;
+using example.domain.abstractions.ports.output.exceptions;
 
 namespace example.domain.use_cases
 {
     public class SendAnswerUseCase : ISendAnswerUseCase
     {
-        private readonly IPermission permission;
+        private readonly IHasPermissonPort hasPermissionPort;
+        private readonly IRegisterCommandPort registerCommandPort;
 
         public SendAnswerUseCase(
-            IPermission permission
+            IHasPermissonPort hasPermissionPort,
+            IRegisterCommandPort registerCommandPort
         )
         {
-            if (permission is null)
+            if (hasPermissionPort is null)
             {
-                throw new ArgumentNullException(nameof(permission));
+                throw new ArgumentNullException(nameof(hasPermissionPort));
             }
 
-            this.permission = permission;
+            if (registerCommandPort is null)
+            {
+                throw new ArgumentNullException(nameof(registerCommandPort));
+            }
+
+            this.hasPermissionPort = hasPermissionPort;
+            this.registerCommandPort = registerCommandPort;
         }
 
-        [PreAuthorize(nameof(HasPermission))]
-        public Task Execute(ISendAnswerUseCase.Command command)
+        public async Task Execute(ISendAnswerUseCase.Command command)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                using (var scope = new TransactionScope())
+                {
+                    await CheckPermission();
+
+                    await registerCommandPort.Execute(command);
+
+                    throw new NotImplementedException();
+
+                    scope.Complete();
+                }
+            }
+            catch (CommandAlreadyExistsException)
+            {
+                return;
+            }
         }
 
-        public Task<bool> HasPermission()
+        private async Task CheckPermission()
         {
-            return permission.HasPermission("A permission");
+            var hasPermission = await hasPermissionPort.Execute(new IHasPermissonPort.Query("a permission"));
+            if (!hasPermission)
+            {
+                throw new UnauthorizedAccessException();
+            }
         }
     }
 }

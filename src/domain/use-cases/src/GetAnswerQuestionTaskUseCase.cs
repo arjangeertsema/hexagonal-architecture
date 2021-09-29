@@ -1,37 +1,40 @@
 using System;
 using System.Threading.Tasks;
-using example.domain.abstractions.attributes;
 using example.domain.abstractions.ports.input;
-using example.domain.abstractions;
-using static example.domain.abstractions.ports.input.IGetAnswerQuestionTaskUseCase;
+using example.domain.abstractions.ports.output;
 
 namespace example.domain.use_cases
 {
     public class GetAnswerQuestionTaskUseCase : IGetAnswerQuestionTaskUseCase
     {
-        private readonly IPermission permission;
+        private readonly IHasPermissonPort hasPermissionPort;
 
         public GetAnswerQuestionTaskUseCase(
-            IPermission permission
+            IHasPermissonPort hasPermissionPort
         )
         {
-            if (permission is null)
+            if (hasPermissionPort is null)
             {
-                throw new ArgumentNullException(nameof(permission));
+                throw new ArgumentNullException(nameof(hasPermissionPort));
             }
 
-            this.permission = permission;
+            this.hasPermissionPort = hasPermissionPort;
         }
-        
-        [PreAuthorize(nameof(HasPermission))]
-        public Task<Response> Execute(IGetAnswerQuestionTaskUseCase.Query query)
+
+        public async Task<IGetAnswerQuestionTaskUseCase.Response> Execute(IGetAnswerQuestionTaskUseCase.Query query)
         {
+            await CheckPermission();
+
             throw new NotImplementedException();
         }
 
-        public Task<bool> HasPermission()
+        private async Task CheckPermission()
         {
-            return permission.HasPermission("A permission");
+            var hasPermission = await hasPermissionPort.Execute(new IHasPermissonPort.Query("a permission"));
+            if (!hasPermission)
+            {
+                throw new UnauthorizedAccessException();
+            }
         }
     }
 }

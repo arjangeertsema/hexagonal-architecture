@@ -3,7 +3,7 @@ using example.domain.abstractions.ddd;
 
 namespace example.domain.abstractions.ports.output
 {
-    public interface ISaveAggregateRoot<TAggregateId> : IOutputPort<ISaveAggregateRoot<TAggregateId>.Command>
+    public interface IStoreAggregateRoot<TAggregateId> : IOutputPort<IStoreAggregateRoot<TAggregateId>.Command>
     {
         public class Command : ICommand
         {
