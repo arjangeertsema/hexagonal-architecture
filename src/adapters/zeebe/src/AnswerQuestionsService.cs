@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Reference.Domain.Abstractions;
 using Reference.Domain.Abstractions.Ports.Input;
 using Reference.Domain.Abstractions.Ports.Output;
 using Reference.Domain.Core.AnswerQuestions;
@@ -12,26 +13,24 @@ using Zeebe.Client.Bootstrap.Attributes;
 namespace Reference.Adapters.Zeebe
 {
     public class AnswerQuestionsService : 
-        IHandleDomainEventPort<QuestionRecievedEvent>, 
-        IHandleDomainEventPort<QuestionAnsweredEvent>, 
-        IHandleDomainEventPort<AnswerRejectedEvent>, 
-        IHandleDomainEventPort<AnswerAcceptedEvent>, 
-        IHandleDomainEventPort<AnswerModifiedEvent>,
+        IOutputPortHandler<HandleDomainEvent<QuestionRecievedEvent>>,
+        IOutputPortHandler<HandleDomainEvent<QuestionAnsweredEvent>>, 
+        IOutputPortHandler<HandleDomainEvent<AnswerRejectedEvent>>, 
+        IOutputPortHandler<HandleDomainEvent<AnswerAcceptedEvent>>, 
+        IOutputPortHandler<HandleDomainEvent<AnswerModifiedEvent>>,
         IAsyncJobHandler<SendAnswerJob>,
         IAsyncJobHandler<SendQuestionAnsweredEventJob>
     {
         private readonly IZeebeClient zeebeClient;
         private readonly IZeebeVariablesSerializer serializer;
         private readonly IZeebeVariablesDeserializer deserializer;
-        private readonly ISendAnswerUseCase sendAnswerUseCase;
-        private readonly ISendQuestionAnsweredEventUseCase sendQuestionAnsweredEventUseCase;
+        private readonly IMediator mediator;
 
         public AnswerQuestionsService(
             IZeebeClient zeebeClient,
             IZeebeVariablesSerializer serializer,
             IZeebeVariablesDeserializer deserializer,
-            ISendAnswerUseCase sendAnswerUseCase,
-            ISendQuestionAnsweredEventUseCase sendQuestionAnsweredEventUseCase)
+            IMediator mediator)
         {
             if (zeebeClient is null)
             {
@@ -48,24 +47,18 @@ namespace Reference.Adapters.Zeebe
                 throw new ArgumentNullException(nameof(deserializer));
             }
 
-            if (sendAnswerUseCase is null)
+            if (mediator is null)
             {
-                throw new ArgumentNullException(nameof(sendAnswerUseCase));
-            }
-
-            if (sendQuestionAnsweredEventUseCase is null)
-            {
-                throw new ArgumentNullException(nameof(sendQuestionAnsweredEventUseCase));
+                throw new ArgumentNullException(nameof(mediator));
             }
 
             this.zeebeClient = zeebeClient;
             this.serializer = serializer;
             this.deserializer = deserializer;
-            this.sendAnswerUseCase = sendAnswerUseCase;
-            this.sendQuestionAnsweredEventUseCase = sendQuestionAnsweredEventUseCase;
+            this.mediator = mediator;
         }
 
-        public async Task Execute(IHandleDomainEventPort<QuestionRecievedEvent>.Command command)
+        public async Task Handle(HandleDomainEvent<QuestionRecievedEvent> command)
         {
             if (command is null)
             {
@@ -87,15 +80,9 @@ namespace Reference.Adapters.Zeebe
                 .CorrelationKey(command.CommandId.ToString())
                 .MessageId(command.CommandId.ToString())
                 .Send();
-
-            // await zeebeClient.NewCreateProcessInstanceCommand()
-            //     .BpmnProcessId("Process_AnswerQuestions")
-            //     .Version(1)
-            //     .Variables(serializer.Serialize(variables))
-            //     .Send();
         }
 
-        public async Task Execute(IHandleDomainEventPort<QuestionAnsweredEvent>.Command command)
+        public async Task Handle(HandleDomainEvent<QuestionAnsweredEvent> command)
         {
             var variables = new {
                 command.Event.Answer,
@@ -108,7 +95,7 @@ namespace Reference.Adapters.Zeebe
                 .SendWithRetry();
         }
 
-        public async Task Execute(IHandleDomainEventPort<AnswerRejectedEvent>.Command command)
+        public async Task Handle(HandleDomainEvent<AnswerRejectedEvent> command)
         {
             var variables = new {
                 command.Event.Rejected,
@@ -121,7 +108,7 @@ namespace Reference.Adapters.Zeebe
                 .SendWithRetry();
         }
 
-        public async Task Execute(IHandleDomainEventPort<AnswerAcceptedEvent>.Command command)
+        public async Task Handle(HandleDomainEvent<AnswerAcceptedEvent> command)
         {
             var variables = new {
                 command.Event.Accepted,
@@ -133,7 +120,7 @@ namespace Reference.Adapters.Zeebe
                 .SendWithRetry();
         }
 
-        public async Task Execute(IHandleDomainEventPort<AnswerModifiedEvent>.Command command)
+        public async Task Handle(HandleDomainEvent<AnswerModifiedEvent> command)
         {
             var variables = new {
                 command.Event.Answer,
@@ -148,18 +135,28 @@ namespace Reference.Adapters.Zeebe
 
         public async Task HandleJob(SendAnswerJob job, CancellationToken cancellationToken)
         {
-            //TODO: set identity for permission check
+            //TODO: set system IPrincipal with IIdentiy on thread for permission check
+
             var variables = deserializer.Deserialize<AnswerQuestionsVariables>(job.Variables);
-            var command = new ISendAnswerUseCase.Command(variables.SendAnswerCommandId);
-            await this.sendAnswerUseCase.Execute(command);
+            var command = new SendAnswerUseCase
+            (
+                commandId: variables.SendAnswerCommandId
+            );
+
+            await this.mediator.Send(command);
         }
 
         public async Task HandleJob(SendQuestionAnsweredEventJob job, CancellationToken cancellationToken)
         {
-            //TODO: set identity for permission check
+            //TODO: set system IPrincipal with IIdentiy on thread for permission check
+
             var variables = deserializer.Deserialize<AnswerQuestionsVariables>(job.Variables);
-            var command = new ISendQuestionAnsweredEventUseCase.Command(variables.SendQuestionAnsweredEventCommandId);
-            await sendQuestionAnsweredEventUseCase.Execute(command);
+            var command = new SendQuestionAnsweredEventUseCase
+            (
+                commandId: variables.SendQuestionAnsweredEventCommandId
+            );
+
+            await mediator.Send(command);
         }
     }
 

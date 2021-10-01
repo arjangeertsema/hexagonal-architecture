@@ -1,15 +1,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Reference.Domain.Abstractions;
 using Reference.Domain.Abstractions.Ports.Output;
 
 namespace Reference.Adapters.Zeebe
 {
-    public class ProcessStateService : IGetAggregateRootStatePort
-    {
-        public Task<IEnumerable<KeyValuePair<string, string>>> Execute(IGetAggregateRootStatePort.Query query)
+    public class ProcessStateService : IOutputPortHandler<GetAggregateRootState, IEnumerable<KeyValuePair<string, string>>>
+    {        public Task<IEnumerable<KeyValuePair<string, string>>> Handle(GetAggregateRootState query)
         {
-            //Get process variables from elastic search and convert to IEnumerable<KeyValuePair<string, string>>
-            
             throw new System.NotImplementedException();
         }
     }

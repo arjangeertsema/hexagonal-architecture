@@ -1,24 +1,23 @@
 using System;
 using System.Collections.Generic;
 using Reference.Domain.Abstractions.DDD;
-using Reference.Domain.Core;
 using Reference.Domain.Core.AnswerQuestions;
 
 namespace Reference.Domain.Core
 {
     public class AnswerQuestionsAggregateRoot : AggregateRoot
     {
-        public static AnswerQuestionsAggregateRoot Start(string subject, string question, string sender)
+        public static AnswerQuestionsAggregateRoot Start(string subject, string question, string askedBy)
         {
             return new AnswerQuestionsAggregateRoot
             (
                 subject: subject,
                 question: question,
-                sender: sender
+                askedBy: askedBy
             );
         }
 
-        private AnswerQuestionsAggregateRoot(string subject, string question, string sender)
+        private AnswerQuestionsAggregateRoot(string subject, string question, string askedBy)
             : base(Guid.NewGuid())
         {
             if (string.IsNullOrWhiteSpace(subject))
@@ -31,14 +30,14 @@ namespace Reference.Domain.Core
                 throw new ArgumentException($"'{nameof(question)}' cannot be null or whitespace.", nameof(question));
             }
 
-            if (string.IsNullOrWhiteSpace(sender))
+            if (string.IsNullOrWhiteSpace(askedBy))
             {
-                throw new ArgumentException($"'{nameof(sender)}' cannot be null or whitespace.", nameof(sender));
+                throw new ArgumentException($"'{nameof(askedBy)}' cannot be null or whitespace.", nameof(askedBy));
             }
 
             Subject = subject;
             Question = question;
-            AskedBy = sender;
+            AskedBy = askedBy;
             Asked = DateTime.Now;
             
             RaiseEvent(new QuestionRecievedEvent(Id, Subject, Question, AskedBy, Asked));
@@ -47,22 +46,6 @@ namespace Reference.Domain.Core
         public AnswerQuestionsAggregateRoot(IEnumerable<KeyValuePair<string, string>> state)
             : base(state)
         { }
-
-        private string Subject { get; set; }
-        private string Question { get; set; }
-        private string AskedBy { get; set; }
-        private DateTime Asked { get; set; }
-        private string Answer { get; set; }
-        private string AnsweredBy { get; set; }
-        private DateTime? Answered { get; set; }
-        private string AcceptedBy { get; set; }
-        private DateTime? Accepted { get; set; }
-        private string Rejection { get; set; }
-        private string RejectedBy { get; set; }
-        private DateTime? Rejected { get; set; }
-        private string ModifiedBy { get; set; }
-        private DateTime? Modified { get; set; }
-        private DateTime? Sent { get; set; }
 
         public void AnswerQuestion(long taskId, string answer, string answeredBy)
         {
@@ -204,5 +187,31 @@ namespace Reference.Domain.Core
 
             RaiseEvent(new AnswerSentEvent(Id, Sent.Value));
         }
+
+        public void SendQuestionAnsweredEvent()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EndQuestion(string endedBy)
+        {
+            throw new NotImplementedException();
+        }
+
+        private string Subject { get; set; }
+        private string Question { get; set; }
+        private string AskedBy { get; set; }
+        private DateTime Asked { get; set; }
+        private string Answer { get; set; }
+        private string AnsweredBy { get; set; }
+        private DateTime? Answered { get; set; }
+        private string AcceptedBy { get; set; }
+        private DateTime? Accepted { get; set; }
+        private string Rejection { get; set; }
+        private string RejectedBy { get; set; }
+        private DateTime? Rejected { get; set; }
+        private string ModifiedBy { get; set; }
+        private DateTime? Modified { get; set; }
+        private DateTime? Sent { get; set; }
     }
 }

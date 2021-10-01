@@ -1,64 +1,55 @@
 using System;
 using System.Threading.Tasks;
 using System.Transactions;
+using Reference.Domain.Abstractions;
+using Reference.Domain.Abstractions.DDD;
 using Reference.Domain.Abstractions.Ports.Input;
 using Reference.Domain.Abstractions.Ports.Output;
 using Reference.Domain.Abstractions.Ports.Output.Exceptions;
+using Reference.Domain.Core;
 
 namespace Reference.Domain.UseCases
 {
-    public class SendAnswerUseCase : ISendAnswerUseCase
+    public class SendAnswerUseCase :IInputPortHandler<Abstractions.Ports.Input.SendAnswerUseCase>
     {
-        private readonly IHasPermissonPort hasPermissionPort;
-        private readonly IRegisterCommandPort registerCommandPort;
+        private readonly IMediator mediator;
+        private readonly IAggregateRootStore aggregateRootStore;
 
         public SendAnswerUseCase(
-            IHasPermissonPort hasPermissionPort,
-            IRegisterCommandPort registerCommandPort
+            IMediator mediator,
+            IAggregateRootStore aggregateRootStore
         )
         {
-            if (hasPermissionPort is null)
+            if (mediator is null)
             {
-                throw new ArgumentNullException(nameof(hasPermissionPort));
+                throw new ArgumentNullException(nameof(mediator));
             }
 
-            if (registerCommandPort is null)
+            if (aggregateRootStore is null)
             {
-                throw new ArgumentNullException(nameof(registerCommandPort));
+                throw new ArgumentNullException(nameof(aggregateRootStore));
             }
 
-            this.hasPermissionPort = hasPermissionPort;
-            this.registerCommandPort = registerCommandPort;
-        }
+            this.mediator = mediator;
+            this.aggregateRootStore = aggregateRootStore;         
+         }
 
-        public async Task Execute(ISendAnswerUseCase.Command command)
+        [Scoped]
+        [PreAuthorize("a permission")]
+        [MakeIdempotent]
+        public async Task Handle(Abstractions.Ports.Input.SendAnswerUseCase command)
         {
-            try
-            {
-                using (var scope = new TransactionScope())
-                {
-                    await CheckPermission();
+            var aggregateRoot = await aggregateRootStore.Get<AnswerQuestionsAggregateRoot>(command.QuestionId);
 
-                    await registerCommandPort.Execute(command);
+            var identity = await mediator.Send(new GetIdentity());
 
-                    throw new NotImplementedException();
+            aggregateRoot.SendAnswer();
 
-                    scope.Complete();
-                }
-            }
-            catch (CommandAlreadyExistsException)
-            {
-                return;
-            }
-        }
-
-        private async Task CheckPermission()
-        {
-            var hasPermission = await hasPermissionPort.Execute(new IHasPermissonPort.Query("a permission"));
-            if (!hasPermission)
-            {
-                throw new UnauthorizedAccessException();
-            }
+            await aggregateRootStore.Save
+            (
+                commandId: command.CommandId, 
+                aggregateRoot: aggregateRoot
+            );
         }
     }
 }

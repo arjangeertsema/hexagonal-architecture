@@ -2,114 +2,84 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Reference.Domain.Abstractions.Ports.Input;
 using Reference.Adapters.Rest.Generated.Controllers;
 using Reference.Adapters.Rest.Generated.Models;
 using Microsoft.AspNetCore.Mvc;
+using Reference.Domain.Abstractions;
+using Reference.Domain.Abstractions.Ports.Input;
 
 namespace Reference.Adapters.Rest
 {
     public class QuestionsApi : QuestionsApiController
     {
-        private readonly IRegisterQuestionUseCase registerQuestionUseCase;
-        private readonly IGetQuestionsUseCase getQuestionsUseCase;
-        private readonly IEndQuestionUseCase endQuestionUseCase;
+        private readonly IMediator mediator;
 
-        public QuestionsApi(
-            IRegisterQuestionUseCase registerQuestionUseCase,
-            IGetQuestionsUseCase getQuestionsUseCase,
-            IEndQuestionUseCase endQuestionUseCase)
+        public QuestionsApi(IMediator mediator)
         {
-            if (registerQuestionUseCase is null)
+            if (mediator is null)
             {
-                throw new ArgumentNullException(nameof(registerQuestionUseCase));
+                throw new ArgumentNullException(nameof(mediator));
             }
 
-            if (getQuestionsUseCase is null)
-            {
-                throw new ArgumentNullException(nameof(getQuestionsUseCase));
-            }
-
-            if (endQuestionUseCase is null)
-            {
-                throw new ArgumentNullException(nameof(endQuestionUseCase));
-            }
-
-            this.registerQuestionUseCase = registerQuestionUseCase;
-            this.getQuestionsUseCase = getQuestionsUseCase;
-            this.endQuestionUseCase = endQuestionUseCase;
+            this.mediator = mediator;
         }
 
         public override async Task<IActionResult> RegisterQuestion([FromBody] RegisterQuestion registerQuestion)
         {
-            var command = Map(registerQuestion);
-            await this.registerQuestionUseCase.Execute(command);
+            var command = new RegisterQuestionUseCase
+            (
+                commandId: registerQuestion.CommandId, 
+                subject: registerQuestion.Subject, 
+                question: registerQuestion.Question, 
+                askedBy: registerQuestion.Sender
+            );            
+            await this.mediator.Send(command);
             return Accepted();
         }
 
         public override async Task<IActionResult> GetQuestions([FromQuery(Name = "offset")] int? offset, [FromQuery(Name = "limit")] int? limit)
         {
-            var query = Map(offset, limit);
-            var response = await this.getQuestionsUseCase.Execute(query);
+            var query = new GetQuestionsUseCase
+            (
+                offset: offset,
+                limit: limit
+            );
+            
+            var response = await mediator.Send(query);
             return Ok(Map(response));
         }
 
         public override async Task<IActionResult> EndQuestion([FromRoute(Name = "question_id"), Required] Guid questionId, [FromBody] EndQuestion endQuestion)
         {
-            var command = Map(endQuestion);
-            await this.endQuestionUseCase.Execute(command);
+            var command = new EndQuestionUseCase
+            (
+                commandId: endQuestion.CommandId,
+                questionId: questionId
+            );
+
+            await this.mediator.Send(command);
             return Accepted();
         }
-        
-        private static IRegisterQuestionUseCase.Command Map(RegisterQuestion registerQuestion)
-        {
-            var command = new IRegisterQuestionUseCase.Command(
-                commandId: registerQuestion.CommandId,
-                subject: registerQuestion.Subject,
-                question: registerQuestion.Question,
-                sender: registerQuestion.Sender
-            );
 
-            return command;
+        private static Questions Map(GetQuestionsUseCase.Response response)
+        {
+            return new Questions()
+            {
+                Items = response.Items.Select(Map).ToList()
+            };
         }
 
-        private static IGetQuestionsUseCase.Query Map(int? offset, int? limit)
+        private static QuestionsModel Map(GetQuestionsUseCase.Response.Item item) 
         {
-            var query = new IGetQuestionsUseCase.Query
-            (
-                offset: offset,
-                limit: limit
-            );
-
-            return query;
-        }
-
-        private static Questions Map(IGetQuestionsUseCase.Response response)
-        {
-            var questions = new Questions();
-            questions.Items = response.Items
-                .Select(i => 
-                    new QuestionsModelItem()
-                    {
-                        QuestionId = i.QuestionId,
-                        RecievedOn = i.RecievedOn,
-                        LastActivityOn = i.LastActivityOn,
-                        Subject = i.Subject,
-                        Sender = i.Sender,
-                        Status = (QuestionsModelItem.StatusEnum) Enum.Parse(typeof(QuestionsModelItem.StatusEnum), i.Status.ToString())
-                    }
-                )
-                .ToList();
-
-
-            return questions;
-        }
-
-        private static IEndQuestionUseCase.Command Map(EndQuestion endQuestio) 
-        {
-            var command = new IEndQuestionUseCase.Command();
-
-            return command;
+            return new QuestionsModel()
+            {
+                QuestionId = item.QuestionId,
+                RecievedOn = item.AskedOn,
+                LastActivityOn = item.LastActivityOn,
+                Subject = item.Subject,
+                Sender = item.AskedBy,
+                Status = (QuestionsModel.StatusEnum) Enum.Parse(typeof(QuestionsModel.StatusEnum), item.Status.ToString())
+            };
         }
     }
 }

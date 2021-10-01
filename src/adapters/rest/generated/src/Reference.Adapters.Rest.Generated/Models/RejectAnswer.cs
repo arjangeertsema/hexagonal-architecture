@@ -39,6 +39,7 @@ namespace Reference.Adapters.Rest.Generated.Models
         [Required]
         [DataMember(Name="rejection", EmitDefaultValue=false)]
         public string Rejection { get; set; }
+        public Guid QuestionId { get; internal set; }
 
         /// <summary>
         /// Returns the string presentation of the object

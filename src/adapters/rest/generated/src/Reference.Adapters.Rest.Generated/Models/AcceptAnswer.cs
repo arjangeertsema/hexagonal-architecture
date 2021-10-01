@@ -32,6 +32,7 @@ namespace Reference.Adapters.Rest.Generated.Models
         [Required]
         [DataMember(Name="command_id", EmitDefaultValue=false)]
         public Guid CommandId { get; set; }
+        public Guid QuestionId { get; internal set; }
 
         /// <summary>
         /// Returns the string presentation of the object

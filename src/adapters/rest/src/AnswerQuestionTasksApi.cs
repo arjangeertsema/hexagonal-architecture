@@ -1,63 +1,63 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Reference.Domain.Abstractions.Ports.Input;
 using Reference.Adapters.Rest.Generated.Controllers;
 using Reference.Adapters.Rest.Generated.Models;
 using Microsoft.AspNetCore.Mvc;
+using Reference.Domain.Abstractions;
+using Reference.Domain.Abstractions.Ports.Input;
 
 namespace Reference.Adapters.Rest
 {
     public class AnswerQuestionTasksApi : AnswerQuestionTasksApiController
     {
-        private readonly IGetAnswerQuestionTaskUseCase getAnswerQuestionTaskUseCase;
-        private readonly IAnswerQuestionUseCase answerQuestionUseCase;
+        private readonly IMediator mediator;
 
-        public AnswerQuestionTasksApi(
-            IGetAnswerQuestionTaskUseCase getAnswerQuestionTaskUseCase,
-            IAnswerQuestionUseCase answerQuestionUseCase)
+        public AnswerQuestionTasksApi(IMediator mediator)
         {
-            if (getAnswerQuestionTaskUseCase is null)
+            if (mediator is null)
             {
-                throw new ArgumentNullException(nameof(getAnswerQuestionTaskUseCase));
+                throw new ArgumentNullException(nameof(mediator));
             }
 
-            if (answerQuestionUseCase is null)
-            {
-                throw new ArgumentNullException(nameof(answerQuestionUseCase));
-            }
-
-            this.getAnswerQuestionTaskUseCase = getAnswerQuestionTaskUseCase;
-            this.answerQuestionUseCase = answerQuestionUseCase;
+            this.mediator = mediator;
         }
 
         public override async Task<IActionResult> GetAnswerQuestionTask([FromRoute(Name = "task_id"), Required] long taskId)
         {
-            var query = Map(taskId);
-            var response = await this.getAnswerQuestionTaskUseCase.Execute(query);
+            var query = new GetAnswerQuestionTaskUseCase
+            (
+                taskId: taskId
+            );
+            
+            var response = await this.mediator.Send(query);
             return Ok(Map(response));
         }
 
         public override async Task<IActionResult> AnswerQuestion([FromRoute(Name = "task_id"), Required] long taskId, [FromBody] AnswerQuestion answerQuestion)
         {
-            var command = Map(answerQuestion);
-            await this.answerQuestionUseCase.Execute(command);
+            var command = new AnswerQuestionUseCase
+            (
+                commandId: answerQuestion.CommandId,
+                questionId: answerQuestion.QuestionId,
+                taskId: taskId, answer: answerQuestion.Answer
+            );
+
+            await this.mediator.Send(command);
             return this.Accepted();
         }
 
-        private IGetAnswerQuestionTaskUseCase.Query Map(long taskId)
+        private AnswerQuestionTask Map(GetAnswerQuestionTaskUseCase.Response response)
         {
-            throw new NotImplementedException();
-        }
-
-        private AnswerQuestionTask Map(IGetAnswerQuestionTaskUseCase.Response response)
-        {
-            throw new NotImplementedException();
-        }
-
-        private IAnswerQuestionUseCase.Command Map(AnswerQuestion answerQuestion)
-        {
-            throw new NotImplementedException();
+            return new AnswerQuestionTask()
+            {
+                TaskId = response.TaskId,
+                QuestionId = response.QuestionId,
+                RecievedOn = response.AskedOn,
+                Subject = response.Subject,
+                Question = response.Question,
+                Sender = response.AskedBy
+            };
         }
     }
 }

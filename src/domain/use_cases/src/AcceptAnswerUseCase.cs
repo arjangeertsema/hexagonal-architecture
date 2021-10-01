@@ -1,36 +1,26 @@
 using System;
 using System.Threading.Tasks;
-using System.Transactions;
+using Reference.Domain.Abstractions;
 using Reference.Domain.Abstractions.DDD;
 using Reference.Domain.Abstractions.Ports.Input;
 using Reference.Domain.Abstractions.Ports.Output;
-using Reference.Domain.Abstractions.Ports.Output.Exceptions;
 using Reference.Domain.Core;
 
 namespace Reference.Domain.UseCases
 {
-    public class AcceptAnswerUseCase : IAcceptAnswerUseCase
+    public class AcceptAnswerUseCase : IInputPortHandler<Abstractions.Ports.Input.AcceptAnswerUseCase>
     {
-        private readonly IHasPermissonPort hasPermissionPort;
-        private readonly IRegisterCommandPort registerCommandPort;
+        private readonly IMediator mediator;
         private readonly IAggregateRootStore aggregateRootStore;
-        private readonly IGetIdentityPort getIdentityPort;
 
         public AcceptAnswerUseCase(
-            IHasPermissonPort hasPermissionPort,
-            IRegisterCommandPort registerCommandPort,
-            IAggregateRootStore aggregateRootStore,
-            IGetIdentityPort getIdentityPort
+            IMediator mediator,
+            IAggregateRootStore aggregateRootStore
         )
         {
-            if (hasPermissionPort is null)
+            if (mediator is null)
             {
-                throw new ArgumentNullException(nameof(hasPermissionPort));
-            }
-
-            if (registerCommandPort is null)
-            {
-                throw new ArgumentNullException(nameof(registerCommandPort));
+                throw new ArgumentNullException(nameof(mediator));
             }
 
             if (aggregateRootStore is null)
@@ -38,46 +28,30 @@ namespace Reference.Domain.UseCases
                 throw new ArgumentNullException(nameof(aggregateRootStore));
             }
 
-            this.hasPermissionPort = hasPermissionPort;
-            this.registerCommandPort = registerCommandPort;
-            this.aggregateRootStore = aggregateRootStore;
-            this.getIdentityPort = getIdentityPort ?? throw new ArgumentNullException(nameof(getIdentityPort));
-        }
+            this.mediator = mediator;
+            this.aggregateRootStore = aggregateRootStore;         
+         }
 
-        public async Task Execute(IAcceptAnswerUseCase.Command command)
+        [Scoped]
+        [PreAuthorize("a permission")]
+        [MakeIdempotent]
+        public async Task Handle(Abstractions.Ports.Input.AcceptAnswerUseCase command)
         {
-            try
-            {
-                using (var scope = new TransactionScope())
-                {
-                    await CheckPermission();
+            var aggregateRoot = await aggregateRootStore.Get<AnswerQuestionsAggregateRoot>(command.QuestionId);
 
-                    var identity = await getIdentityPort.Execute(new IGetIdentityPort.Query());
+            var identity = await mediator.Send(new GetIdentity());
 
-                    await registerCommandPort.Execute(command);
-                    
-                    var aggregateRoot = await aggregateRootStore.Get<AnswerQuestionsAggregateRoot>(command.QuestionId);
+            aggregateRoot.AcceptAnswer
+            (
+                taskId: command.TaskId, 
+                acceptedBy: identity.Id
+            );
 
-                    aggregateRoot.AcceptAnswer(command.TaskId, identity.Id);
-
-                    await aggregateRootStore.Save(aggregateRoot);
-                    
-                    scope.Complete();
-                }
-            }
-            catch (CommandAlreadyExistsException)
-            {
-                return;
-            }
-        }
-
-        private async Task CheckPermission()
-        {
-            var hasPermission = await hasPermissionPort.Execute(new IHasPermissonPort.Query("a permission"));
-            if (!hasPermission)
-            {
-                throw new UnauthorizedAccessException();
-            }
+            await aggregateRootStore.Save
+            (
+                commandId: command.CommandId, 
+                aggregateRoot: aggregateRoot
+            );
         }
     }
 }

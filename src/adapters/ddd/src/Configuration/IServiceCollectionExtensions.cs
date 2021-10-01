@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Reference.Domain.Abstractions.DDD;
-using Reference.Domain.Abstractions.Ports.Output;
 
 namespace Example.Adapters.DDD.Configuration
 {
@@ -10,8 +9,7 @@ namespace Example.Adapters.DDD.Configuration
         public static IServiceCollection ConfigureDDDAdapterServices(this IServiceCollection services, IConfiguration configuration) 
         {
             return services
-                .AddSingleton<IAggregateRootStore, AggregateRootStore>()
-                .AddSingleton<ISaveAggregateRootPort, AggregateRootService>();
+                .AddSingleton<IAggregateRootStore, AggregateRootStore>();
         }
     }
 }

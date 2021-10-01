@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Reference.Domain.Abstractions;
 using Reference.Domain.Abstractions.DDD;
 using Reference.Domain.Abstractions.DDD.Exceptions;
 using Reference.Domain.Abstractions.Ports.Output;
@@ -8,38 +9,31 @@ namespace Example.Adapters.DDD
 {
     public class AggregateRootStore : IAggregateRootStore
     {
-        private readonly IGetAggregateRootStatePort getAggregateRootStatePort;
-        private readonly ISaveAggregateRootPort saveAggregateRootPort;
+        private readonly IMediator mediator;
 
-        public AggregateRootStore(IGetAggregateRootStatePort getAggregateRootStatePort,
-            ISaveAggregateRootPort saveAggregateRootPort)
+        public AggregateRootStore(IMediator mediator)
         {
-            if (getAggregateRootStatePort is null)
+            if (mediator is null)
             {
-                throw new ArgumentNullException(nameof(getAggregateRootStatePort));
+                throw new ArgumentNullException(nameof(mediator));
             }
 
-            if (saveAggregateRootPort is null)
-            {
-                throw new ArgumentNullException(nameof(saveAggregateRootPort));
-            }
-
-            this.getAggregateRootStatePort = getAggregateRootStatePort;
-            this.saveAggregateRootPort = saveAggregateRootPort;
+            this.mediator = mediator;
         }
-        public async Task<TAggregateRoot> Get<TAggregateRoot>(Guid id) where TAggregateRoot : AggregateRoot
+        
+        public async Task<TAggregateRoot> Get<TAggregateRoot>(Guid aggregateRootId) where TAggregateRoot : AggregateRoot
         {
-            var state = await getAggregateRootStatePort.Execute(new IGetAggregateRootStatePort.Query(id));
+            var state = await mediator.Send(new GetAggregateRootState(aggregateRootId));
             if (state == null)
-                throw new NotFoundException($"AggregateRoot of type `{typeof(TAggregateRoot).Name}` with id `${id}` does not exist.");
+                throw new NotFoundException($"AggregateRoot state for type `{typeof(TAggregateRoot).Name}` with id `${aggregateRootId}` is not found.");
 
             var aggregateRoot = Activator.CreateInstance(typeof(TAggregateRoot), new object[] { state }) as TAggregateRoot;
             return aggregateRoot;
         }
 
-        public async Task Save<TAggregateRoot>(TAggregateRoot aggregateRoot) where TAggregateRoot : AggregateRoot
+        public async Task Save<TAggregateRoot>(Guid commandId, TAggregateRoot aggregateRoot) where TAggregateRoot : AggregateRoot
         {
-            await saveAggregateRootPort.Execute(new ISaveAggregateRootPort.Command(Guid.NewGuid(), aggregateRoot));
+            await mediator.Send(new SaveAggregateRoot(commandId, aggregateRoot));
         }
     }
 }

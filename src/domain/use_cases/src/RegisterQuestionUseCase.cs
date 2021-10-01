@@ -1,80 +1,53 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Reference.Domain.Abstractions;
+using Reference.Domain.Abstractions.DDD;
 using Reference.Domain.Abstractions.Ports.Input;
-using Reference.Domain.Abstractions.Ports.Output;
-using Reference.Domain.Abstractions.Ports.Output.Exceptions;
-using System.Transactions;
 using Reference.Domain.Core;
 
 namespace Reference.Domain.UseCases
 {
-    public class RegisterQuestionUseCase : IRegisterQuestionUseCase
+    public class RegisterQuestionUseCase :IInputPortHandler<Abstractions.Ports.Input.RegisterQuestionUseCase>
     {
-        private readonly IHasPermissonPort hasPermissionPort;
-        private readonly IRegisterCommandPort registerCommandPort;
-        private readonly ISaveAggregateRootPort saveAggregateRootPort;
+        private readonly IMediator mediator;
+        private readonly IAggregateRootStore aggregateRootStore;
 
         public RegisterQuestionUseCase(
-            IHasPermissonPort hasPermissionPort,
-            IRegisterCommandPort registerCommandPort,
-            ISaveAggregateRootPort saveAggregateRootPort
+            IMediator mediator,
+            IAggregateRootStore aggregateRootStore
         )
         {
-            if (hasPermissionPort is null)
+            if (mediator is null)
             {
-                throw new ArgumentNullException(nameof(hasPermissionPort));
+                throw new ArgumentNullException(nameof(mediator));
             }
 
-            if (registerCommandPort is null)
+            if (aggregateRootStore is null)
             {
-                throw new ArgumentNullException(nameof(registerCommandPort));
+                throw new ArgumentNullException(nameof(aggregateRootStore));
             }
 
-            if (saveAggregateRootPort is null)
-            {
-                throw new ArgumentNullException(nameof(saveAggregateRootPort));
-            }
+            this.mediator = mediator;
+            this.aggregateRootStore = aggregateRootStore;         
+         }
 
-            this.hasPermissionPort = hasPermissionPort;
-            this.registerCommandPort = registerCommandPort;
-            this.saveAggregateRootPort = saveAggregateRootPort;
-        }
-
-        public async Task Execute(IRegisterQuestionUseCase.Command command)
+        [Scoped]
+        [PreAuthorize("a permission")]
+        [MakeIdempotent]
+        public async Task Handle(Abstractions.Ports.Input.RegisterQuestionUseCase command)
         {
-            try
-            {
-                using (var scope = new TransactionScope())
-                {
-                    await CheckPermission();
+            var aggregateRoot = AnswerQuestionsAggregateRoot.Start
+            (
+                subject: command.Subject,
+                question: command.Question,
+                askedBy: command.AskedBy
+            );
 
-                    await registerCommandPort.Execute(command);
-
-                    var aggregateRoot = AnswerQuestionsAggregateRoot.Start
-                    (
-                        subject: command.Subject,
-                        question: command.Question,
-                        sender: command.Sender
-                    );
-
-                    await saveAggregateRootPort.Execute(new ISaveAggregateRootPort.Command(Guid.NewGuid(), aggregateRoot));
-
-                    scope.Complete();
-                }
-            }
-            catch (CommandAlreadyExistsException)
-            {
-                return;
-            }
-        }
-
-        private async Task CheckPermission()
-        {
-            var hasPermission = await hasPermissionPort.Execute(new IHasPermissonPort.Query("a permission"));
-            if (!hasPermission)
-            {
-                throw new UnauthorizedAccessException();
-            }
+            await aggregateRootStore.Save
+            (
+                commandId: command.CommandId, 
+                aggregateRoot: aggregateRoot
+            );
         }
     }
 }

@@ -1,83 +1,78 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Reference.Domain.Abstractions.Ports.Input;
 using Reference.Adapters.Rest.Generated.Controllers;
 using Reference.Adapters.Rest.Generated.Models;
 using Microsoft.AspNetCore.Mvc;
+using Reference.Domain.Abstractions;
+using Reference.Domain.Abstractions.Ports.Input;
 
 namespace Reference.Adapters.Rest
 {
     public class ReviewAnswerTasksApi : ReviewAnswerTasksApiController
     {
-        private readonly IGetReviewAnswerTaskUseCase getReviewAnswerTaskUseCase;
-        private readonly IAcceptAnswerUseCase acceptAnswerUseCase;
-        private readonly IRejectAnswerUseCase rejectAnswerUseCase;
+        private readonly IMediator mediator;
 
-        public ReviewAnswerTasksApi(
-            IGetReviewAnswerTaskUseCase getReviewAnswerTaskUseCase,
-            IAcceptAnswerUseCase acceptAnswerUseCase,
-            IRejectAnswerUseCase rejectAnswerUseCase)
+        public ReviewAnswerTasksApi(IMediator mediator)
         {
-            if (getReviewAnswerTaskUseCase is null)
+            if (mediator is null)
             {
-                throw new ArgumentNullException(nameof(getReviewAnswerTaskUseCase));
+                throw new ArgumentNullException(nameof(mediator));
             }
 
-            if (acceptAnswerUseCase is null)
-            {
-                throw new ArgumentNullException(nameof(acceptAnswerUseCase));
-            }
-
-            if (rejectAnswerUseCase is null)
-            {
-                throw new ArgumentNullException(nameof(rejectAnswerUseCase));
-            }
-
-            this.getReviewAnswerTaskUseCase = getReviewAnswerTaskUseCase;
-            this.acceptAnswerUseCase = acceptAnswerUseCase;
-            this.rejectAnswerUseCase = rejectAnswerUseCase;
+            this.mediator = mediator;
         }
 
         public override async Task<IActionResult> GetReviewAnswerTask([FromRoute(Name = "task_id"), Required] long taskId)
         {
-            var query = Map(taskId);
-            var response = await this.getReviewAnswerTaskUseCase.Execute(query);
+            var query = new GetReviewAnswerTaskUseCase
+            (
+                taskId: taskId
+            );
+
+            var response = await mediator.Send(query);
             return Ok(Map(response));
         }
 
         public override async Task<IActionResult> AcceptAnswer([FromRoute(Name = "task_id"), Required] long taskId, [FromBody] AcceptAnswer acceptAnswer)
         {
-            var command = Map(acceptAnswer);
-            await this.acceptAnswerUseCase.Execute(command);
+            var command = new AcceptAnswerUseCase
+            (
+                commandId: acceptAnswer.CommandId,
+                questionId: acceptAnswer.QuestionId,
+                taskId: taskId
+            );
+
+            await mediator.Send(command);
             return this.Accepted();
         }
 
         public override async Task<IActionResult> RejectAnswer([FromRoute(Name = "task_id"), Required] long taskId, [FromBody] RejectAnswer rejectAnswer)
         {
-            var command = Map(rejectAnswer);
-            await this.rejectAnswerUseCase.Execute(command);
+            var command = new RejectAnswerUseCase
+            (
+                commandId: rejectAnswer.CommandId, 
+                questionId: rejectAnswer.QuestionId,
+                taskId: taskId, 
+                rejection: rejectAnswer.Rejection
+            );
+
+            await mediator.Send(command);
             return this.Accepted();
         }
 
-        private IGetReviewAnswerTaskUseCase.Query Map(long taskId)
+        private ReviewAnswerTask Map(GetReviewAnswerTaskUseCase.Response response)
         {
-            throw new NotImplementedException();
-        }
-
-        private ReviewAnswerTask Map(IGetReviewAnswerTaskUseCase.Response response)
-        {
-            throw new NotImplementedException();
-        }
-
-        private IAcceptAnswerUseCase.Command Map(AcceptAnswer acceptAnswer)
-        {
-            throw new NotImplementedException();
-        }
-
-        private IRejectAnswerUseCase.Command Map(RejectAnswer rejectAnswer)
-        {
-            throw new NotImplementedException();
+            return new ReviewAnswerTask()
+            {
+                QuestionId = response.QuestionId,
+                TaskId = response.TaskId,
+                RecievedOn = response.AskedOn,
+                Subject = response.Subject,
+                Question = response.Question,
+                Sender = response.AskedBy,
+                Answer = response.Answer
+            };
         }
     }
 }

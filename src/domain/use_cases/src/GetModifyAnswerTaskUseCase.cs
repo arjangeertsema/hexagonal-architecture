@@ -1,40 +1,30 @@
 using System;
 using System.Threading.Tasks;
+using Reference.Domain.Abstractions;
 using Reference.Domain.Abstractions.Ports.Input;
-using Reference.Domain.Abstractions.Ports.Output;
 
 namespace Reference.Domain.UseCases
 {
-    public class GetModifyAnswerTaskUseCase : IGetModifyAnswerTaskUseCase
+    public class GetModifyAnswerTaskUseCase : IInputPort<Abstractions.Ports.Input.GetModifyAnswerTaskUseCase>
     {
-        private readonly IHasPermissonPort hasPermissionPort;
+        private readonly IMediator mediator;
 
         public GetModifyAnswerTaskUseCase(
-            IHasPermissonPort hasPermissionPort
+            IMediator mediator
         )
         {
-            if (hasPermissionPort is null)
+            if (mediator is null)
             {
-                throw new ArgumentNullException(nameof(hasPermissionPort));
+                throw new ArgumentNullException(nameof(mediator));
             }
 
-            this.hasPermissionPort = hasPermissionPort;
+            this.mediator = mediator;
         }
 
-        public async Task<IGetModifyAnswerTaskUseCase.Response> Execute(IGetModifyAnswerTaskUseCase.Query query)
+        [PreAuthorize("a permission")]
+        public async Task<Abstractions.Ports.Input.GetModifyAnswerTaskUseCase.Response> Handle(Abstractions.Ports.Input.GetModifyAnswerTaskUseCase query)
         {
-            await CheckPermission();
-
             throw new NotImplementedException();
-        }
-
-        private async Task CheckPermission()
-        {
-            var hasPermission = await hasPermissionPort.Execute(new IHasPermissonPort.Query("a permission"));
-            if (!hasPermission)
-            {
-                throw new UnauthorizedAccessException();
-            }
         }
     }
 }

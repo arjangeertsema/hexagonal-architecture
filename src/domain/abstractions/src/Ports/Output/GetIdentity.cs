@@ -2,12 +2,9 @@ using System;
 
 namespace Reference.Domain.Abstractions.Ports.Output
 {
-    public interface IGetIdentityPort : IOutputPort<IGetIdentityPort.Query, IGetIdentityPort.Response>
+    public class GetIdentity : IOutputPort<GetIdentity.Response>
     {
-        public class Query : IQuery<IGetIdentityPort.Response>
-        {
-            public Query() { }
-        }
+        public GetIdentity() { }
 
         public class Response
         {

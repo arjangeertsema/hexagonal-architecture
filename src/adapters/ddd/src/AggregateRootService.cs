@@ -3,38 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Reference.Domain.Abstractions;
 using Reference.Domain.Abstractions.DDD;
 using Reference.Domain.Abstractions.Ports.Output;
 
 namespace Example.Adapters.DDD
 {
-    public class AggregateRootService : ISaveAggregateRootPort
+    public class AggregateRootService : IOutputPort<SaveAggregateRoot>
     {
-        private readonly IServiceProvider serviceProvider;
+        private readonly IMediator mediator;
 
-        public AggregateRootService(IServiceProvider serviceProvider)
+        public AggregateRootService(IMediator mediator)
         {
-            if (serviceProvider is null)
+            if (mediator is null)
             {
-                throw new ArgumentNullException(nameof(serviceProvider));
+                throw new ArgumentNullException(nameof(mediator));
             }
 
-            this.serviceProvider = serviceProvider;
+            this.mediator = mediator;
         }
-        public async Task Execute(ISaveAggregateRootPort.Command command)
+
+        public async Task Handle(SaveAggregateRoot command)
         {
             var tasks = new List<Task>();
             
             foreach(var @event in command.AggregateRoot.GetChanges())
             {
-                var type = GetDomainEventHandlerType(@event);
-                var handlers = GetDomainEventHandlers(@event, type);
-
-                foreach (var handler in handlers)
-                {
-                    var task = type.GetMethod("").Invoke(handler, new object[] { @event }) as Task;
-                    tasks.Add(task);
-                }
+                var handleDomainEvent = CreateHandleDomainEvent(command.CommandId, @event);
+                tasks.Add(mediator.Send(handleDomainEvent));
             }
 
             await Task.WhenAll(tasks.ToArray());
@@ -42,25 +38,12 @@ namespace Example.Adapters.DDD
             command.AggregateRoot.ClearChanges();
         }
 
-        private object[] GetDomainEventHandlers(IDomainEvent @event, Type type)
+        private ICommand CreateHandleDomainEvent(Guid commandId, IDomainEvent @event)
         {
-            var handlers = serviceProvider.GetServices(type)
-                                .Where(h => h != null)
-                                .ToArray();
-
-            if (handlers == null || handlers.Length == 0)
-            {
-                throw new DomainEventHandlerNotFoundException(@event);
-            }
-
-            return handlers;
-        }
-
-        private Type GetDomainEventHandlerType(IDomainEvent @event) 
-        {
-            var type = typeof(IHandleDomainEventPort<>);
+            var type = typeof(HandleDomainEvent<>);
             var genericType = type.MakeGenericType(@event.GetType());
-            return genericType;
+            var command = Activator.CreateInstance(genericType, new object[] { commandId, @event });
+            return command as ICommand;
         }
     }
 }

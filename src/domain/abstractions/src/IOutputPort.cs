@@ -1,16 +1,8 @@
-using System.Threading.Tasks;
-
 namespace Reference.Domain.Abstractions
 {
-    public interface IOutputPort<TCommand>  
-        where TCommand : ICommand
-    { 
-        Task Execute(TCommand command);
-    }
+    public interface IOutputPort : ICommand
+    { }
 
-    public interface IOutputPort<TQuery, TResponse>
-         where TQuery : IQuery<TResponse>
-    { 
-         Task<TResponse> Execute(TQuery query);
-    }
+    public interface IOutputPort<out TResponse> : IQuery<TResponse>
+    { }
 }
