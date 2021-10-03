@@ -24,15 +24,8 @@ namespace Reference.Adapters.Rest.Generated.Models
     /// 
     /// </summary>
     [DataContract]
-    public class ModifyAnswer : IEquatable<ModifyAnswer>
+    public class AcceptAnswerAllOf : IEquatable<AcceptAnswerAllOf>
     {
-        /// <summary>
-        /// Gets or Sets CommandId
-        /// </summary>
-        [Required]
-        [DataMember(Name="command_id", EmitDefaultValue=false)]
-        public Guid CommandId { get; set; }
-
         /// <summary>
         /// Gets or Sets QuestionId
         /// </summary>
@@ -41,23 +34,14 @@ namespace Reference.Adapters.Rest.Generated.Models
         public Guid QuestionId { get; set; }
 
         /// <summary>
-        /// Gets or Sets Answer
-        /// </summary>
-        [Required]
-        [DataMember(Name="answer", EmitDefaultValue=false)]
-        public string Answer { get; set; }
-
-        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class ModifyAnswer {\n");
-            sb.Append("  CommandId: ").Append(CommandId).Append("\n");
+            sb.Append("class AcceptAnswerAllOf {\n");
             sb.Append("  QuestionId: ").Append(QuestionId).Append("\n");
-            sb.Append("  Answer: ").Append(Answer).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -80,34 +64,24 @@ namespace Reference.Adapters.Rest.Generated.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((ModifyAnswer)obj);
+            return obj.GetType() == GetType() && Equals((AcceptAnswerAllOf)obj);
         }
 
         /// <summary>
-        /// Returns true if ModifyAnswer instances are equal
+        /// Returns true if AcceptAnswerAllOf instances are equal
         /// </summary>
-        /// <param name="other">Instance of ModifyAnswer to be compared</param>
+        /// <param name="other">Instance of AcceptAnswerAllOf to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(ModifyAnswer other)
+        public bool Equals(AcceptAnswerAllOf other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    CommandId == other.CommandId ||
-                    CommandId != null &&
-                    CommandId.Equals(other.CommandId)
-                ) && 
-                (
                     QuestionId == other.QuestionId ||
                     QuestionId != null &&
                     QuestionId.Equals(other.QuestionId)
-                ) && 
-                (
-                    Answer == other.Answer ||
-                    Answer != null &&
-                    Answer.Equals(other.Answer)
                 );
         }
 
@@ -121,12 +95,8 @@ namespace Reference.Adapters.Rest.Generated.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    if (CommandId != null)
-                    hashCode = hashCode * 59 + CommandId.GetHashCode();
                     if (QuestionId != null)
                     hashCode = hashCode * 59 + QuestionId.GetHashCode();
-                    if (Answer != null)
-                    hashCode = hashCode * 59 + Answer.GetHashCode();
                 return hashCode;
             }
         }
@@ -134,12 +104,12 @@ namespace Reference.Adapters.Rest.Generated.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(ModifyAnswer left, ModifyAnswer right)
+        public static bool operator ==(AcceptAnswerAllOf left, AcceptAnswerAllOf right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(ModifyAnswer left, ModifyAnswer right)
+        public static bool operator !=(AcceptAnswerAllOf left, AcceptAnswerAllOf right)
         {
             return !Equals(left, right);
         }

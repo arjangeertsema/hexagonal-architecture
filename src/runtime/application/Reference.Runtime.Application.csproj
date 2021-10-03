@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\domain\use_cases\Reference.Domain.UseCases.csproj" />
-    <ProjectReference Include="..\..\adapters\ddd\Reference.Adapters.DDD.csproj" />
+    <ProjectReference Include="..\..\adapters\storage\Reference.Adapters.Storage.csproj" />
     <ProjectReference Include="..\..\adapters\events\Reference.Adapters.Events.csproj" />
     <ProjectReference Include="..\..\adapters\rest\Reference.Adapters.Rest.csproj" />
     <ProjectReference Include="..\..\adapters\zeebe\Reference.Adapters.Zeebe.csproj" />

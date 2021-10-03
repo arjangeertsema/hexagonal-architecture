@@ -36,9 +36,9 @@ namespace Reference.Domain.UseCases.Behaviours
                 await this.mediator.Send(new RegisterCommandPort(command));
                 await next();
             }
-            catch(CommandAlreadyExistsException exception)
+            catch(CommandAlreadyExistsException)
             {
-                //Stop pipeline.
+                //Stop pipeline command has already been handled.
                 return;
             }
         }

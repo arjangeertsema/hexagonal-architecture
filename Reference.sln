@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "runtime", "runtime", "{089C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "application", "src\runtime\application\Reference.Runtime.Application.csproj", "{7EA5729A-6C23-4073-88B7-0CC09ACA11D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.Adapters.DDD", "src\adapters\ddd\Reference.Adapters.DDD.csproj", "{F36AC5EC-C7C0-403F-96C4-B2A850627AE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.Adapters.Storage", "src\adapters\storage\Reference.Adapters.Storage.csproj", "{F36AC5EC-C7C0-403F-96C4-B2A850627AE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

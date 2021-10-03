@@ -1,5 +1,4 @@
 using System;
-using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -89,7 +88,7 @@ namespace Reference.Domain.UseCases.Behaviours
             }
 
             var type = this.authorizeCommandType.MakeGenericType(new Type[] { command.GetType() });
-            return this.serviceProvider.GetService(type) as IHasCommandAuthorization<ICommand>;
+            return (IHasCommandAuthorization<ICommand>) this.serviceProvider.GetRequiredService(type);
         }
 
         private IHasQueryAuthorization<IQuery<object>, object> GetAuthorizeQuery(IQuery<object> query, object response)
@@ -102,7 +101,7 @@ namespace Reference.Domain.UseCases.Behaviours
             var queryType = query.GetType();
             var queryParameterType = queryType.GenericTypeArguments[0];
 
-            var type = this.authorizeCommandType.MakeGenericType(new Type[] { query.GetType(), queryParameterType });
+            var type = this.authorizeQueryType.MakeGenericType(new Type[] { queryType, queryParameterType });
             return (IHasQueryAuthorization<IQuery<object>, object>) this.serviceProvider.GetRequiredService(type);
         }
 

@@ -1,3 +1,4 @@
+.openapi-generator-ignore
 README.md
 Reference.Adapters.Rest.Generated.sln
 build.bat
@@ -12,6 +13,7 @@ src/Reference.Adapters.Rest.Generated/Controllers/ReviewAnswerTasksApi.cs
 src/Reference.Adapters.Rest.Generated/Converters/CustomEnumConverter.cs
 src/Reference.Adapters.Rest.Generated/Formatters/InputFormatterStream.cs
 src/Reference.Adapters.Rest.Generated/Models/AcceptAnswer.cs
+src/Reference.Adapters.Rest.Generated/Models/AcceptAnswerAllOf.cs
 src/Reference.Adapters.Rest.Generated/Models/AnswerQuestion.cs
 src/Reference.Adapters.Rest.Generated/Models/AnswerQuestionAllOf.cs
 src/Reference.Adapters.Rest.Generated/Models/AnswerQuestionTask.cs

@@ -34,12 +34,18 @@ namespace Reference.Adapters.Rest.Generated.Models
         public Guid CommandId { get; set; }
 
         /// <summary>
+        /// Gets or Sets QuestionId
+        /// </summary>
+        [Required]
+        [DataMember(Name="question_id", EmitDefaultValue=false)]
+        public Guid QuestionId { get; set; }
+
+        /// <summary>
         /// Gets or Sets Rejection
         /// </summary>
         [Required]
         [DataMember(Name="rejection", EmitDefaultValue=false)]
         public string Rejection { get; set; }
-        public Guid QuestionId { get; internal set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -50,6 +56,7 @@ namespace Reference.Adapters.Rest.Generated.Models
             var sb = new StringBuilder();
             sb.Append("class RejectAnswer {\n");
             sb.Append("  CommandId: ").Append(CommandId).Append("\n");
+            sb.Append("  QuestionId: ").Append(QuestionId).Append("\n");
             sb.Append("  Rejection: ").Append(Rejection).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -93,6 +100,11 @@ namespace Reference.Adapters.Rest.Generated.Models
                     CommandId.Equals(other.CommandId)
                 ) && 
                 (
+                    QuestionId == other.QuestionId ||
+                    QuestionId != null &&
+                    QuestionId.Equals(other.QuestionId)
+                ) && 
+                (
                     Rejection == other.Rejection ||
                     Rejection != null &&
                     Rejection.Equals(other.Rejection)
@@ -111,6 +123,8 @@ namespace Reference.Adapters.Rest.Generated.Models
                 // Suitable nullity checks etc, of course :)
                     if (CommandId != null)
                     hashCode = hashCode * 59 + CommandId.GetHashCode();
+                    if (QuestionId != null)
+                    hashCode = hashCode * 59 + QuestionId.GetHashCode();
                     if (Rejection != null)
                     hashCode = hashCode * 59 + Rejection.GetHashCode();
                 return hashCode;

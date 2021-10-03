@@ -27,6 +27,13 @@ namespace Reference.Adapters.Rest.Generated.Models
     public class RejectAnswerAllOf : IEquatable<RejectAnswerAllOf>
     {
         /// <summary>
+        /// Gets or Sets QuestionId
+        /// </summary>
+        [Required]
+        [DataMember(Name="question_id", EmitDefaultValue=false)]
+        public Guid QuestionId { get; set; }
+
+        /// <summary>
         /// Gets or Sets Rejection
         /// </summary>
         [Required]
@@ -41,6 +48,7 @@ namespace Reference.Adapters.Rest.Generated.Models
         {
             var sb = new StringBuilder();
             sb.Append("class RejectAnswerAllOf {\n");
+            sb.Append("  QuestionId: ").Append(QuestionId).Append("\n");
             sb.Append("  Rejection: ").Append(Rejection).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -79,6 +87,11 @@ namespace Reference.Adapters.Rest.Generated.Models
 
             return 
                 (
+                    QuestionId == other.QuestionId ||
+                    QuestionId != null &&
+                    QuestionId.Equals(other.QuestionId)
+                ) && 
+                (
                     Rejection == other.Rejection ||
                     Rejection != null &&
                     Rejection.Equals(other.Rejection)
@@ -95,6 +108,8 @@ namespace Reference.Adapters.Rest.Generated.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
+                    if (QuestionId != null)
+                    hashCode = hashCode * 59 + QuestionId.GetHashCode();
                     if (Rejection != null)
                     hashCode = hashCode * 59 + Rejection.GetHashCode();
                 return hashCode;

@@ -5,7 +5,7 @@ using Reference.Domain.Abstractions.DDD;
 using Reference.Domain.Abstractions.DDD.Exceptions;
 using Reference.Domain.Abstractions.Ports.Output;
 
-namespace Example.Adapters.DDD
+namespace Example.Adapters.Storage
 {
     public class AggregateRootStore : IAggregateRootStore
     {

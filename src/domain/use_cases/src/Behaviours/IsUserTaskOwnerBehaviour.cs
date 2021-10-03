@@ -1,8 +1,6 @@
 using System;
-using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Reference.Domain.Abstractions;
 using Reference.Domain.Abstractions.Ports.Output;
 using Reference.Domain.UseCases.Attributes;

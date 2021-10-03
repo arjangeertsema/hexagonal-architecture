@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Example.Adapters.DDD.Configuration;
+using Example.Adapters.Storage.Configuration;
 using Reference.Adapters.Rest.Configuration;
 using Reference.Domain.UseCases.Configuration;
 
@@ -21,7 +21,7 @@ namespace application
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .ConfigureDDDAdapterServices(Configuration)
+                .ConfigureStorageAdapterServices(Configuration)
                 .ConfigureZeebeAdapterServices(Configuration)
                 .ConfigureRestAdapterServices(Configuration)
                 .ConfigureDomainUseCasesServices(Configuration);
