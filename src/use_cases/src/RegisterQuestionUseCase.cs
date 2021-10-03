@@ -4,16 +4,16 @@ using Reference.Domain.Abstractions;
 using Reference.Domain.Abstractions.DDD;
 using Reference.Domain.Abstractions.Ports.Input;
 using Reference.Domain.Core;
-using Reference.Domain.UseCases.Attributes;
+using Reference.UseCases.Attributes;
 
-namespace Reference.Domain.UseCases
+namespace Reference.UseCases
 {
-    public class RegisterQuestionUseCase :IInputPortHandler<Abstractions.Ports.Input.RegisterQuestionUseCase>
+    public class RegisterQuestionUseCaseHandler :IInputPortHandler<RegisterQuestionUseCase>
     {
         private readonly IMediator mediator;
         private readonly IAggregateRootStore aggregateRootStore;
 
-        public RegisterQuestionUseCase(
+        public RegisterQuestionUseCaseHandler(
             IMediator mediator,
             IAggregateRootStore aggregateRootStore
         )
@@ -35,7 +35,7 @@ namespace Reference.Domain.UseCases
         [Transactional]
         [HasPermission("a permission")]
         [MakeIdempotent]
-        public async Task Handle(Abstractions.Ports.Input.RegisterQuestionUseCase command)
+        public async Task Handle(RegisterQuestionUseCase command)
         {
             var aggregateRoot = AnswerQuestionsAggregateRoot.Start
             (

@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Reference.Domain.Abstractions;
 using Reference.Domain.Abstractions.Ports.Output;
-using Reference.Domain.UseCases.Attributes;
+using Reference.UseCases.Attributes;
 
-namespace Reference.Domain.UseCases.Behaviours
+namespace Reference.UseCases.Behaviours
 {
     public class IsAuthorizedBehaviour : ICommandBehaviour, IQueryBehaviour
     {

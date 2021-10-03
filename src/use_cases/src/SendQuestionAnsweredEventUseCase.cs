@@ -2,18 +2,19 @@ using System;
 using System.Threading.Tasks;
 using Reference.Domain.Abstractions;
 using Reference.Domain.Abstractions.DDD;
+using Reference.Domain.Abstractions.Ports.Input;
 using Reference.Domain.Abstractions.Ports.Output;
 using Reference.Domain.Core;
-using Reference.Domain.UseCases.Attributes;
+using Reference.UseCases.Attributes;
 
-namespace Reference.Domain.UseCases
+namespace Reference.UseCases
 {
-    public class RejectAnswerUseCase : IInputPortHandler<Abstractions.Ports.Input.RejectAnswerUseCase>
+    public class SendQuestionAnsweredEventUseCaseHandler :IInputPortHandler<SendQuestionAnsweredEventUseCase>
     {
         private readonly IMediator mediator;
         private readonly IAggregateRootStore aggregateRootStore;
 
-        public RejectAnswerUseCase(
+        public SendQuestionAnsweredEventUseCaseHandler(
             IMediator mediator,
             IAggregateRootStore aggregateRootStore
         )
@@ -34,20 +35,14 @@ namespace Reference.Domain.UseCases
 
         [Transactional]
         [HasPermission("a permission")]
-        [IsUserTaskOwner]
         [MakeIdempotent]
-        public async Task Handle(Abstractions.Ports.Input.RejectAnswerUseCase command)
+        public async Task Handle(SendQuestionAnsweredEventUseCase command)
         {
             var aggregateRoot = await aggregateRootStore.Get<AnswerQuestionsAggregateRoot>(command.QuestionId);
 
             var identity = await mediator.Send(new GetIdentityPort());
 
-            aggregateRoot.RejectAnswer
-            (
-                taskId: command.UserTaskId, 
-                rejection: command.Rejection, 
-                rejectedBy: identity.Id
-            );
+            aggregateRoot.SendQuestionAnsweredEvent();
 
             await aggregateRootStore.Save
             (

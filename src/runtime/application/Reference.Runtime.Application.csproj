@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\domain\use_cases\Reference.Domain.UseCases.csproj" />
+    <ProjectReference Include="..\..\use_cases\Reference.UseCases.csproj" />
     <ProjectReference Include="..\..\adapters\storage\Reference.Adapters.Storage.csproj" />
     <ProjectReference Include="..\..\adapters\events\Reference.Adapters.Events.csproj" />
     <ProjectReference Include="..\..\adapters\rest\Reference.Adapters.Rest.csproj" />

@@ -2,18 +2,19 @@ using System;
 using System.Threading.Tasks;
 using Reference.Domain.Abstractions;
 using Reference.Domain.Abstractions.DDD;
+using Reference.Domain.Abstractions.Ports.Input;
 using Reference.Domain.Abstractions.Ports.Output;
 using Reference.Domain.Core;
-using Reference.Domain.UseCases.Attributes;
+using Reference.UseCases.Attributes;
 
-namespace Reference.Domain.UseCases
+namespace Reference.UseCases
 {
-    public class AcceptAnswerUseCase : IInputPortHandler<Abstractions.Ports.Input.AcceptAnswerUseCase>
+    public class ModifyAnswerUseCaseHandler :IInputPortHandler<ModifyAnswerUseCase>
     {
         private readonly IMediator mediator;
         private readonly IAggregateRootStore aggregateRootStore;
 
-        public AcceptAnswerUseCase(
+        public ModifyAnswerUseCaseHandler(
             IMediator mediator,
             IAggregateRootStore aggregateRootStore
         )
@@ -36,16 +37,17 @@ namespace Reference.Domain.UseCases
         [HasPermission("a permission")]
         [IsUserTaskOwner]
         [MakeIdempotent]
-        public async Task Handle(Abstractions.Ports.Input.AcceptAnswerUseCase command)
+        public async Task Handle(ModifyAnswerUseCase command)
         {
             var aggregateRoot = await aggregateRootStore.Get<AnswerQuestionsAggregateRoot>(command.QuestionId);
 
             var identity = await mediator.Send(new GetIdentityPort());
 
-            aggregateRoot.AcceptAnswer
+            aggregateRoot.ModifyAnswer
             (
                 taskId: command.UserTaskId, 
-                acceptedBy: identity.Id
+                answer: command.Answer, 
+                modifiedBy: identity.Id
             );
 
             await aggregateRootStore.Save

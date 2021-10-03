@@ -4,9 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Reference.Domain.Abstractions;
 using Reference.Domain.Abstractions.Ports.Output;
-using Reference.Domain.UseCases.Attributes;
+using Reference.UseCases.Attributes;
 
-namespace Reference.Domain.UseCases.Behaviours
+namespace Reference.UseCases.Behaviours
 {
     public class HasPemissionBehaviour : ICommandBehaviour, IQueryBehaviour
     {

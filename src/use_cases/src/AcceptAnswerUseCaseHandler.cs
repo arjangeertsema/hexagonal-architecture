@@ -2,18 +2,19 @@ using System;
 using System.Threading.Tasks;
 using Reference.Domain.Abstractions;
 using Reference.Domain.Abstractions.DDD;
+using Reference.Domain.Abstractions.Ports.Input;
 using Reference.Domain.Abstractions.Ports.Output;
 using Reference.Domain.Core;
-using Reference.Domain.UseCases.Attributes;
+using Reference.UseCases.Attributes;
 
-namespace Reference.Domain.UseCases
+namespace Reference.UseCases
 {
-    public class EndQuestionUseCase :IInputPortHandler<Abstractions.Ports.Input.EndQuestionUseCase>
+    public class AcceptAnswerUseCaseHandler : IInputPortHandler<AcceptAnswerUseCase>
     {
         private readonly IMediator mediator;
         private readonly IAggregateRootStore aggregateRootStore;
 
-        public EndQuestionUseCase(
+        public AcceptAnswerUseCaseHandler(
             IMediator mediator,
             IAggregateRootStore aggregateRootStore
         )
@@ -34,16 +35,18 @@ namespace Reference.Domain.UseCases
 
         [Transactional]
         [HasPermission("a permission")]
+        [IsUserTaskOwner]
         [MakeIdempotent]
-        public async Task Handle(Abstractions.Ports.Input.EndQuestionUseCase command)
+        public async Task Handle(AcceptAnswerUseCase command)
         {
             var aggregateRoot = await aggregateRootStore.Get<AnswerQuestionsAggregateRoot>(command.QuestionId);
 
             var identity = await mediator.Send(new GetIdentityPort());
 
-            aggregateRoot.EndQuestion
+            aggregateRoot.AcceptAnswer
             (
-                endedBy: identity.Id
+                taskId: command.UserTaskId, 
+                acceptedBy: identity.Id
             );
 
             await aggregateRootStore.Save

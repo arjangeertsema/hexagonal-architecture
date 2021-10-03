@@ -2,9 +2,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
 using Reference.Domain.Abstractions;
-using Reference.Domain.UseCases.Attributes;
+using Reference.UseCases.Attributes;
 
-namespace Reference.Domain.UseCases.Behaviours
+namespace Reference.UseCases.Behaviours
 {
     public class TransactionalBehavior : ICommandBehaviour
     {

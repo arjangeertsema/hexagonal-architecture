@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Reference.Domain.UseCases.Attributes
+namespace Reference.UseCases.Attributes
 {
     public class HasPermissionAttribute : Attribute
     {

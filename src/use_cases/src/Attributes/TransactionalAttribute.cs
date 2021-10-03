@@ -1,6 +1,6 @@
 using System;
 
-namespace Reference.Domain.UseCases.Attributes
+namespace Reference.UseCases.Attributes
 {
     public class TransactionalAttribute : Attribute
     {

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Example.Adapters.Storage.Configuration;
 using Reference.Adapters.Rest.Configuration;
-using Reference.Domain.UseCases.Configuration;
+using Reference.UseCases.Configuration;
 
 namespace application
 {

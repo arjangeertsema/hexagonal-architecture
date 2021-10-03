@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "core", "src\domain\core\Ref
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "abstractions", "src\domain\abstractions\Reference.Domain.Abstractions.csproj", "{BCDB5132-DAC8-4FA8-B4AE-26ABE703EE11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "use-cases", "src\domain\use_cases\Reference.Domain.UseCases.csproj", "{15FD9AB7-23F2-4D17-8B13-A2784EC725AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "use-cases", "src\use_cases\Reference.UseCases.csproj", "{15FD9AB7-23F2-4D17-8B13-A2784EC725AC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "adapters", "adapters", "{F2B4D93C-4FCF-49A9-9F8F-FDC62F43F531}"
 EndProject

@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Reference.Domain.UseCases.Configuration
+namespace Reference.UseCases.Configuration
 {
     public static class IServiceCollectionExtensions
     {

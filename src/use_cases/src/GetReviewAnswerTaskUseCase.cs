@@ -1,17 +1,16 @@
 using System;
 using System.Threading.Tasks;
 using Reference.Domain.Abstractions;
-using Reference.Domain.UseCases.Attributes;
+using Reference.Domain.Abstractions.Ports.Input;
+using Reference.UseCases.Attributes;
 
-namespace Reference.Domain.UseCases
+namespace Reference.UseCases
 {
-    public class GetReviewAnswerTaskUseCase : IInputPort<Abstractions.Ports.Input.GetReviewAnswerTaskUseCase>
+    public class GetReviewAnswerTaskUseCaseHandler : IInputPort<GetReviewAnswerTaskUseCase>
     {
         private readonly IMediator mediator;
 
-        public GetReviewAnswerTaskUseCase(
-            IMediator mediator
-        )
+        public GetReviewAnswerTaskUseCaseHandler(IMediator mediator)
         {
             if (mediator is null)
             {
@@ -23,7 +22,7 @@ namespace Reference.Domain.UseCases
 
         [HasPermission("a permission")]
         [IsUserTaskOwner]
-        public async Task<Abstractions.Ports.Input.GetReviewAnswerTaskUseCase.Response> Handle(Abstractions.Ports.Input.GetReviewAnswerTaskUseCase query)
+        public async Task<GetReviewAnswerTaskUseCase.Response> Handle(GetReviewAnswerTaskUseCase query)
         {
             throw new NotImplementedException();
         }
