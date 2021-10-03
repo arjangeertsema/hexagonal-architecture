@@ -2,10 +2,10 @@
 
 namespace Reference.Domain.Abstractions.Ports.Input
 {
-    public class RejectAnswerUseCase : IInputPort
+    public class RejectAnswerUseCase : IInputPort, IUserTask
     {
 
-        public RejectAnswerUseCase(Guid commandId, Guid questionId, long taskId, string rejection)
+        public RejectAnswerUseCase(Guid commandId, Guid questionId, long userTaskId, string rejection)
         {
             if (string.IsNullOrWhiteSpace(rejection))
             {
@@ -14,12 +14,12 @@ namespace Reference.Domain.Abstractions.Ports.Input
 
             CommandId = commandId;
             QuestionId = questionId;
-            TaskId = taskId;
+            UserTaskId = userTaskId;
         }
 
         public Guid CommandId { get; }
         public Guid QuestionId { get; }
-        public long TaskId { get; set; }
+        public long UserTaskId { get; set; }
         public string Rejection { get; set; }
     }
 }

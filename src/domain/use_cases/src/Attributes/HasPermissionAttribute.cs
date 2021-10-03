@@ -1,20 +1,18 @@
 using System;
 using System.Collections.Generic;
 
-namespace Reference.Domain.Abstractions.Ports.Output
+namespace Reference.Domain.UseCases.Attributes
 {
-    public class HasPermisson : IOutputPort<bool>
+    public class HasPermissionAttribute : Attribute
     {
-        public HasPermisson(params string[] permissions)
+        public HasPermissionAttribute(params string[] permissions)
         {
             if (permissions is null || permissions.Length == 0)
             {
                 throw new ArgumentNullException(nameof(permissions));
             }
-
             Permissions = permissions;
         }
-
         public IEnumerable<string> Permissions { get; }
     }
 }

@@ -2,18 +2,18 @@ using System;
 
 namespace Reference.Domain.Abstractions.Ports.Input
 {        
-    public class GetAnswerQuestionTaskUseCase : IInputPort<GetAnswerQuestionTaskUseCase.Response>
+    public class GetAnswerQuestionTaskUseCase : IInputPort<GetAnswerQuestionTaskUseCase.Response>, IUserTask
     {
         public GetAnswerQuestionTaskUseCase(long taskId)
         {
-            TaskId = taskId;
+            UserTaskId = taskId;
         }
 
-        public long TaskId { get; }
+        public long UserTaskId { get; }
 
         public class Response
         {
-            public Response(Guid QuestionId, long taskId, DateTime askedOn, string askedBy, string subject, string question)
+            public Response(Guid QuestionId, long userTaskId, DateTime askedOn, string askedBy, string subject, string question)
             {
                 if (string.IsNullOrEmpty(askedBy))
                 {
@@ -31,7 +31,7 @@ namespace Reference.Domain.Abstractions.Ports.Input
                 }
 
                 this.QuestionId = QuestionId;
-                TaskId = taskId;
+                UserTaskId = userTaskId;
                 AskedOn = askedOn;
                 AskedBy = askedBy;
                 Subject = subject;
@@ -39,7 +39,7 @@ namespace Reference.Domain.Abstractions.Ports.Input
             }
 
             public Guid QuestionId { get; }
-            public long TaskId { get; }
+            public long UserTaskId { get; }
             public DateTime AskedOn { get; }
             public string AskedBy { get; }
             public string Subject { get; }

@@ -2,17 +2,17 @@
 
 namespace Reference.Domain.Abstractions.Ports.Input
 {
-    public class AcceptAnswerUseCase : IInputPort
+    public class AcceptAnswerUseCase : IInputPort, IUserTask
     {
-        public AcceptAnswerUseCase(Guid commandId, Guid questionId, long taskId)
+        public AcceptAnswerUseCase(Guid commandId, Guid questionId, long userTaskId)
         {
             CommandId = commandId;
             QuestionId = questionId;
-            TaskId = taskId;
+            UserTaskId = userTaskId;
         }
 
         public Guid CommandId { get; }
         public Guid QuestionId { get; }
-        public long TaskId { get; }
+        public long UserTaskId { get; }
     }
 }

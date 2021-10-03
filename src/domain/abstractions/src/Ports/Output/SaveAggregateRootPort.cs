@@ -3,9 +3,9 @@ using Reference.Domain.Abstractions.DDD;
 
 namespace Reference.Domain.Abstractions.Ports.Output
 {
-    public class SaveAggregateRoot : IOutputPort
+    public class SaveAggregateRootPort : IOutputPort
     {
-        public SaveAggregateRoot(Guid commandId, IAggregateRoot aggregateRoot)
+        public SaveAggregateRootPort(Guid commandId, IAggregateRoot aggregateRoot)
         {
             if (aggregateRoot is null)
             {

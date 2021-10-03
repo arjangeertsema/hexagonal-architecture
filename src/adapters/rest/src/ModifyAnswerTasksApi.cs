@@ -27,7 +27,7 @@ namespace Reference.Adapters.Rest
         {
             var query = new GetModifyAnswerTaskUseCase
             (
-                taskId: taskId
+                userTaskId: taskId
             );
 
             var response = await this.mediator.Send(query);
@@ -40,7 +40,7 @@ namespace Reference.Adapters.Rest
             (
                 commandId: modifyAnswer.CommandId,
                 questionId: modifyAnswer.QuestionId,
-                taskId: taskId, 
+                userTaskId: taskId, 
                 answer: modifyAnswer.Answer
             );
             
@@ -53,7 +53,7 @@ namespace Reference.Adapters.Rest
             return new ModifyAnswerTask()
             {
                 QuestionId = response.QuestionId,
-                TaskId = response.TaskId,
+                TaskId = response.UserTaskId,
                 RecievedOn = response.AskedOn,
                 Subject = response.Subject,
                 Question = response.Question,

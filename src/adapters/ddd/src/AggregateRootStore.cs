@@ -23,7 +23,7 @@ namespace Example.Adapters.DDD
         
         public async Task<TAggregateRoot> Get<TAggregateRoot>(Guid aggregateRootId) where TAggregateRoot : AggregateRoot
         {
-            var state = await mediator.Send(new GetAggregateRootState(aggregateRootId));
+            var state = await mediator.Send(new GetAggregateRootStatePort(aggregateRootId));
             if (state == null)
                 throw new NotFoundException($"AggregateRoot state for type `{typeof(TAggregateRoot).Name}` with id `${aggregateRootId}` is not found.");
 
@@ -33,7 +33,7 @@ namespace Example.Adapters.DDD
 
         public async Task Save<TAggregateRoot>(Guid commandId, TAggregateRoot aggregateRoot) where TAggregateRoot : AggregateRoot
         {
-            await mediator.Send(new SaveAggregateRoot(commandId, aggregateRoot));
+            await mediator.Send(new SaveAggregateRootPort(commandId, aggregateRoot));
         }
     }
 }

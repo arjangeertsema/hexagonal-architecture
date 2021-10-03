@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Reference.Domain.Abstractions;
-using Reference.Domain.Abstractions.Ports.Input;
+using Reference.Domain.UseCases.Attributes;
 
 namespace Reference.Domain.UseCases
 {
@@ -21,7 +21,8 @@ namespace Reference.Domain.UseCases
             this.mediator = mediator;
         }
 
-        [PreAuthorize("a permission")]
+        [HasPermission("a permission")]
+        [IsUserTaskOwner]
         public async Task<Abstractions.Ports.Input.GetAnswerQuestionTaskUseCase.Response> Handle(Abstractions.Ports.Input.GetAnswerQuestionTaskUseCase query)
         {
             throw new NotImplementedException();

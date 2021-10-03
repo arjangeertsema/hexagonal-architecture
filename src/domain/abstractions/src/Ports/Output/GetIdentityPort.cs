@@ -2,9 +2,9 @@ using System;
 
 namespace Reference.Domain.Abstractions.Ports.Output
 {
-    public class GetIdentity : IOutputPort<GetIdentity.Response>
+    public class GetIdentityPort : IOutputPort<GetIdentityPort.Response>
     {
-        public GetIdentity() { }
+        public GetIdentityPort() { }
 
         public class Response
         {

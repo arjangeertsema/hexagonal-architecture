@@ -9,7 +9,7 @@ using Reference.Domain.Abstractions.Ports.Output;
 
 namespace Example.Adapters.DDD
 {
-    public class AggregateRootService : IOutputPort<SaveAggregateRoot>
+    public class AggregateRootService : IOutputPort<SaveAggregateRootPort>
     {
         private readonly IMediator mediator;
 
@@ -23,7 +23,7 @@ namespace Example.Adapters.DDD
             this.mediator = mediator;
         }
 
-        public async Task Handle(SaveAggregateRoot command)
+        public async Task Handle(SaveAggregateRootPort command)
         {
             var tasks = new List<Task>();
             
@@ -40,7 +40,7 @@ namespace Example.Adapters.DDD
 
         private ICommand CreateHandleDomainEvent(Guid commandId, IDomainEvent @event)
         {
-            var type = typeof(HandleDomainEvent<>);
+            var type = typeof(HandleDomainEventPort<>);
             var genericType = type.MakeGenericType(@event.GetType());
             var command = Activator.CreateInstance(genericType, new object[] { commandId, @event });
             return command as ICommand;

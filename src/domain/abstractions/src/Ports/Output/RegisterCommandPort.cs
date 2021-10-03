@@ -2,9 +2,9 @@ using System;
 
 namespace Reference.Domain.Abstractions.Ports.Output
 {
-    public class RegisterCommand : IOutputPort
+    public class RegisterCommandPort : IOutputPort
     {
-        public RegisterCommand(ICommand command)
+        public RegisterCommandPort(ICommand command)
         {
             if (command is null)
             {

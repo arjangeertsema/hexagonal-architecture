@@ -1,6 +1,6 @@
 using System;
 
-namespace Reference.Domain.Abstractions.Ports.Input
+namespace Reference.Domain.UseCases.Attributes
 {
     public class MakeIdempotentAttribute : Attribute
     {

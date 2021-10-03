@@ -3,10 +3,10 @@ using Reference.Domain.Abstractions.DDD;
 
 namespace Reference.Domain.Abstractions.Ports.Output
 {
-    public class HandleDomainEvent<TEvent> : IOutputPort
+    public class HandleDomainEventPort<TEvent> : IOutputPort
             where TEvent : IDomainEvent
     {
-        public HandleDomainEvent(Guid commandId, TEvent @event)
+        public HandleDomainEventPort(Guid commandId, TEvent @event)
         {
             if (@event is null)
             {

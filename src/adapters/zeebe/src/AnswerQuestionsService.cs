@@ -13,11 +13,11 @@ using Zeebe.Client.Bootstrap.Attributes;
 namespace Reference.Adapters.Zeebe
 {
     public class AnswerQuestionsService : 
-        IOutputPortHandler<HandleDomainEvent<QuestionRecievedEvent>>,
-        IOutputPortHandler<HandleDomainEvent<QuestionAnsweredEvent>>, 
-        IOutputPortHandler<HandleDomainEvent<AnswerRejectedEvent>>, 
-        IOutputPortHandler<HandleDomainEvent<AnswerAcceptedEvent>>, 
-        IOutputPortHandler<HandleDomainEvent<AnswerModifiedEvent>>,
+        IOutputPortHandler<HandleDomainEventPort<QuestionRecievedEvent>>,
+        IOutputPortHandler<HandleDomainEventPort<QuestionAnsweredEvent>>, 
+        IOutputPortHandler<HandleDomainEventPort<AnswerRejectedEvent>>, 
+        IOutputPortHandler<HandleDomainEventPort<AnswerAcceptedEvent>>, 
+        IOutputPortHandler<HandleDomainEventPort<AnswerModifiedEvent>>,
         IAsyncJobHandler<SendAnswerJob>,
         IAsyncJobHandler<SendQuestionAnsweredEventJob>
     {
@@ -58,7 +58,7 @@ namespace Reference.Adapters.Zeebe
             this.mediator = mediator;
         }
 
-        public async Task Handle(HandleDomainEvent<QuestionRecievedEvent> command)
+        public async Task Handle(HandleDomainEventPort<QuestionRecievedEvent> command)
         {
             if (command is null)
             {
@@ -82,7 +82,7 @@ namespace Reference.Adapters.Zeebe
                 .Send();
         }
 
-        public async Task Handle(HandleDomainEvent<QuestionAnsweredEvent> command)
+        public async Task Handle(HandleDomainEventPort<QuestionAnsweredEvent> command)
         {
             var variables = new {
                 command.Event.Answer,
@@ -95,7 +95,7 @@ namespace Reference.Adapters.Zeebe
                 .SendWithRetry();
         }
 
-        public async Task Handle(HandleDomainEvent<AnswerRejectedEvent> command)
+        public async Task Handle(HandleDomainEventPort<AnswerRejectedEvent> command)
         {
             var variables = new {
                 command.Event.Rejected,
@@ -108,7 +108,7 @@ namespace Reference.Adapters.Zeebe
                 .SendWithRetry();
         }
 
-        public async Task Handle(HandleDomainEvent<AnswerAcceptedEvent> command)
+        public async Task Handle(HandleDomainEventPort<AnswerAcceptedEvent> command)
         {
             var variables = new {
                 command.Event.Accepted,
@@ -120,7 +120,7 @@ namespace Reference.Adapters.Zeebe
                 .SendWithRetry();
         }
 
-        public async Task Handle(HandleDomainEvent<AnswerModifiedEvent> command)
+        public async Task Handle(HandleDomainEventPort<AnswerModifiedEvent> command)
         {
             var variables = new {
                 command.Event.Answer,
@@ -140,7 +140,8 @@ namespace Reference.Adapters.Zeebe
             var variables = deserializer.Deserialize<AnswerQuestionsVariables>(job.Variables);
             var command = new SendAnswerUseCase
             (
-                commandId: variables.SendAnswerCommandId
+                commandId: variables.SendAnswerCommandId,
+                questionId: variables.QuestionId
             );
 
             await this.mediator.Send(command);
@@ -153,20 +154,21 @@ namespace Reference.Adapters.Zeebe
             var variables = deserializer.Deserialize<AnswerQuestionsVariables>(job.Variables);
             var command = new SendQuestionAnsweredEventUseCase
             (
-                commandId: variables.SendQuestionAnsweredEventCommandId
+                commandId: variables.SendQuestionAnsweredEventCommandId,
+                questionId: variables.QuestionId
             );
 
             await mediator.Send(command);
         }
     }
 
-    [FetchVariables("SendAnswerCommandId")]
+    [FetchVariables("QuestionId", "SendAnswerCommandId")]
     public class SendAnswerJob : AbstractJob
     {
         public SendAnswerJob(IJob job) : base(job) { }
     }
 
-    [FetchVariables("SendQuestionAnsweredEventCommandId")]
+    [FetchVariables("QuestionId", "SendQuestionAnsweredEventCommandId")]
     public class SendQuestionAnsweredEventJob : AbstractJob
     {
         public SendQuestionAnsweredEventJob(IJob job) : base(job) { }
@@ -174,6 +176,7 @@ namespace Reference.Adapters.Zeebe
 
     public class AnswerQuestionsVariables
     {
+        public Guid QuestionId { get; set; }
         public Guid SendAnswerCommandId { get; set; }
         public Guid SendQuestionAnsweredEventCommandId { get; set; }
     }

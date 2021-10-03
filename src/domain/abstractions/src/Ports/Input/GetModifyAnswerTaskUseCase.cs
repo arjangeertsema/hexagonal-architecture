@@ -2,20 +2,20 @@ using System;
 
 namespace Reference.Domain.Abstractions.Ports.Input
 {
-    public class GetModifyAnswerTaskUseCase : IInputPort<GetModifyAnswerTaskUseCase.Response>
+    public class GetModifyAnswerTaskUseCase : IInputPort<GetModifyAnswerTaskUseCase.Response>, IUserTask
     {
-        public GetModifyAnswerTaskUseCase(long taskId)
+        public GetModifyAnswerTaskUseCase(long userTaskId)
         {
-            TaskId = taskId;
+            this.UserTaskId = userTaskId;
         }
 
-        public long TaskId { get; }
+        public long UserTaskId { get; }
 
         public class Response
         {
             public Guid QuestionId { get; }
 
-            public Response(Guid questionId, long taskId, DateTime askedOn, string askedBy, string subject, string question, string answer, string rejection)
+            public Response(Guid questionId, long userTaskId, DateTime askedOn, string askedBy, string subject, string question, string answer, string rejection)
             {
                 if (string.IsNullOrEmpty(askedBy))
                 {
@@ -43,7 +43,7 @@ namespace Reference.Domain.Abstractions.Ports.Input
                 }
 
                 QuestionId = questionId;
-                TaskId = taskId;
+                UserTaskId = userTaskId;
                 AskedOn = askedOn;
                 AskedBy = askedBy;
                 Subject = subject;
@@ -52,7 +52,7 @@ namespace Reference.Domain.Abstractions.Ports.Input
                 Rejection = rejection;
             }
 
-            public long TaskId { get; }
+            public long UserTaskId { get; }
             public DateTime AskedOn { get; }
             public string Subject { get; }
             public string Question { get; }

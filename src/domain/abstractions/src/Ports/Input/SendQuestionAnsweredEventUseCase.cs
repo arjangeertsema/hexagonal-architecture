@@ -4,12 +4,13 @@ namespace Reference.Domain.Abstractions.Ports.Input
 {
     public class SendQuestionAnsweredEventUseCase : IInputPort
     {
-        public SendQuestionAnsweredEventUseCase(Guid commandId)
+        public SendQuestionAnsweredEventUseCase(Guid commandId, Guid questionId)
         {
             CommandId = commandId;
+            QuestionId = questionId;
         }
 
         public Guid CommandId { get; }
-        public Guid QuestionId { get; set; }
+        public Guid QuestionId { get; }
     }
 }

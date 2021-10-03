@@ -4,6 +4,7 @@ using Reference.Domain.Abstractions;
 using Reference.Domain.Abstractions.DDD;
 using Reference.Domain.Abstractions.Ports.Input;
 using Reference.Domain.Core;
+using Reference.Domain.UseCases.Attributes;
 
 namespace Reference.Domain.UseCases
 {
@@ -31,8 +32,8 @@ namespace Reference.Domain.UseCases
             this.aggregateRootStore = aggregateRootStore;         
          }
 
-        [Scoped]
-        [PreAuthorize("a permission")]
+        [Transactional]
+        [HasPermission("a permission")]
         [MakeIdempotent]
         public async Task Handle(Abstractions.Ports.Input.RegisterQuestionUseCase command)
         {

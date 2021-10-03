@@ -2,9 +2,9 @@
 
 namespace Reference.Domain.Abstractions.Ports.Input
 {
-    public class ModifyAnswerUseCase : IInputPort
+    public class ModifyAnswerUseCase : IInputPort, IUserTask
     {
-        public ModifyAnswerUseCase(Guid commandId, Guid questionId, long taskId, string answer)
+        public ModifyAnswerUseCase(Guid commandId, Guid questionId, long userTaskId, string answer)
         {
             if (string.IsNullOrWhiteSpace(answer))
             {
@@ -13,13 +13,13 @@ namespace Reference.Domain.Abstractions.Ports.Input
 
             CommandId = commandId;
             QuestionId = questionId;
-            TaskId = taskId;
+            UserTaskId = userTaskId;
             Answer = answer;
         }
 
         public Guid CommandId { get; }
         public Guid QuestionId { get; }
-        public long TaskId { get; set; }
+        public long UserTaskId { get; set; }
         public string Answer { get; set; }
     }
 }

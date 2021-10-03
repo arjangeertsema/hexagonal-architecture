@@ -27,7 +27,7 @@ namespace Reference.Adapters.Rest
         {
             var query = new GetReviewAnswerTaskUseCase
             (
-                taskId: taskId
+                userTaskId: taskId
             );
 
             var response = await mediator.Send(query);
@@ -40,7 +40,7 @@ namespace Reference.Adapters.Rest
             (
                 commandId: acceptAnswer.CommandId,
                 questionId: acceptAnswer.QuestionId,
-                taskId: taskId
+                userTaskId: taskId
             );
 
             await mediator.Send(command);
@@ -53,7 +53,7 @@ namespace Reference.Adapters.Rest
             (
                 commandId: rejectAnswer.CommandId, 
                 questionId: rejectAnswer.QuestionId,
-                taskId: taskId, 
+                userTaskId: taskId, 
                 rejection: rejectAnswer.Rejection
             );
 
@@ -66,7 +66,7 @@ namespace Reference.Adapters.Rest
             return new ReviewAnswerTask()
             {
                 QuestionId = response.QuestionId,
-                TaskId = response.TaskId,
+                TaskId = response.UserTaskId,
                 RecievedOn = response.AskedOn,
                 Subject = response.Subject,
                 Question = response.Question,

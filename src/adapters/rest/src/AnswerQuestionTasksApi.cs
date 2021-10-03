@@ -40,7 +40,7 @@ namespace Reference.Adapters.Rest
             (
                 commandId: answerQuestion.CommandId,
                 questionId: answerQuestion.QuestionId,
-                taskId: taskId, answer: answerQuestion.Answer
+                userTaskId: taskId, answer: answerQuestion.Answer
             );
 
             await this.mediator.Send(command);
@@ -51,7 +51,7 @@ namespace Reference.Adapters.Rest
         {
             return new AnswerQuestionTask()
             {
-                TaskId = response.TaskId,
+                TaskId = response.UserTaskId,
                 QuestionId = response.QuestionId,
                 RecievedOn = response.AskedOn,
                 Subject = response.Subject,
