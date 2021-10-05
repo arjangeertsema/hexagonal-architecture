@@ -2,7 +2,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\Reference.Domain\Reference.Domain.Abstractions\Reference.Domain.Abstractions.csproj" />
-    <ProjectReference Include="..\Generated\src\Reference.Adapters.Rest.Generated\Reference.Adapters.Rest.Generated.csproj" />
+    <ProjectReference Include="..\Generated\src\Reference.Adapters.Generated.Rest\Reference.Adapters.Generated.Rest.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -13,8 +13,4 @@
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Reference.Adapters.Rest</RootNamespace>
   </PropertyGroup>
-
-  <!-- <Target Name="GenerateRestServer" BeforeTargets="BeforeBuild">
-    <Exec Command="bash generate.sh" />
-  </Target> -->
 </Project>

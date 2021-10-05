@@ -1,8 +1,8 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Reference.Adapters.Rest.Generated.Controllers;
-using Reference.Adapters.Rest.Generated.Models;
+using Reference.Adapters.Generated.Rest.Controllers;
+using Reference.Adapters.Generated.Rest.Models;
 using Microsoft.AspNetCore.Mvc;
 using Reference.Domain.Abstractions;
 using Reference.Domain.Abstractions.Ports.Input;
