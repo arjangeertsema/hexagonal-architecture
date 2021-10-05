@@ -3,27 +3,27 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.6.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reference.UseCases", "Reference.UseCases\Reference.UseCases.csproj", "{6859871E-CBE9-497D-9B32-ABB27B1F7C96}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseCases", "UseCases\UseCases.csproj", "{6859871E-CBE9-497D-9B32-ABB27B1F7C96}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reference.Adapters", "Reference.Adapters", "{7C185426-9C41-4567-841E-7D4D1DEAE995}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adapters", "Adapters", "{7C185426-9C41-4567-841E-7D4D1DEAE995}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reference.Adapters.Events", "Reference.Adapters\Reference.Adapters.Events\Reference.Adapters.Events.csproj", "{7DB769AC-F66B-43DE-BF08-6942BE7708AB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapters.Events", "Adapters\Adapters.Events\Adapters.Events.csproj", "{7DB769AC-F66B-43DE-BF08-6942BE7708AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reference.Adapters.Rest", "Reference.Adapters\Reference.Adapters.Rest\Reference.Adapters.Rest.csproj", "{414F5F82-8BEE-43E4-ABEF-ED2E0B088CC5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapters.Rest", "Adapters\Adapters.Rest\Adapters.Rest.csproj", "{414F5F82-8BEE-43E4-ABEF-ED2E0B088CC5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reference.Adapters.Storage", "Reference.Adapters\Reference.Adapters.Storage\Reference.Adapters.Storage.csproj", "{60E3D4D6-05CB-40A7-B3E8-C382A37BA6DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapters.Storage", "Adapters\Adapters.Storage\Adapters.Storage.csproj", "{60E3D4D6-05CB-40A7-B3E8-C382A37BA6DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reference.Adapters.Zeebe", "Reference.Adapters\Reference.Adapters.Zeebe\Reference.Adapters.Zeebe.csproj", "{34E876F1-D4EA-46A8-925E-A1DB1743F1E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapters.Zeebe", "Adapters\Adapters.Zeebe\Adapters.Zeebe.csproj", "{34E876F1-D4EA-46A8-925E-A1DB1743F1E8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reference.Domain", "Reference.Domain", "{3B0CA3DD-0FD7-493F-B46D-DDC41FE7F999}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{3B0CA3DD-0FD7-493F-B46D-DDC41FE7F999}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reference.Domain.Abstractions", "Reference.Domain\Reference.Domain.Abstractions\Reference.Domain.Abstractions.csproj", "{B4D44ADA-5EB6-48B2-931A-3931503D89F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Abstractions", "Domain\Domain.Abstractions\Domain.Abstractions.csproj", "{B4D44ADA-5EB6-48B2-931A-3931503D89F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reference.Domain.Core", "Reference.Domain\Reference.Domain.Core\Reference.Domain.Core.csproj", "{602CA634-5870-4996-9E30-54E9354398DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Core", "Domain\Domain.Core\Domain.Core.csproj", "{602CA634-5870-4996-9E30-54E9354398DD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reference.Runtime", "Reference.Runtime", "{31612B91-5670-40F3-AE48-B97D2F540D47}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtime", "Runtime", "{31612B91-5670-40F3-AE48-B97D2F540D47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reference.Runtime.Application", "Reference.Runtime\Reference.Runtime.Application\Reference.Runtime.Application.csproj", "{E6CEBA61-D208-4902-B145-145270F820CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Runtime.Application", "Runtime\Runtime.Application\Runtime.Application.csproj", "{E6CEBA61-D208-4902-B145-145270F820CA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Synion", "Synion", "{6F3439E7-404C-4EAC-9A5A-BBAA6A22FDB4}"
 EndProject

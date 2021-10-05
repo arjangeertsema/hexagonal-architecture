@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\Domain.Abstractions\Domain.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Synion\Synion.CQRS\Synion.CQRS.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Adapters.Events</RootNamespace>
+  </PropertyGroup>
+
+</Project>
