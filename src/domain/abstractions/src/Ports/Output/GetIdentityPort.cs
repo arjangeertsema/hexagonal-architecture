@@ -10,11 +10,6 @@ namespace Reference.Domain.Abstractions.Ports.Output
         {
             public Response(string id)
             {
-                if (id is null)
-                {
-                    throw new ArgumentNullException(nameof(id));
-                }
-
                 Id = id;
             }
 

@@ -14,24 +14,11 @@ namespace Reference.UseCases
         private readonly IMediator mediator;
         private readonly IAggregateRootStore aggregateRootStore;
 
-        public AnswerQuestionUseCaseHandler(
-            IMediator mediator,
-            IAggregateRootStore aggregateRootStore
-        )
+        public AnswerQuestionUseCaseHandler(IMediator mediator, IAggregateRootStore aggregateRootStore)
         {
-            if (mediator is null)
-            {
-                throw new ArgumentNullException(nameof(mediator));
-            }
-
-            if (aggregateRootStore is null)
-            {
-                throw new ArgumentNullException(nameof(aggregateRootStore));
-            }
-
-            this.mediator = mediator;
-            this.aggregateRootStore = aggregateRootStore;         
-         }
+            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));           
+        }
 
         [Transactional]
         [HasPermission("a permission")]

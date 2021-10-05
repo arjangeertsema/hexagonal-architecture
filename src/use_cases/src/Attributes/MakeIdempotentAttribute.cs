@@ -1,8 +1,9 @@
 using System;
+using Reference.Domain.Abstractions;
 
 namespace Reference.UseCases.Attributes
 {
-    public class MakeIdempotentAttribute : Attribute
+    public class MakeIdempotentAttribute : BehaviourAttribute
     {
         public MakeIdempotentAttribute()
         { }

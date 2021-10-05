@@ -20,7 +20,7 @@ namespace Reference.Domain.Abstractions.Ports.Input
 
             public Response(IEnumerable<Response.Item> items)
             {
-                Items = items;
+                Items = items ?? throw new ArgumentNullException(nameof(items));
             }
             public IEnumerable<Response.Item> Items { get; }
 
@@ -29,6 +29,21 @@ namespace Reference.Domain.Abstractions.Ports.Input
 
                 public Item(Guid questionId, string subject, string question, string askedBy, DateTime askedOn, DateTime lastActivityOn, int status)
                 {
+                    if (string.IsNullOrEmpty(subject))
+                    {
+                        throw new ArgumentException($"'{nameof(subject)}' cannot be null or empty.", nameof(subject));
+                    }
+
+                    if (string.IsNullOrEmpty(question))
+                    {
+                        throw new ArgumentException($"'{nameof(question)}' cannot be null or empty.", nameof(question));
+                    }
+
+                    if (string.IsNullOrEmpty(askedBy))
+                    {
+                        throw new ArgumentException($"'{nameof(askedBy)}' cannot be null or empty.", nameof(askedBy));
+                    }
+
                     QuestionId = questionId;
                     Subject = subject;
                     Question = question;

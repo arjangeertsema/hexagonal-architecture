@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Reference.Domain.Abstractions
 {
-    public interface IAttributeCollection
+    public interface IAttributeCollection : IEnumerable<Attribute>
     {
         TAttribute GetAttribute<TAttribute>() where TAttribute : Attribute;
         IEnumerable<TAttribute> GetAttributes<TAttribute>() where TAttribute : Attribute;

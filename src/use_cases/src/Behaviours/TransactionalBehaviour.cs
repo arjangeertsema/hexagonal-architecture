@@ -1,23 +1,21 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Transactions;
 using Reference.Domain.Abstractions;
 using Reference.UseCases.Attributes;
 
 namespace Reference.UseCases.Behaviours
 {
-    public class TransactionalBehavior : ICommandBehaviour
+    public class TransactionalCommandBehavior<TCommand> : ICommandAttributeBehaviour<TCommand, TransactionalAttribute>
+        where TCommand : ICommand
     {
-        public async Task Handle(ICommand command, IAttributeCollection attributeCollection, CancellationToken cancellationToken, CommandHandlerDelegate next)
+        private readonly ICommandTransactionScopeFactory<TCommand> transactionScopeFactory;
+
+        public TransactionalCommandBehavior(ICommandTransactionScopeFactory<TCommand> transactionScopeFactory) => this.transactionScopeFactory = transactionScopeFactory ?? throw new ArgumentNullException(nameof(transactionScopeFactory));
+
+        public async Task Handle(TCommand command, TransactionalAttribute attribute, CancellationToken cancellationToken, CommandBehaviourDelegate next)
         {
-            var attr = attributeCollection.GetAttribute<TransactionalAttribute>();
-            if( attr == null)
-            {
-                await next();
-                return;
-            }
-            
-            using(var scope = new TransactionScope())
+            using(var scope = this.transactionScopeFactory.Create())
             {
                 await next();
                 

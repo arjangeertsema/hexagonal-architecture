@@ -5,11 +5,11 @@ namespace Reference.Domain.Abstractions.Ports.Output
 {
     public class GetAggregateRootStatePort : IOutputPort<IEnumerable<KeyValuePair<string, string>>>
     {
-        public GetAggregateRootStatePort(Guid key)
+        public GetAggregateRootStatePort(Guid aggregateRootId)
         {
-            Key = key;
+            AggregateRootId = aggregateRootId;
         }
 
-        public Guid Key { get; }
+        public Guid AggregateRootId { get; }
     }
 }

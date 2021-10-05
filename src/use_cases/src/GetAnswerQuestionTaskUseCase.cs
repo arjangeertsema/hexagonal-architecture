@@ -10,15 +10,7 @@ namespace Reference.UseCases
     {
         private readonly IMediator mediator;
 
-        public GetAnswerQuestionTaskUseCaseHandler(IMediator mediator)
-        {
-            if (mediator is null)
-            {
-                throw new ArgumentNullException(nameof(mediator));
-            }
-
-            this.mediator = mediator;
-        }
+        public GetAnswerQuestionTaskUseCaseHandler(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
         [HasPermission("a permission")]
         [IsUserTaskOwner]

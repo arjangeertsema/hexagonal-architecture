@@ -8,29 +8,15 @@ using Reference.UseCases.Attributes;
 
 namespace Reference.UseCases.Behaviours
 {
-    public class MakeIdempotentBehaviour : ICommandBehaviour
+    public class MakeIdempotentCommandBehaviour<TCommand> : ICommandAttributeBehaviour<TCommand, MakeIdempotentAttribute>
+        where TCommand : ICommand
     {
         private readonly IMediator mediator;
 
-        public MakeIdempotentBehaviour(IMediator mediator)
+        public MakeIdempotentCommandBehaviour(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+
+        public async Task Handle(TCommand command, MakeIdempotentAttribute attribute, CancellationToken cancellationToken, CommandBehaviourDelegate next)
         {
-            if (mediator is null)
-            {
-                throw new ArgumentNullException(nameof(mediator));
-            }
-
-            this.mediator = mediator;
-        }
-
-        public async Task Handle(ICommand command, IAttributeCollection attributeCollection, CancellationToken cancellationToken, CommandHandlerDelegate next)
-        {
-            var attr = attributeCollection.GetAttribute<MakeIdempotentAttribute>();
-            if(attr == null)
-            {
-                await next();
-                return;
-            }
-
             try
             {
                 await this.mediator.Send(new RegisterCommandPort(command));
@@ -38,7 +24,7 @@ namespace Reference.UseCases.Behaviours
             }
             catch(CommandAlreadyExistsException)
             {
-                //Stop pipeline command has already been handled.
+                //Stop pipeline, command has already been handled. Do not call next.
                 return;
             }
         }

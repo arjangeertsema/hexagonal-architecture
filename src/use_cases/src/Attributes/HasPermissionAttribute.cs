@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Reference.Domain.Abstractions;
 
 namespace Reference.UseCases.Attributes
 {
-    public class HasPermissionAttribute : Attribute
+    public class HasPermissionAttribute : BehaviourAttribute
     {
         public HasPermissionAttribute(params string[] permissions)
         {

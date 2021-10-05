@@ -8,44 +8,32 @@ using Reference.UseCases.Attributes;
 
 namespace Reference.UseCases.Behaviours
 {
-    public class HasPemissionBehaviour : ICommandBehaviour, IQueryBehaviour
+    public class HasPemissionCommandBehaviour<TCommand> : ICommandAttributeBehaviour<TCommand, HasPermissionAttribute>
+        where TCommand : ICommand
     {
         private readonly IMediator mediator;
 
-        public HasPemissionBehaviour(IMediator mediator)
-        {
-            if (mediator is null)
-            {
-                throw new ArgumentNullException(nameof(mediator));
-            }
+        public HasPemissionCommandBehaviour(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
-            this.mediator = mediator;
-        }
-        
-        public async Task Handle(ICommand command, IAttributeCollection attributeCollection, CancellationToken cancellationToken, CommandHandlerDelegate next)
+        public async Task Handle(TCommand command, HasPermissionAttribute attribute, CancellationToken cancellationToken, CommandBehaviourDelegate next)
         {
-            var attr = attributeCollection.GetAttribute<HasPermissionAttribute>();
-            if(attr == null)
-            {
-                await next();
-                return;
-            }
-
-            if(! await mediator.Send(new HasPermissionPort(attr.Permissions.ToArray())))
+            if(! await mediator.Send(new HasPermissionPort(attribute.Permissions.ToArray())))
                 throw new UnauthorizedAccessException();
 
             await next();
         }
+    }
 
-        public async Task<object> Handle(IQuery<object> query, IAttributeCollection attributeCollection, CancellationToken cancellationToken, QueryHandlerDelegate<object> next)
+    public class HasPemissionQueryBehaviour<TQuery, TResponse> : IQueryAttributeBehaviour<TQuery, TResponse, HasPermissionAttribute>
+        where TQuery : IQuery<TResponse>
+    {
+        private readonly IMediator mediator;
+
+        public HasPemissionQueryBehaviour(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+
+        public async Task<TResponse> Handle(TQuery query, HasPermissionAttribute attribute, CancellationToken cancellationToken, QueryBehaviourDelegate<TResponse> next)
         {
-            var attr = attributeCollection.GetAttribute<HasPermissionAttribute>();
-            if(attr == null)
-            {
-                return await next();                
-            }
-
-            if(! await mediator.Send(new HasPermissionPort(attr.Permissions.ToArray())))
+            if(! await mediator.Send(new HasPermissionPort(attribute.Permissions.ToArray())))
                 throw new UnauthorizedAccessException();
 
             return await next();
