@@ -57,7 +57,7 @@ namespace Synion.CQRS
             where TCommand : ICommand
         {
             var handler = serviceProvider.GetRequiredService<CommandHandler<TCommand>>();
-            return handler.Handle(command, cancellationToken);
+            return handler.Handle(command, cancellationToken).ConfigureAwait(false);
         }
 
         public Task<TResponse> SendQuery<TQuery, TResponse>(TQuery query, CancellationToken cancellationToken = default)
@@ -69,7 +69,7 @@ namespace Synion.CQRS
             }
 
             var handler = serviceProvider.GetRequiredService<QueryHandler<TQuery, TResponse>>();
-            return handler.Handle(query, cancellationToken);
+            return handler.Handle(query, cancellationToken.ConfigureAwait(false));
         }
     }
 }

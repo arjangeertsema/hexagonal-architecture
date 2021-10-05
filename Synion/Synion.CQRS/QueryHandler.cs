@@ -22,12 +22,12 @@ namespace Synion.CQRS
         {
             var handler = serviceProvider.GetRequiredService<IQueryHandler<TQuery, TResponse>>();
             var attributes = GetHandlerAttributes(handler);
-            Task<TResponse> Handler() => handler.Handle(query, cancellationToken);
+            Task<TResponse> handleDelegate() => handler.Handle(query, cancellationToken);
 
             return serviceProvider
                 .GetServices<IQueryBehaviour<TQuery, TResponse>>()
                 .Reverse()
-                .Aggregate((QueryBehaviourDelegate<TResponse>) Handler, (next, behaviour) => () => behaviour.Handle(query, attributes, cancellationToken, next))();
+                .Aggregate((QueryBehaviourDelegate<TResponse>) handleDelegate, (next, behaviour) => () => behaviour.Handle(query, attributes, cancellationToken, next))();
         }
 
         private static IAttributeCollection GetHandlerAttributes(IQueryHandler<TQuery, TResponse> handler) 

@@ -22,12 +22,12 @@ namespace Synion.CQRS
         {
             var handler = serviceProvider.GetRequiredService<ICommandHandler<TCommand>>();
             var attributes = GetHandlerAttributes(handler);
-            Task Handler() => handler.Handle(command, cancellationToken);
+            Task handleDelegate() => handler.Handle(command, cancellationToken);
 
             return serviceProvider
                 .GetServices<ICommandBehaviour<TCommand>>()
                 .Reverse()
-                .Aggregate((CommandBehaviourDelegate) Handler, (next, behaviour) => () => behaviour.Handle(command, attributes, cancellationToken, next))();        
+                .Aggregate((CommandBehaviourDelegate) handleDelegate, (next, behaviour) => () => behaviour.Handle(command, attributes, cancellationToken, next))();        
         }
 
         private static IAttributeCollection GetHandlerAttributes(ICommandHandler<TCommand> handler) 
@@ -36,7 +36,7 @@ namespace Synion.CQRS
             var reference = typeof(ICommandHandler<TCommand>)
                 .GetMethods()
                 .Where(m => m.Name.Equals(name))
-                .Single();
+                .sin;
 
             var methodInfo = handler.GetType().GetMethod
             (

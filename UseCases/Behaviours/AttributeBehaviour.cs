@@ -91,15 +91,15 @@ namespace UseCases.Behaviours
                         Behaviour = GetQueryAttributeBehaviour(a) 
                     }
                 )
-                .Aggregate(
-                    seed: (QueryBehaviourDelegate<TResponse>) nextDelegate,
-                    func: (n, i) => ()  => i.Behaviour.Handle(query, i.Attribute, cancellationToken, n)
-                )();
+                .Aggregate((QueryBehaviourDelegate<TResponse>) nextDelegate, (nxt, item) => ()  => item.Behaviour.Handle(query, item.Attribute, cancellationToken, nxt)
+                )
+                ().ConfigureAwait(false);
         }
 
         private IQueryAttributeBehaviour<TQuery, TResponse, BehaviourAttribute> GetQueryAttributeBehaviour(BehaviourAttribute attribute)
         {
-            return (IQueryAttributeBehaviour<TQuery, TResponse, BehaviourAttribute>)this.serviceProvider.GetRequiredService(
+            return (IQueryAttributeBehaviour<TQuery, TResponse, BehaviourAttribute>) this.serviceProvider.GetRequiredService
+            (
                 serviceType: this.queryBehaviourType.MakeGenericType(typeof(TQuery), typeof(TResponse), attribute.GetType())
             );
         }
