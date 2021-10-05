@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Reference.Adapters.Generated.Rest.Controllers;
 using Reference.Adapters.Generated.Rest.Models;
 using Microsoft.AspNetCore.Mvc;
-using Reference.Domain.Abstractions;
+using Synion.CQRS.Abstractions;
 using Reference.Domain.Abstractions.Ports.Input;
 
 namespace Reference.Adapters.Rest
@@ -13,15 +13,7 @@ namespace Reference.Adapters.Rest
     {
         private readonly IMediator mediator;
 
-        public ReviewAnswerTasksApi(IMediator mediator)
-        {
-            if (mediator is null)
-            {
-                throw new ArgumentNullException(nameof(mediator));
-            }
-
-            this.mediator = mediator;
-        }
+        public ReviewAnswerTasksApi(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
         public override async Task<IActionResult> GetReviewAnswerTask([FromRoute(Name = "task_id"), Required] long taskId)
         {

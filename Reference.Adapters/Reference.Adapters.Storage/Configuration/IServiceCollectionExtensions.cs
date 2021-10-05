@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Reference.Domain.Abstractions.DDD;
+using Synion.DDD.Abstractions;
 
 namespace Example.Adapters.Storage.Configuration
 {

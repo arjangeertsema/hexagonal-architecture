@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
+using Synion.CQRS.Abstractions.Commands;
+using Synion.CQRS.Abstractions.Queries;
 
-namespace Reference.Domain.Abstractions
+namespace Synion.CQRS.Abstractions
 {
     public interface IMediator
     {

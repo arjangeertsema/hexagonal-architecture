@@ -1,6 +1,6 @@
 using System;
 
-namespace Reference.Domain.Abstractions.DDD.Exceptions
+namespace Synion.DDD.Abstractions.Exceptions
 {
     [Serializable]
     public class NotFoundException : Exception

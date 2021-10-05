@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Reference.Domain.Abstractions.DDD
+namespace Synion.DDD.Abstractions
 {
     public abstract class AggregateRoot : IAggregateRoot
     {
@@ -11,11 +11,11 @@ namespace Reference.Domain.Abstractions.DDD
 
         public AggregateRoot(Guid id)
         {
-            Id = id;
+            Id = id;            
             changes = new LinkedList<IDomainEvent>();
         }
 
-        public AggregateRoot(IEnumerable<KeyValuePair<string, string>> state)
+        public AggregateRoot(Guid id, IEnumerable<KeyValuePair<string, string>> state)
         {
             if (state is null)
             {
@@ -27,18 +27,20 @@ namespace Reference.Domain.Abstractions.DDD
             throw new NotImplementedException();
         }
 
+
         public Guid Id { get; }
 
-        IEnumerable<IDomainEvent> IAggregateRoot.GetChanges() => changes.AsEnumerable();
-
-        void IAggregateRoot.ClearChanges() => changes.Clear();
+        public IEnumerable<IDomainEvent> Commit() 
+        {
+            var commit = new List<IDomainEvent>(this.changes);
+            this.changes.Clear();
+            return commit;
+        }
 
         protected void RaiseEvent<TEvent>(TEvent @event)
             where TEvent: IDomainEvent
         {
             changes.Add(@event);
         }
-
-        
     }
 }

@@ -1,15 +1,16 @@
 using System;
 using System.Threading.Tasks;
-using Reference.Domain.Abstractions;
-using Reference.Domain.Abstractions.DDD;
+using Synion.CQRS.Abstractions;
+using Synion.DDD.Abstractions;
 using Reference.Domain.Abstractions.Ports.Input;
 using Reference.Domain.Abstractions.Ports.Output;
 using Reference.Domain.Core;
 using Reference.UseCases.Attributes;
+using Synion.CQRS.Abstractions.Ports;
 
 namespace Reference.UseCases
 {
-    public class SendQuestionAnsweredEventUseCaseHandler :IInputPortHandler<SendQuestionAnsweredEventUseCase>
+    public class SendQuestionAnsweredEventUseCaseHandler : IInputPortHandler<SendQuestionAnsweredEventUseCase>
     {
         private readonly IMediator mediator;
         private readonly IAggregateRootStore aggregateRootStore;

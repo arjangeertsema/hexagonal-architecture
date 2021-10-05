@@ -1,9 +1,11 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Reference.Domain.Abstractions;
+using Synion.CQRS.Abstractions;
 using Reference.Domain.Abstractions.Ports.Output;
 using Reference.UseCases.Attributes;
+using Synion.CQRS.Abstractions.Commands;
+using Synion.CQRS.Abstractions.Queries;
 
 namespace Reference.UseCases.Behaviours
 {

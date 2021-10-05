@@ -1,10 +1,10 @@
 using System;
 
-namespace Reference.Domain.Abstractions.DDD
+namespace Synion.DDD.Abstractions
 {
     public interface IDomainEvent
     {
         Guid EventId { get; }
-        Guid AggregateId { get;  }
+        Guid AggregateRootId { get;  }
     }
 }

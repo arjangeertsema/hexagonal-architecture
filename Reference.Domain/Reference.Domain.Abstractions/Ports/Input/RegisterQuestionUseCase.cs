@@ -1,10 +1,11 @@
 using System;
+using Synion.CQRS.Abstractions.Ports;
 
 namespace Reference.Domain.Abstractions.Ports.Input
 {
     public class RegisterQuestionUseCase : IInputPort
     {
-        public RegisterQuestionUseCase(Guid commandId, string subject, string question, string askedBy)
+        public RegisterQuestionUseCase(Guid commandId, Guid questionId, string subject, string question, string askedBy)
         {
             if (string.IsNullOrWhiteSpace(subject))
             {
@@ -22,11 +23,13 @@ namespace Reference.Domain.Abstractions.Ports.Input
             }
 
             CommandId = commandId;
+            QuestionId = questionId;
             Subject  = subject;
             Question = question;
             AskedBy = askedBy;
         }
         public Guid CommandId { get; }
+        public Guid QuestionId { get; set; }
         public string Subject { get; }
         public string Question { get; }            
         public string AskedBy { get; }

@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using Reference.Domain.Abstractions;
-using Reference.Domain.Abstractions.DDD;
-using Reference.Domain.Abstractions.DDD.Exceptions;
+using Synion.CQRS.Abstractions;
+using Synion.DDD.Abstractions;
+using Synion.DDD.Abstractions.Exceptions;
 using Reference.Domain.Abstractions.Ports.Output;
 
 namespace Example.Adapters.Storage
@@ -11,16 +11,8 @@ namespace Example.Adapters.Storage
     {
         private readonly IMediator mediator;
 
-        public AggregateRootStore(IMediator mediator)
-        {
-            if (mediator is null)
-            {
-                throw new ArgumentNullException(nameof(mediator));
-            }
+        public AggregateRootStore(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
-            this.mediator = mediator;
-        }
-        
         public async Task<TAggregateRoot> Get<TAggregateRoot>(Guid aggregateRootId) where TAggregateRoot : AggregateRoot
         {
             var state = await mediator.Send(new GetAggregateRootStatePort(aggregateRootId));

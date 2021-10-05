@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Reference.Domain.Abstractions
+namespace Synion.CQRS.Abstractions.Queries
 {
     public interface IQueryHandler<TQuery, TResponse>
         where TQuery : IQuery<TResponse>

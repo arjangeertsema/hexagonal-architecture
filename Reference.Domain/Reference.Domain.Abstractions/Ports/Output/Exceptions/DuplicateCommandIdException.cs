@@ -1,4 +1,5 @@
 using System;
+using Synion.CQRS.Abstractions.Commands;
 
 namespace Reference.Domain.Abstractions.Ports.Output.Exceptions
 {

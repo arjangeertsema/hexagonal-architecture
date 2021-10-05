@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Reference.Domain.Abstractions;
+using Synion.CQRS.Abstractions;
 using Reference.Domain.Abstractions.Events;
 using Reference.Domain.Abstractions.Ports.Input;
 using Reference.Domain.Abstractions.Ports.Output;
@@ -9,6 +9,7 @@ using Zeebe.Client;
 using Zeebe.Client.Api.Responses;
 using Zeebe.Client.Bootstrap.Abstractions;
 using Zeebe.Client.Bootstrap.Attributes;
+using Synion.CQRS.Abstractions.Ports;
 
 namespace Reference.Adapters.Zeebe
 {
@@ -32,30 +33,10 @@ namespace Reference.Adapters.Zeebe
             IZeebeVariablesDeserializer deserializer,
             IMediator mediator)
         {
-            if (zeebeClient is null)
-            {
-                throw new ArgumentNullException(nameof(zeebeClient));
-            }
-
-            if (serializer is null)
-            {
-                throw new ArgumentNullException(nameof(serializer));
-            }
-
-            if (deserializer is null)
-            {
-                throw new ArgumentNullException(nameof(deserializer));
-            }
-
-            if (mediator is null)
-            {
-                throw new ArgumentNullException(nameof(mediator));
-            }
-
-            this.zeebeClient = zeebeClient;
-            this.serializer = serializer;
-            this.deserializer = deserializer;
-            this.mediator = mediator;
+            this.zeebeClient = zeebeClient ?? throw new ArgumentNullException(nameof(zeebeClient));;
+            this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));;
+            this.deserializer = deserializer ?? throw new ArgumentNullException(nameof(deserializer));;
+            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));;
         }
 
         public async Task Handle(HandleDomainEventPort<QuestionRecievedEvent> command)
@@ -66,7 +47,7 @@ namespace Reference.Adapters.Zeebe
             }
 
             var variables = new {
-                command.Event.AggregateId,
+                command.Event.AggregateRootId,
                 command.Event.Subject,
                 command.Event.Question,
                 command.Event.Asked,
@@ -84,6 +65,11 @@ namespace Reference.Adapters.Zeebe
 
         public async Task Handle(HandleDomainEventPort<QuestionAnsweredEvent> command)
         {
+            if (command is null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
             var variables = new {
                 command.Event.Answer,
                 command.Event.Answered,
@@ -97,6 +83,11 @@ namespace Reference.Adapters.Zeebe
 
         public async Task Handle(HandleDomainEventPort<AnswerRejectedEvent> command)
         {
+            if (command is null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
             var variables = new {
                 command.Event.Rejected,
                 command.Event.RejectedBy,
@@ -110,6 +101,11 @@ namespace Reference.Adapters.Zeebe
 
         public async Task Handle(HandleDomainEventPort<AnswerAcceptedEvent> command)
         {
+            if (command is null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
             var variables = new {
                 command.Event.Accepted,
                 command.Event.AcceptedBy
@@ -122,6 +118,11 @@ namespace Reference.Adapters.Zeebe
 
         public async Task Handle(HandleDomainEventPort<AnswerModifiedEvent> command)
         {
+            if (command is null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
             var variables = new {
                 command.Event.Answer,
                 command.Event.Modified,

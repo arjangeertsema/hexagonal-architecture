@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 
-namespace Reference.Domain.Abstractions.DDD
+namespace Synion.DDD.Abstractions
 {
     public interface IAggregateRoot
     {
         Guid Id { get; }
-        IEnumerable<IDomainEvent> GetChanges();
-        void ClearChanges();
+        IEnumerable<IDomainEvent> Commit();
     }
 }

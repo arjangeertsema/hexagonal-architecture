@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Synion.CQRS.Abstractions.Ports;
 
 namespace Reference.Domain.Abstractions.Ports.Output
 {

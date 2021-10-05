@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Reference.Adapters.Generated.Rest.Controllers;
 using Reference.Adapters.Generated.Rest.Models;
 using Microsoft.AspNetCore.Mvc;
-using Reference.Domain.Abstractions;
+using Synion.CQRS.Abstractions;
 using Reference.Domain.Abstractions.Ports.Input;
 
 namespace Reference.Adapters.Rest
@@ -14,21 +14,14 @@ namespace Reference.Adapters.Rest
     {
         private readonly IMediator mediator;
 
-        public QuestionsApi(IMediator mediator)
-        {
-            if (mediator is null)
-            {
-                throw new ArgumentNullException(nameof(mediator));
-            }
-
-            this.mediator = mediator;
-        }
+        public QuestionsApi(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
         public override async Task<IActionResult> RegisterQuestion([FromBody] RegisterQuestion registerQuestion)
         {
             var command = new RegisterQuestionUseCase
             (
                 commandId: registerQuestion.CommandId, 
+                questionId: registerQuestion.QuestionId,
                 subject: registerQuestion.Subject, 
                 question: registerQuestion.Question, 
                 askedBy: registerQuestion.Sender

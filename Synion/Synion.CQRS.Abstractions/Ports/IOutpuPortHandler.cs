@@ -1,4 +1,7 @@
-namespace Reference.Domain.Abstractions
+using Synion.CQRS.Abstractions.Commands;
+using Synion.CQRS.Abstractions.Queries;
+
+namespace Synion.CQRS.Abstractions.Ports
 {
     public interface IOutputPortHandler<TCommand> : ICommandHandler<TCommand>
         where TCommand : IOutputPort

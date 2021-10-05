@@ -1,6 +1,6 @@
 using System.Transactions;
 
-namespace Reference.Domain.Abstractions
+namespace Synion.CQRS.Abstractions.Commands
 {
     public interface ICommandTransactionScopeFactory<TCommand>
         where TCommand : ICommand

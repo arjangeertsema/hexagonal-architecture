@@ -1,5 +1,5 @@
 using System;
-using Reference.Domain.Abstractions.DDD;
+using Synion.DDD.Abstractions;
 
 namespace Reference.Domain.Abstractions.Events
 {

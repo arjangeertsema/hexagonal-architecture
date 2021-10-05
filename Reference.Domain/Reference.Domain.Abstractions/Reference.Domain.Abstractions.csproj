@@ -5,4 +5,9 @@
     <RootNamespace>Reference.Domain.Abstractions</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Synion\Synion.DDD.Abstractions\Synion.DDD.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Synion\Synion.CQRS.Abstractions\Synion.CQRS.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>

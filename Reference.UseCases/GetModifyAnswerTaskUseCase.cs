@@ -1,8 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Reference.Domain.Abstractions;
+using Synion.CQRS.Abstractions;
 using Reference.Domain.Abstractions.Ports.Input;
 using Reference.UseCases.Attributes;
+using Synion.CQRS.Abstractions.Ports;
 
 namespace Reference.UseCases
 {

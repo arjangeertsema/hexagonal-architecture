@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Reference.Domain.Abstractions;
+using Synion.CQRS.Abstractions;
 
 namespace Reference.UseCases.Attributes
 {

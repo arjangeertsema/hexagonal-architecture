@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Reference.Domain.Abstractions;
+using Synion.CQRS.Abstractions;
+using Synion.CQRS.Abstractions.Commands;
+using Synion.CQRS.Abstractions.Queries;
 
 namespace Reference.UseCases.Behaviours
 {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Reference.Domain.Abstractions;
 using Reference.Domain.Abstractions.Ports.Output;
+using Synion.CQRS.Abstractions.Ports;
 
 namespace Reference.Adapters.Zeebe
 {

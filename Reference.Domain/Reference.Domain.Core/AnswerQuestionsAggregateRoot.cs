@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Reference.Domain.Abstractions.DDD;
+using Synion.DDD.Abstractions;
 using Reference.Domain.Abstractions.Events;
 using Reference.Domain.Abstractions.Exceptions;
 
@@ -8,18 +8,19 @@ namespace Reference.Domain.Core
 {
     public class AnswerQuestionsAggregateRoot : AggregateRoot
     {
-        public static AnswerQuestionsAggregateRoot Start(string subject, string question, string askedBy)
+        public static AnswerQuestionsAggregateRoot Start(Guid questionId, string subject, string question, string askedBy)
         {
             return new AnswerQuestionsAggregateRoot
             (
+                id: questionId,
                 subject: subject,
                 question: question,
                 askedBy: askedBy
             );
         }
 
-        private AnswerQuestionsAggregateRoot(string subject, string question, string askedBy)
-            : base(Guid.NewGuid())
+        private AnswerQuestionsAggregateRoot(Guid id, string subject, string question, string askedBy)
+            : base(id)
         {
             if (string.IsNullOrWhiteSpace(subject))
             {
@@ -44,8 +45,8 @@ namespace Reference.Domain.Core
             RaiseEvent(new QuestionRecievedEvent(Id, Subject, Question, AskedBy, Asked));
         }
 
-        public AnswerQuestionsAggregateRoot(IEnumerable<KeyValuePair<string, string>> state)
-            : base(state)
+        public AnswerQuestionsAggregateRoot(Guid id, IEnumerable<KeyValuePair<string, string>> state)
+            : base(id, state)
         { }
 
         public void AnswerQuestion(long taskId, string answer, string answeredBy)

@@ -1,5 +1,5 @@
 using System;
-using Reference.Domain.Abstractions;
+using Synion.CQRS.Abstractions;
 
 namespace Reference.UseCases.Attributes
 {

@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Reference.Domain.Abstractions
+namespace Synion.CQRS.Abstractions.Commands
 {
     public interface ICommandAttributeBehaviour<TCommand, in TAttribute>
         where TCommand : ICommand

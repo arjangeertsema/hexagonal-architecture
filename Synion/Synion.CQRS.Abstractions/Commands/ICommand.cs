@@ -1,6 +1,6 @@
 using System;
 
-namespace Reference.Domain.Abstractions
+namespace Synion.CQRS.Abstractions.Commands
 {
     public interface ICommand
     {

@@ -1,8 +1,8 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Reference.Domain.Abstractions;
 using Reference.UseCases.Attributes;
+using Synion.CQRS.Abstractions.Commands;
 
 namespace Reference.UseCases.Behaviours
 {

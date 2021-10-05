@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Reference.Domain.Abstractions.DDD
+namespace Synion.DDD.Abstractions
 {
     public interface IAggregateRootStore
     {

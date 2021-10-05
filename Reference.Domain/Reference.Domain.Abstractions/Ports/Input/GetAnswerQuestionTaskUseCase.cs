@@ -1,4 +1,6 @@
 using System;
+using Synion.CQRS.Abstractions;
+using Synion.CQRS.Abstractions.Ports;
 
 namespace Reference.Domain.Abstractions.Ports.Input
 {        

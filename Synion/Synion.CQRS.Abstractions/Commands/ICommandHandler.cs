@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace Reference.Domain.Abstractions
+namespace Synion.CQRS.Abstractions.Commands
 {
     public interface ICommandHandler<TCommand>
         where TCommand : ICommand

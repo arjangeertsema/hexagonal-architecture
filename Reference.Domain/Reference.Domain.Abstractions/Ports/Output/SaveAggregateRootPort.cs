@@ -1,5 +1,6 @@
 using System;
-using Reference.Domain.Abstractions.DDD;
+using Synion.DDD.Abstractions;
+using Synion.CQRS.Abstractions.Ports;
 
 namespace Reference.Domain.Abstractions.Ports.Output
 {

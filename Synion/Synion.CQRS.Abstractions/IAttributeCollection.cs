@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Reference.Domain.Abstractions
+namespace Synion.CQRS.Abstractions
 {
     public interface IAttributeCollection : IEnumerable<Attribute>
     {

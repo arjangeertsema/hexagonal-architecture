@@ -1,4 +1,4 @@
-namespace Reference.Domain.Abstractions
+namespace Synion.CQRS.Abstractions
 {
     public interface IUserTask
     {
