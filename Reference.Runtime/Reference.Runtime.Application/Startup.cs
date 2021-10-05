@@ -21,10 +21,10 @@ namespace application
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .ConfigureStorageAdapterServices(Configuration)
-                .ConfigureZeebeAdapterServices(Configuration)
-                .ConfigureRestAdapterServices(Configuration)
-                .ConfigureDomainUseCasesServices(Configuration);
+                .AddServicesForStorageAdapter(Configuration)
+                .AddServicesForZeebeAdapter(Configuration)
+                .AddServicesForRestAdapter(Configuration)
+                .AddServicesForUseCases(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

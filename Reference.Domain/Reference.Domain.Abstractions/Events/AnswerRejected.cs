@@ -1,11 +1,12 @@
 using System;
+using Synion.CQRS.Abstractions;
 using Synion.DDD.Abstractions;
 
 namespace Reference.Domain.Abstractions.Events
 {
-    public class AnswerRejectedEvent : DomainEvent
+    public class AnswerRejectedEvent : DomainEvent, IUserTask
     {
-        public AnswerRejectedEvent(Guid aggregateId, long taskId, string rejection, string rejectedBy, DateTime rejected)
+        public AnswerRejectedEvent(Guid aggregateId, long userTaskId, string rejection, string rejectedBy, DateTime rejected)
             : base(aggregateId)
 
         {
@@ -19,13 +20,13 @@ namespace Reference.Domain.Abstractions.Events
                 throw new ArgumentException($"'{nameof(rejectedBy)}' cannot be null or whitespace.", nameof(rejectedBy));
             }
 
-            TaskId = taskId;
+            UserTaskId = userTaskId;
             Rejection = rejection;
             RejectedBy = rejectedBy;
             Rejected = rejected;
         }
 
-        public long TaskId { get; }
+        public long UserTaskId { get; }
         public string Rejection { get; }
         public string RejectedBy { get; }
         public DateTime Rejected { get; }

@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Reference.Domain\Reference.Domain.Abstractions\Reference.Domain.Abstractions.csproj" />
     <ProjectReference Include="..\Reference.Domain\Reference.Domain.Core\Reference.Domain.Core.csproj" />
+    <ProjectReference Include="..\Synion\Synion.CQRS\Synion.CQRS.csproj" />
   </ItemGroup>
 
   <ItemGroup>

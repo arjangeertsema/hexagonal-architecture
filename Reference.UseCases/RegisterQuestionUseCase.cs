@@ -6,6 +6,7 @@ using Reference.Domain.Abstractions.Ports.Input;
 using Reference.Domain.Core;
 using Reference.UseCases.Attributes;
 using Synion.CQRS.Abstractions.Ports;
+using System.Threading;
 
 namespace Reference.UseCases
 {
@@ -23,7 +24,7 @@ namespace Reference.UseCases
         [Transactional]
         [HasPermission("a permission")]
         [MakeIdempotent]
-        public async Task Handle(RegisterQuestionUseCase command)
+        public async Task Handle(RegisterQuestionUseCase command, CancellationToken cancellationToken)
         {
             var aggregateRoot = AnswerQuestionsAggregateRoot.Start
             (

@@ -1,14 +1,17 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Synion.CQRS;
 
 namespace Reference.Adapters.Rest.Configuration
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection ConfigureRestAdapterServices(this IServiceCollection services, IConfiguration configuration) 
+        public static IServiceCollection AddServicesForRestAdapter(this IServiceCollection services, IConfiguration configuration) 
         {
-            services.AddControllers();
+            services
+                .AddMediator(typeof(IServiceCollectionExtensions))
+                .AddControllers();
             
             return services
                 .AddSwaggerGen(c =>

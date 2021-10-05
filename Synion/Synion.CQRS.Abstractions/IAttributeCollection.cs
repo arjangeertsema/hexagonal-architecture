@@ -7,7 +7,6 @@ namespace Synion.CQRS.Abstractions
     {
         TAttribute GetAttribute<TAttribute>() where TAttribute : Attribute;
         IEnumerable<TAttribute> GetAttributes<TAttribute>() where TAttribute : Attribute;
-        TAttribute GetRequiredAttribute<TAttribute>() where TAttribute : Attribute;
-        IEnumerable<TAttribute> GetRequiredAttributes<TAttribute>() where TAttribute : Attribute;
+        TAttribute GetRequiredAttribute<TAttribute>() where TAttribute : Attribute;        
     }
 }

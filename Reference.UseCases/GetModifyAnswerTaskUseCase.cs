@@ -4,10 +4,11 @@ using Synion.CQRS.Abstractions;
 using Reference.Domain.Abstractions.Ports.Input;
 using Reference.UseCases.Attributes;
 using Synion.CQRS.Abstractions.Ports;
+using System.Threading;
 
 namespace Reference.UseCases
 {
-    public class GetModifyAnswerTaskUseCaseHandler : IInputPort<GetModifyAnswerTaskUseCase>
+    public class GetModifyAnswerTaskUseCaseHandler : IInputPortHandler<GetModifyAnswerTaskUseCase, GetModifyAnswerTaskUseCase.Response>
     {
         private readonly IMediator mediator;
 
@@ -15,7 +16,7 @@ namespace Reference.UseCases
 
         [HasPermission("a permission")]
         [IsUserTaskOwner]
-        public Task<GetModifyAnswerTaskUseCase.Response> Handle(GetModifyAnswerTaskUseCase query)
+        public Task<GetModifyAnswerTaskUseCase.Response> Handle(GetModifyAnswerTaskUseCase query, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

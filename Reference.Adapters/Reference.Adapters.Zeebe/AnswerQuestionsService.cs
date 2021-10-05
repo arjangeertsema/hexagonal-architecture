@@ -39,7 +39,7 @@ namespace Reference.Adapters.Zeebe
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));;
         }
 
-        public async Task Handle(HandleDomainEventPort<QuestionRecievedEvent> command)
+        public async Task Handle(HandleDomainEventPort<QuestionRecievedEvent> command, CancellationToken cancellationToken)
         {
             if (command is null)
             {
@@ -58,12 +58,13 @@ namespace Reference.Adapters.Zeebe
 
             await zeebeClient.NewPublishMessageCommand()
                 .MessageName("Message_QuestionRecieved")
-                .CorrelationKey(command.CommandId.ToString())
+                .CorrelationKey(command.Event.AggregateRootId.ToString())
                 .MessageId(command.CommandId.ToString())
+                .Variables(this.serializer.Serialize(variables))
                 .Send();
         }
 
-        public async Task Handle(HandleDomainEventPort<QuestionAnsweredEvent> command)
+        public async Task Handle(HandleDomainEventPort<QuestionAnsweredEvent> command, CancellationToken cancellationToken)
         {
             if (command is null)
             {
@@ -76,12 +77,12 @@ namespace Reference.Adapters.Zeebe
                 command.Event.AnsweredBy
             };
 
-            await this.zeebeClient.NewCompleteJobCommand(command.Event.TaskId)
-                .Variables(serializer.Serialize(variables))
+            await this.zeebeClient.NewCompleteJobCommand(command.Event.UserTaskId)
+                .Variables(this.serializer.Serialize(variables))
                 .SendWithRetry();
         }
 
-        public async Task Handle(HandleDomainEventPort<AnswerRejectedEvent> command)
+        public async Task Handle(HandleDomainEventPort<AnswerRejectedEvent> command, CancellationToken cancellationToken)
         {
             if (command is null)
             {
@@ -94,12 +95,12 @@ namespace Reference.Adapters.Zeebe
                 command.Event.Rejection
             };
 
-            await this.zeebeClient.NewCompleteJobCommand(command.Event.TaskId)
+            await this.zeebeClient.NewCompleteJobCommand(command.Event.UserTaskId)
                 .Variables(serializer.Serialize(variables))
                 .SendWithRetry();
         }
 
-        public async Task Handle(HandleDomainEventPort<AnswerAcceptedEvent> command)
+        public async Task Handle(HandleDomainEventPort<AnswerAcceptedEvent> command, CancellationToken cancellationToken)
         {
             if (command is null)
             {
@@ -111,12 +112,12 @@ namespace Reference.Adapters.Zeebe
                 command.Event.AcceptedBy
             };
 
-            await this.zeebeClient.NewCompleteJobCommand(command.Event.TaskId)
+            await this.zeebeClient.NewCompleteJobCommand(command.Event.UserTaskId)
                 .Variables(serializer.Serialize(variables))
                 .SendWithRetry();
         }
 
-        public async Task Handle(HandleDomainEventPort<AnswerModifiedEvent> command)
+        public async Task Handle(HandleDomainEventPort<AnswerModifiedEvent> command, CancellationToken cancellationToken)
         {
             if (command is null)
             {
@@ -129,7 +130,7 @@ namespace Reference.Adapters.Zeebe
                 command.Event.ModifiedBy
             };
 
-            await this.zeebeClient.NewCompleteJobCommand(command.Event.TaskId)
+            await this.zeebeClient.NewCompleteJobCommand(command.Event.UserTaskId)
                 .Variables(serializer.Serialize(variables))
                 .SendWithRetry();
         }

@@ -1,13 +1,14 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Synion.CQRS;
 
 namespace Reference.UseCases.Configuration
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection ConfigureDomainUseCasesServices(this IServiceCollection services, IConfiguration configuration) 
+        public static IServiceCollection AddServicesForUseCases(this IServiceCollection services, IConfiguration configuration) 
         {
-            return services;
+            return services.AddMediator(typeof(IServiceCollectionExtensions));
         }
     }
 }
