@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Reference.Runtime.Application</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Reference.UseCases\Reference.UseCases.csproj" />    
+    <ProjectReference Include="..\..\Reference.Adapters\Reference.Adapters.Events\Reference.Adapters.Events.csproj" />
+    <ProjectReference Include="..\..\Reference.Adapters\Reference.Adapters.Rest\Reference.Adapters.Rest.csproj" />
+    <ProjectReference Include="..\..\Reference.Adapters\Reference.Adapters.Storage\Reference.Adapters.Storage.csproj" />
+    <ProjectReference Include="..\..\Reference.Adapters\Reference.Adapters.Zeebe\Reference.Adapters.Zeebe.csproj" />
+  </ItemGroup>
+
+</Project>
