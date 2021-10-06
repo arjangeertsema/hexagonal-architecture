@@ -1,7 +1,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel;
 
 namespace Synion.DDD.Abstractions
 {
@@ -9,24 +9,29 @@ namespace Synion.DDD.Abstractions
     {
         private readonly ICollection<IDomainEvent> changes;
 
-        public AggregateRoot(Guid id)
+        protected AggregateRoot(Guid id)
         {
             Id = id;            
             changes = new LinkedList<IDomainEvent>();
         }
 
-        public AggregateRoot(Guid id, IEnumerable<KeyValuePair<string, string>> state)
+        protected AggregateRoot(Guid id, IEnumerable<KeyValuePair<string, string>> state)
+            : this(id)
         {
             if (state is null)
             {
                 throw new ArgumentNullException(nameof(state));
             }
 
-            changes = new LinkedList<IDomainEvent>();
-
-            throw new NotImplementedException();
+            try
+            {
+                ParseState(state);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Failed to parse state for aggregate root with id {id}.", ex);
+            }
         }
-
 
         public Guid Id { get; }
 
@@ -41,6 +46,34 @@ namespace Synion.DDD.Abstractions
             where TEvent: IDomainEvent
         {
             changes.Add(@event);
+        }
+
+        private void ParseState(IEnumerable<KeyValuePair<string, string>> state)
+        {
+            var type = this.GetType();
+            foreach(var kvp in state)
+            {
+                var property = type.GetProperty(kvp.Key);
+                if(property == null)
+                    throw new KeyNotFoundException($"Propert {kvp.Key} not found in {type.FullName}.");
+
+                var value = Convert(property.PropertyType, kvp.Value);
+                property.SetValue(this, value);
+            }
+        }
+
+        private static object Convert(Type valueType, string value)
+        {
+            return typeof(AggregateRoot)
+                .GetMethod(nameof(Convert), 1, new Type[] { typeof(string) })
+                .MakeGenericMethod(valueType)
+                .Invoke(null, new object[] { value });
+        }
+
+        private static T Convert<T>(string value)
+        {
+            var converter = TypeDescriptor.GetConverter(typeof(T));
+            return (T)(converter.ConvertFromInvariantString(value));
         }
     }
 }

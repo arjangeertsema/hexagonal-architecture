@@ -1,10 +1,10 @@
 using System;
+using Synion.CQRS.Abstractions.Events;
 
 namespace Synion.DDD.Abstractions
 {
-    public interface IDomainEvent
+    public interface IDomainEvent : IEvent
     {
-        Guid EventId { get; }
         Guid AggregateRootId { get;  }
     }
 }

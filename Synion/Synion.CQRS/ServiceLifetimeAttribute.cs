@@ -3,7 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Synion.CQRS
 {
-     public class ServiceLifetimeAttribute : Attribute
+    [System.AttributeUsage(AttributeTargets.Class)]
+    public class ServiceLifetimeAttribute : Attribute
     {
         public ServiceLifetimeAttribute(ServiceLifetime serviceLifetime)
         {            

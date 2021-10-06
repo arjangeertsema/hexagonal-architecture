@@ -6,6 +6,7 @@ using Adapters.Generated.Rest.Models;
 using Microsoft.AspNetCore.Mvc;
 using Synion.CQRS.Abstractions;
 using Domain.Abstractions.Ports.Input;
+using System.Threading;
 
 namespace Adapters.Rest
 {

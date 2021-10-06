@@ -19,7 +19,7 @@ namespace UseCases.Behaviours
 
         public async Task Handle(TCommand command, HasPermissionAttribute attribute, CancellationToken cancellationToken, CommandBehaviourDelegate next)
         {
-            if(! await mediator.Send(new HasPermissionPort(attribute.Permissions.ToArray())))
+            if(! await mediator.Send(new HasPermissionPort(attribute.Permissions.ToArray()), cancellationToken))
                 throw new UnauthorizedAccessException();
 
             await next();
@@ -35,7 +35,7 @@ namespace UseCases.Behaviours
 
         public async Task<TResponse> Handle(TQuery query, HasPermissionAttribute attribute, CancellationToken cancellationToken, QueryBehaviourDelegate<TResponse> next)
         {
-            if(! await mediator.Send(new HasPermissionPort(attribute.Permissions.ToArray())))
+            if(! await mediator.Send(new HasPermissionPort(attribute.Permissions.ToArray()), cancellationToken))
                 throw new UnauthorizedAccessException();
 
             return await next();

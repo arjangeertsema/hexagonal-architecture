@@ -4,17 +4,19 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Synion.CQRS.Abstractions;
 using Synion.CQRS.Abstractions.Commands;
+using Synion.CQRS.Abstractions.Events;
 using Synion.CQRS.Abstractions.Ports;
 using Synion.CQRS.Abstractions.Queries;
+using Synion.CQRS.Commands;
+using Synion.CQRS.Events;
+using Synion.CQRS.Queries;
 
 namespace Synion.CQRS
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddMediator(this IServiceCollection services, Type type)
-        {
-            var assembly = type.Assembly;
-            
+        public static IServiceCollection AddMediator(this IServiceCollection services, Assembly assembly)
+        {            
             return services
                 .FindAndAddImplementations(assembly, typeof(ICommandAttributeBehaviour<,>))
                 .FindAndAddImplementations(assembly, typeof(ICommandAuthorization<>))
@@ -27,6 +29,11 @@ namespace Synion.CQRS
                 .FindAndAddImplementations(assembly, typeof(IQueryAuthorization<,>))
                 .FindAndAddImplementations(assembly, typeof(IQueryBehaviour<,>))
                 .FindAndAddImplementations(assembly, typeof(IQueryHandler<,>))
+
+                .FindAndAddImplementations(assembly, typeof(IEventAttributeBehaviour<,>))
+                .FindAndAddImplementations(assembly, typeof(IEventAuthorization<>))
+                .FindAndAddImplementations(assembly, typeof(IEventBehaviour<>))
+                .FindAndAddImplementations(assembly, typeof(IEventHandler<>))
 
                 .FindAndAddImplementations(assembly, typeof(IInputPortHandler<>))
                 .FindAndAddImplementations(assembly, typeof(IInputPortHandler<,>))
@@ -64,8 +71,23 @@ namespace Synion.CQRS
             if(!services.IsAlreadyRegistered(typeof(IMediator)))
                 services.AddSingleton<IMediator, Mediator>();
 
-            if(services.IsAlreadyRegistered(typeof(CommandHandler<>)))
-                services.AddTransient(typeof(CommandHandler<>));
+            if(services.IsAlreadyRegistered(typeof(BehaviourCommandHandler<>)))
+                services.AddTransient(typeof(BehaviourCommandHandler<>));
+
+            if(services.IsAlreadyRegistered(typeof(CommandAttributeBehaviour<>)))
+                services.AddTransient(typeof(ICommandBehaviour<>), typeof(CommandAttributeBehaviour<>));
+
+            if(services.IsAlreadyRegistered(typeof(BehaviourEventHandler<>)))
+                services.AddTransient(typeof(BehaviourEventHandler<>));
+
+            if(services.IsAlreadyRegistered(typeof(EventAttributeBehaviour<>)))
+                services.AddTransient(typeof(IEventBehaviour<>), typeof(EventAttributeBehaviour<>));
+
+            if(services.IsAlreadyRegistered(typeof(BehaviourQueryHandler<,>)))
+                services.AddTransient(typeof(BehaviourQueryHandler<,>));
+
+            if(services.IsAlreadyRegistered(typeof(QueryAttributeBehaviour<,>)))
+                services.AddTransient(typeof(IQueryBehaviour<,>), typeof(QueryAttributeBehaviour<,>));
 
             return services;
         }

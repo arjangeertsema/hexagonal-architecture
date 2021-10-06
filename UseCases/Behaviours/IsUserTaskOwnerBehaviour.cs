@@ -18,15 +18,15 @@ namespace UseCases.Behaviours
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        protected async Task<bool> IsUserTaskOwner(IUserTask userTask)
+        protected async Task<bool> IsUserTaskOwner(IUserTask userTask, CancellationToken cancellationToken)
         {
             if (userTask is null)
             {
                 throw new ArgumentNullException(nameof(userTask));
             }
 
-            var identity = await mediator.Send(new GetIdentityPort());
-            return await mediator.Send(new IsUserTaskOwnerPort(identity: identity.Id, userTaskId: userTask.UserTaskId));
+            var identity = await mediator.Send(new GetIdentityPort(), cancellationToken);
+            return await mediator.Send(new IsUserTaskOwnerPort(identity: identity.Id, userTaskId: userTask.UserTaskId), cancellationToken);
         }
     }
 
@@ -37,7 +37,7 @@ namespace UseCases.Behaviours
 
         public async Task Handle(TCommand command, IsUserTaskOwnerAttribute attribute, CancellationToken cancellationToken, CommandBehaviourDelegate next)
         {
-            if(!await IsUserTaskOwner(command as IUserTask))
+            if(!await IsUserTaskOwner(command as IUserTask, cancellationToken))
                 throw new UnauthorizedAccessException();
 
             await next();
@@ -51,7 +51,7 @@ namespace UseCases.Behaviours
 
         public async Task<TResponse> Handle(TQuery query, IsUserTaskOwnerAttribute attribute, CancellationToken cancellationToken, QueryBehaviourDelegate<TResponse> next)
         {            
-            if(!await IsUserTaskOwner(query as IUserTask))
+            if(!await IsUserTaskOwner(query as IUserTask, cancellationToken))
                 throw new UnauthorizedAccessException();
 
             return await next();

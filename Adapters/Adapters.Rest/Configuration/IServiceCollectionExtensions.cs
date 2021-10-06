@@ -10,7 +10,7 @@ namespace Adapters.Rest.Configuration
         public static IServiceCollection AddServicesForRestAdapter(this IServiceCollection services, IConfiguration configuration) 
         {
             services
-                .AddMediator(typeof(IServiceCollectionExtensions))
+                .AddMediator(typeof(IServiceCollectionExtensions).Assembly)
                 .AddControllers();
             
             return services

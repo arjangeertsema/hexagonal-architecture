@@ -6,14 +6,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Synion.CQRS.Abstractions;
 using Synion.CQRS.Abstractions.Commands;
 
-namespace Synion.CQRS
+namespace Synion.CQRS.Commands
 {
-    internal class CommandHandler<TCommand> : ICommandHandler<TCommand>
+    internal class BehaviourCommandHandler<TCommand> : ICommandHandler<TCommand>
         where TCommand : ICommand
     {
         private readonly IServiceProvider serviceProvider;
 
-        public CommandHandler(IServiceProvider serviceProvider)
+        public BehaviourCommandHandler(IServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
@@ -24,10 +24,15 @@ namespace Synion.CQRS
             var attributes = GetHandlerAttributes(handler);
             Task handleDelegate() => handler.Handle(command, cancellationToken);
 
-            return serviceProvider
+            var pipeline = serviceProvider
                 .GetServices<ICommandBehaviour<TCommand>>()
                 .Reverse()
-                .Aggregate((CommandBehaviourDelegate) handleDelegate, (next, behaviour) => () => behaviour.Handle(command, attributes, cancellationToken, next))();        
+                .Aggregate(
+                    seed: (CommandBehaviourDelegate) handleDelegate, 
+                    func: (next, behaviour) => () => behaviour.Handle(command, attributes, cancellationToken, next)
+                );
+
+            return pipeline();
         }
 
         private static IAttributeCollection GetHandlerAttributes(ICommandHandler<TCommand> handler) 
@@ -36,7 +41,7 @@ namespace Synion.CQRS
             var reference = typeof(ICommandHandler<TCommand>)
                 .GetMethods()
                 .Where(m => m.Name.Equals(name))
-                .sin;
+                .Single();
 
             var methodInfo = handler.GetType().GetMethod
             (

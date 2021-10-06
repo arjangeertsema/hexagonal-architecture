@@ -4,10 +4,10 @@ using Synion.CQRS.Abstractions.Ports;
 
 namespace Domain.Abstractions.Ports.Output
 {
-    public class HandleDomainEventPort<TEvent> : IOutputPort
+    public class SaveDomainEventPort<TEvent> : IOutputPort
             where TEvent : IDomainEvent
     {
-        public HandleDomainEventPort(Guid commandId, TEvent @event)
+        public SaveDomainEventPort(Guid commandId, TEvent @event)
         {
             if (@event is null)
             {

@@ -20,10 +20,10 @@ namespace UseCases.Behaviours
         {
             try
             {
-                await this.mediator.Send(new RegisterCommandPort(command));
+                await this.mediator.Send(new RegisterCommandPort(command), cancellationToken);
                 await next();
             }
-            catch(CommandAlreadyExistsException)
+            catch(CommandIsAlreadyHandledException)
             {
                 //Stop pipeline, command has already been handled. Do not call next.
                 return;

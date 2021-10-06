@@ -27,7 +27,7 @@ namespace Adapters.Rest
                 askedBy: registerQuestion.Sender
             );            
             await this.mediator.Send(command);
-            return Accepted();
+            return CreatedAtAction(nameof(GetQuestion), new { question_id = registerQuestion.QuestionId });
         }
 
         public override async Task<IActionResult> GetQuestions([FromQuery(Name = "offset")] int? offset, [FromQuery(Name = "limit")] int? limit)
@@ -38,6 +38,16 @@ namespace Adapters.Rest
                 limit: limit
             );
             
+            var response = await mediator.Send(query);
+            return Ok(Map(response));
+        }
+        public override async Task<IActionResult> GetQuestion([FromRoute(Name = "question_id"), Required] Guid questionId)
+        {
+            var query = new GetQuestionUseCase
+            (
+                questionId: questionId
+            );
+
             var response = await mediator.Send(query);
             return Ok(Map(response));
         }
@@ -54,9 +64,9 @@ namespace Adapters.Rest
             return Accepted();
         }
 
-        private static Questions Map(GetQuestionsUseCase.Response response)
+        private static QuestionsResponse Map(GetQuestionsUseCase.Response response)
         {
-            return new Questions()
+            return new QuestionsResponse()
             {
                 Items = response.Items.Select(Map).ToList()
             };
@@ -72,6 +82,14 @@ namespace Adapters.Rest
                 Subject = item.Subject,
                 Sender = item.AskedBy,
                 Status = (QuestionsModel.StatusEnum) Enum.Parse(typeof(QuestionsModel.StatusEnum), item.Status.ToString())
+            };
+        }
+
+        private static QuestionResponse Map(GetQuestionUseCase.Response response) 
+        {            
+            return new QuestionResponse()
+            {
+                Question = Map((GetQuestionsUseCase.Response.Item)response)
             };
         }
     }

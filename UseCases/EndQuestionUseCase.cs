@@ -14,9 +14,9 @@ namespace UseCases
     public class EndQuestionUseCaseHandler : IInputPortHandler<EndQuestionUseCase>
     {
         private readonly IMediator mediator;
-        private readonly IAggregateRootStore aggregateRootStore;
+        private readonly IAggregateRootStore<AnswerQuestionsAggregateRoot> aggregateRootStore;
 
-        public EndQuestionUseCaseHandler(IMediator mediator, IAggregateRootStore aggregateRootStore)
+        public EndQuestionUseCaseHandler(IMediator mediator, IAggregateRootStore<AnswerQuestionsAggregateRoot> aggregateRootStore)
         {
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));            
@@ -27,9 +27,9 @@ namespace UseCases
         [MakeIdempotent]
         public async Task Handle(EndQuestionUseCase command, CancellationToken cancellationToken)
         {
-            var aggregateRoot = await aggregateRootStore.Get<AnswerQuestionsAggregateRoot>(command.QuestionId);
+            var aggregateRoot = await aggregateRootStore.Get(command.QuestionId, cancellationToken);
 
-            var identity = await mediator.Send(new GetIdentityPort());
+            var identity = await mediator.Send(new GetIdentityPort(), cancellationToken);
 
             aggregateRoot.EndQuestion
             (
@@ -39,7 +39,8 @@ namespace UseCases
             await aggregateRootStore.Save
             (
                 commandId: command.CommandId, 
-                aggregateRoot: aggregateRoot
+                aggregateRoot: aggregateRoot,
+                cancellationToken: cancellationToken
             );
         }
     }

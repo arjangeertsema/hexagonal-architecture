@@ -8,15 +8,15 @@ using System.Threading;
 
 namespace UseCases
 {
-    public class GetQuestionsUseCaseHandler : IInputPortHandler<GetQuestionsUseCase, GetQuestionsUseCase.Response>
+    public class GetQuestionUseCaseHandler : IInputPortHandler<GetQuestionUseCase, GetQuestionUseCase.Response>
     {
         private readonly IMediator mediator;
 
-        public GetQuestionsUseCaseHandler(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        public GetQuestionUseCaseHandler(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
         [HasPermission("a permission")]
         [IsAuthorized]
-        public Task<GetQuestionsUseCase.Response> Handle(GetQuestionsUseCase query, CancellationToken cancellationToken)
+        public Task<GetQuestionUseCase.Response> Handle(GetQuestionUseCase query, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

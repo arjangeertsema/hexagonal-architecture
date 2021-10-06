@@ -13,9 +13,9 @@ namespace UseCases
     public class RegisterQuestionUseCaseHandler : IInputPortHandler<RegisterQuestionUseCase>
     {
         private readonly IMediator mediator;
-        private readonly IAggregateRootStore aggregateRootStore;
+        private readonly IAggregateRootStore<AnswerQuestionsAggregateRoot> aggregateRootStore;
 
-        public RegisterQuestionUseCaseHandler(IMediator mediator, IAggregateRootStore aggregateRootStore)
+        public RegisterQuestionUseCaseHandler(IMediator mediator, IAggregateRootStore<AnswerQuestionsAggregateRoot> aggregateRootStore)
         {
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));            
@@ -37,7 +37,8 @@ namespace UseCases
             await aggregateRootStore.Save
             (
                 commandId: command.CommandId, 
-                aggregateRoot: aggregateRoot
+                aggregateRoot: aggregateRoot,
+                cancellationToken: cancellationToken
             );
         }
     }

@@ -18,9 +18,9 @@ namespace UseCases.Behaviours
             this.mediator = mediator ??  throw new ArgumentNullException(nameof(mediator));
         }
 
-        protected async Task<string> GetIdentity()
+        protected async Task<string> GetIdentity(CancellationToken cancellationToken)
         {
-            var identity = await mediator.Send(new GetIdentityPort());
+            var identity = await mediator.Send(new GetIdentityPort(), cancellationToken);
             if(identity == null)
                 throw new UnauthorizedAccessException();
 
@@ -41,7 +41,7 @@ namespace UseCases.Behaviours
 
         public async Task Handle(TCommand command, IsAuthorizedAttribute attribute, CancellationToken cancellationToken, CommandBehaviourDelegate next)
         {
-            var identity = await GetIdentity();
+            var identity = await GetIdentity(cancellationToken);
             if(!await authorization.IsAuthorized(identity, command))
                 throw new UnauthorizedAccessException();
 
@@ -64,7 +64,7 @@ namespace UseCases.Behaviours
         {
             var response = await next();
 
-            var identity = await GetIdentity();
+            var identity = await GetIdentity(cancellationToken);
             if(!await authorization.IsAuthorized(identity, query, response))
                 throw new UnauthorizedAccessException();
 

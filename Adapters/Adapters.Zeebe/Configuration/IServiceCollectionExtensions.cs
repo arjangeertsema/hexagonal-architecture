@@ -10,7 +10,7 @@ namespace Adapters.Zeebe.Configuration
         public static IServiceCollection AddServicesForZeebeAdapter(this IServiceCollection services, IConfiguration configuration) 
         {
             return services
-                .AddMediator(typeof(IServiceCollectionExtensions))
+                .AddMediator(typeof(IServiceCollectionExtensions).Assembly)
                 .BootstrapZeebe
                 (
                     configuration.GetSection("ZeebeBootstrap"),

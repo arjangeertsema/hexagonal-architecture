@@ -6,14 +6,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Synion.CQRS.Abstractions;
 using Synion.CQRS.Abstractions.Queries;
 
-namespace Synion.CQRS
+namespace Synion.CQRS.Queries
 {
-    public class QueryHandler<TQuery, TResponse> : IQueryHandler<TQuery, TResponse>
+    internal class BehaviourQueryHandler<TQuery, TResponse> : IQueryHandler<TQuery, TResponse>
         where TQuery : IQuery<TResponse>
     {
         private readonly IServiceProvider serviceProvider;
 
-        public QueryHandler(IServiceProvider serviceProvider)
+        public BehaviourQueryHandler(IServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
@@ -24,10 +24,15 @@ namespace Synion.CQRS
             var attributes = GetHandlerAttributes(handler);
             Task<TResponse> handleDelegate() => handler.Handle(query, cancellationToken);
 
-            return serviceProvider
+            var pipeline = serviceProvider
                 .GetServices<IQueryBehaviour<TQuery, TResponse>>()
                 .Reverse()
-                .Aggregate((QueryBehaviourDelegate<TResponse>) handleDelegate, (next, behaviour) => () => behaviour.Handle(query, attributes, cancellationToken, next))();
+                .Aggregate(
+                    seed: (QueryBehaviourDelegate<TResponse>) handleDelegate, 
+                    func: (next, behaviour) => () => behaviour.Handle(query, attributes, cancellationToken, next)
+                );
+                
+            return pipeline();
         }
 
         private static IAttributeCollection GetHandlerAttributes(IQueryHandler<TQuery, TResponse> handler) 

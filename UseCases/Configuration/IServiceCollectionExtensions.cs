@@ -8,7 +8,7 @@ namespace UseCases.Configuration
     {
         public static IServiceCollection AddServicesForUseCases(this IServiceCollection services, IConfiguration configuration) 
         {
-            return services.AddMediator(typeof(IServiceCollectionExtensions));
+            return services.AddMediator(typeof(IServiceCollectionExtensions).Assembly);
         }
     }
 }

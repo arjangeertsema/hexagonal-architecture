@@ -5,16 +5,19 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Synion.CQRS.Abstractions;
 using Synion.CQRS.Abstractions.Commands;
+using Synion.CQRS.Abstractions.Events;
 using Synion.CQRS.Abstractions.Queries;
+using Synion.CQRS.Commands;
+using Synion.CQRS.Events;
+using Synion.CQRS.Queries;
 
 namespace Synion.CQRS
 {
     public class Mediator : IMediator
     {
-        private readonly Type commandHandlerType;
-        private readonly Type queryHandlerType;
         private readonly MethodInfo sendCommandMethod;
         private readonly MethodInfo sendQueryMethod;
+        private readonly MethodInfo notifyEventMethod;
         private readonly IServiceProvider serviceProvider;
 
         public Mediator(IServiceProvider serviceProvider)
@@ -22,9 +25,7 @@ namespace Synion.CQRS
             var type = this.GetType();            
             this.sendCommandMethod = type.GetMethod(nameof(SendCommand));
             this.sendQueryMethod = type.GetMethod(nameof(SendQuery));
-            
-            this.commandHandlerType = typeof(CommandHandler<>);
-            this.queryHandlerType = typeof(QueryHandler<,>);
+            this.notifyEventMethod = type.GetMethod(nameof(NotifyEvent));
 
             this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
@@ -53,11 +54,23 @@ namespace Synion.CQRS
                 .Invoke(this, new object[] { query, cancellationToken });
         }
 
+        public Task Notify(IEvent @event, CancellationToken cancellationToken = default)
+        {
+            if (@event is null)
+            {
+                throw new ArgumentNullException(nameof(@event));
+            }
+
+            return (Task) this.notifyEventMethod
+                .MakeGenericMethod(@event.GetType())
+                .Invoke(this, new object[] { @event, cancellationToken });
+        }
+
         private Task SendCommand<TCommand>(TCommand command, CancellationToken cancellationToken)
             where TCommand : ICommand
         {
-            var handler = serviceProvider.GetRequiredService<CommandHandler<TCommand>>();
-            return handler.Handle(command, cancellationToken).ConfigureAwait(false);
+            var handler = serviceProvider.GetRequiredService<BehaviourCommandHandler<TCommand>>();
+            return handler.Handle(command, cancellationToken);
         }
 
         public Task<TResponse> SendQuery<TQuery, TResponse>(TQuery query, CancellationToken cancellationToken = default)
@@ -68,8 +81,15 @@ namespace Synion.CQRS
                 throw new ArgumentNullException(nameof(query));
             }
 
-            var handler = serviceProvider.GetRequiredService<QueryHandler<TQuery, TResponse>>();
-            return handler.Handle(query, cancellationToken.ConfigureAwait(false));
+            var handler = serviceProvider.GetRequiredService<BehaviourQueryHandler<TQuery, TResponse>>();
+            return handler.Handle(query, cancellationToken);
+        }
+
+        private Task NotifyEvent<TEvent>(TEvent @event, CancellationToken cancellationToken)
+            where TEvent : IEvent
+        {
+            var handler = serviceProvider.GetRequiredService<BehaviourEventHandler<TEvent>>();
+            return handler.Handle(@event, cancellationToken);
         }
     }
 }
