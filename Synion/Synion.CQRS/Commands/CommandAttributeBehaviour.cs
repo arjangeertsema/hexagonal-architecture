@@ -25,7 +25,7 @@ namespace Synion.CQRS.Commands
         {
             Task nextDelegate() => next();
 
-            return this.GetBehaviourAttributes(attributeCollection)
+            var pipeline = this.GetBehaviourAttributes(attributeCollection)
                 .Select(a => 
                     new { 
                         Attribute = a, 
@@ -35,7 +35,9 @@ namespace Synion.CQRS.Commands
                 .Aggregate(
                     seed: (CommandBehaviourDelegate) nextDelegate,
                     func: (n, i) => () => i.Behaviour.Handle(command, i.Attribute, cancellationToken, n)
-                )();
+                );
+
+            return pipeline();
         }
 
         private ICommandAttributeBehaviour<TCommand, BehaviourAttribute> GetCommandAttributeBehaviour(BehaviourAttribute attribute)

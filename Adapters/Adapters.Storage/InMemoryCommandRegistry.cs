@@ -4,10 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Domain.Abstractions.Ports.Output;
 using Domain.Abstractions.Ports.Output.Exceptions;
+using Microsoft.Extensions.DependencyInjection;
+using Synion.CQRS;
 using Synion.CQRS.Abstractions.Ports;
 
 namespace Adapters.Storage
 {
+    [ServiceLifetime(ServiceLifetime.Singleton)]
     public class InMemoryCommandRegistry : IOutputPortHandler<RegisterCommandPort>
     {
         private Dictionary<Guid, string> store;

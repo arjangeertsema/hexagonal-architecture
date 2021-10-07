@@ -25,7 +25,7 @@ namespace Synion.CQRS.Events
         {
             Task nextDelegate() => next();
 
-            return this.GetBehaviourAttributes(attributeCollection)
+            var pipeline = this.GetBehaviourAttributes(attributeCollection)
                 .Select(a => 
                     new { 
                         Attribute = a, 
@@ -35,7 +35,9 @@ namespace Synion.CQRS.Events
                 .Aggregate(
                     seed: (EventBehaviourDelegate) nextDelegate,
                     func: (n, i) => () => i.Behaviour.Handle(@event, i.Attribute, cancellationToken, n)
-                )();
+                );
+
+            return pipeline();
         }
 
         private IEventAttributeBehaviour<TEvent, BehaviourAttribute> GetEventAttributeBehaviour(BehaviourAttribute attribute)

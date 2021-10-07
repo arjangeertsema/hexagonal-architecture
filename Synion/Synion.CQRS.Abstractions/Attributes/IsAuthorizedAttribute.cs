@@ -1,7 +1,4 @@
-using System;
-using Synion.CQRS.Abstractions;
-
-namespace UseCases.Attributes
+namespace Synion.CQRS.Abstractions.Attributes
 {
     public class IsAuthorizedAttribute : BehaviourAttribute
     {        

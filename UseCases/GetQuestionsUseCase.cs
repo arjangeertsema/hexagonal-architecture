@@ -5,6 +5,7 @@ using Domain.Abstractions.Ports.Input;
 using UseCases.Attributes;
 using Synion.CQRS.Abstractions.Ports;
 using System.Threading;
+using Synion.CQRS.Abstractions.Attributes;
 
 namespace UseCases
 {

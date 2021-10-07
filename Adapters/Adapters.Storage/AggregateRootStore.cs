@@ -37,7 +37,7 @@ namespace Adapters.Storage.Configuration
 
             foreach (var @event in changes)
             {
-                var task = mediator.Send(CreateHandleDomainEventPort(commandId, @event), cancellationToken)
+                var task = mediator.Send(CreateSaveDomainEventPort(commandId, @event), cancellationToken)
                     .ContinueWith((s) =>
                         mediator.Send(CreatePublishDomainEventPort(commandId, @event), cancellationToken)
                     );
@@ -48,9 +48,9 @@ namespace Adapters.Storage.Configuration
             return Task.WhenAll(tasks);
         }
 
-        private ICommand CreateHandleDomainEventPort(Guid commandId, IDomainEvent @event)
+        private ICommand CreateSaveDomainEventPort(Guid commandId, IDomainEvent @event)
         {
-            var type = typeof(PublishDomainEventPort<>);
+            var type = typeof(SaveDomainEventPort<>);
             var genericType = type.MakeGenericType(@event.GetType());
             var command = Activator.CreateInstance(genericType, new object[] { commandId, @event });
             return command as ICommand;
@@ -58,7 +58,7 @@ namespace Adapters.Storage.Configuration
 
         private ICommand CreatePublishDomainEventPort(Guid commandId, IDomainEvent @event)
         {
-            var type = typeof(SaveDomainEventPort<>);
+            var type = typeof(PublishDomainEventPort<>);
             var genericType = type.MakeGenericType(@event.GetType());
             var command = Activator.CreateInstance(genericType, new object[] { commandId, @event });
             return command as ICommand;

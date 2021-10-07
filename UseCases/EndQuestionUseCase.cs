@@ -8,6 +8,7 @@ using Domain.Core;
 using UseCases.Attributes;
 using Synion.CQRS.Abstractions.Ports;
 using System.Threading;
+using Synion.CQRS.Abstractions.Attributes;
 
 namespace UseCases
 {
@@ -22,8 +23,8 @@ namespace UseCases
             this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));            
          }
 
-        [Transactional]
         [HasPermission("a permission")]
+        [Transactional]
         [MakeIdempotent]
         public async Task Handle(EndQuestionUseCase command, CancellationToken cancellationToken)
         {

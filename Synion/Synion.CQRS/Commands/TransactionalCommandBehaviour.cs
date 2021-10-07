@@ -1,10 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using UseCases.Attributes;
+using Synion.CQRS.Abstractions.Attributes;
 using Synion.CQRS.Abstractions.Commands;
 
-namespace UseCases.Behaviours
+namespace Synion.CQRS.Commands
 {
     public class TransactionalCommandBehavior<TCommand> : ICommandAttributeBehaviour<TCommand, TransactionalAttribute>
         where TCommand : ICommand

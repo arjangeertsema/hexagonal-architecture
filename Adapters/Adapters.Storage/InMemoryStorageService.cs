@@ -9,10 +9,11 @@ using System;
 using Synion.DDD.Abstractions;
 using System.ComponentModel;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Adapters.Storage
 {
-    [ServiceLifetime(Microsoft.Extensions.DependencyInjection.ServiceLifetime.Singleton)]
+    [ServiceLifetime(ServiceLifetime.Singleton)]
     public class InMemoryStorageService<TEvent> :        
         IOutputPortHandler<SaveDomainEventPort<TEvent>>,
         IOutputPortHandler<GetAggregateRootStatePort, IEnumerable<KeyValuePair<string, string>>>
