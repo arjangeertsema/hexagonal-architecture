@@ -9,7 +9,7 @@ namespace Synion.CQRS.Abstractions
     public interface IMediator
     {
         Task Send(ICommand command, CancellationToken cancellationToken = default);
-        Task<TResponse> Send<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default);
+        Task<TResponse> Ask<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default);
         Task Notify(IEvent @event, CancellationToken cancellationToken = default);
     }
 }

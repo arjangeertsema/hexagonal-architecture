@@ -41,7 +41,7 @@ namespace Domain.Core
             Question = question;
             AskedBy = askedBy;
             Asked = DateTime.Now;
-            
+
             RaiseEvent(new QuestionRecievedEvent(Id, Subject, Question, AskedBy, Asked));
         }
 
@@ -61,9 +61,9 @@ namespace Domain.Core
                 throw new ArgumentException($"'{nameof(answeredBy)}' cannot be null or whitespace.", nameof(answeredBy));
             }
 
-            if(Answered.HasValue)
+            if (Answered.HasValue)
             {
-                throw new AnswerQuestionsException("Question is already answered."); 
+                throw new AnswerQuestionsException("Question is already answered.");
             }
 
             Answer = answer;
@@ -80,19 +80,19 @@ namespace Domain.Core
                 throw new ArgumentException($"'{nameof(acceptedBy)}' cannot be null or whitespace.", nameof(acceptedBy));
             }
 
-            if(!Answered.HasValue)
+            if (!Answered.HasValue)
             {
-                throw new AnswerQuestionsException("Question is not answered."); 
+                throw new AnswerQuestionsException("Question is not answered.");
             }
 
-            if(Sent.HasValue)
+            if (Sent.HasValue)
             {
-                throw new AnswerQuestionsException("Answer has been sent."); 
+                throw new AnswerQuestionsException("Answer has been sent.");
             }
 
-            if(AnsweredBy == acceptedBy)
+            if (AnsweredBy == acceptedBy)
             {
-                throw new AnswerQuestionsException("Answer may not be reviewed by the same person."); 
+                throw new AnswerQuestionsException("Answer may not be reviewed by the same person.");
             }
 
             AcceptedBy = acceptedBy;
@@ -115,25 +115,25 @@ namespace Domain.Core
 
             if (!Answered.HasValue)
             {
-                throw new AnswerQuestionsException("Question is not answered."); 
+                throw new AnswerQuestionsException("Question is not answered.");
             }
 
-            if(Sent.HasValue)
+            if (Sent.HasValue)
             {
-                throw new AnswerQuestionsException("Answer has been sent."); 
+                throw new AnswerQuestionsException("Answer has been sent.");
             }
 
-            if(AnsweredBy == rejectedBy)
+            if (AnsweredBy == rejectedBy)
             {
-                throw new AnswerQuestionsException("Answer may not be reviewed by the same person."); 
+                throw new AnswerQuestionsException("Answer may not be reviewed by the same person.");
             }
 
             Rejection = rejection;
             RejectedBy = rejectedBy;
             Rejected = DateTime.Now;
-            
+
             RaiseEvent(new AnswerRejectedEvent(Id, taskId, Rejection, RejectedBy, Rejected.Value));
-        }        
+        }
 
         public void ModifyAnswer(long taskId, string answer, string modifiedBy)
         {
@@ -149,22 +149,22 @@ namespace Domain.Core
 
             if (!Answered.HasValue)
             {
-                throw new AnswerQuestionsException("Question is not answered."); 
+                throw new AnswerQuestionsException("Question is not answered.");
             }
 
-            if(Sent.HasValue)
+            if (Sent.HasValue)
             {
-                throw new AnswerQuestionsException("Answer has already been sent."); 
+                throw new AnswerQuestionsException("Answer has already been sent.");
             }
 
-            if(!Rejected.HasValue)
+            if (!Rejected.HasValue)
             {
-                throw new AnswerQuestionsException("Answer has not been rejected."); 
+                throw new AnswerQuestionsException("Answer has not been rejected.");
             }
 
-            if(AnsweredBy != modifiedBy)
+            if (AnsweredBy != modifiedBy)
             {
-                throw new AnswerQuestionsException("Answer must be modified by the same person."); 
+                throw new AnswerQuestionsException("Answer must be modified by the same person.");
             }
 
             Answer = answer;
@@ -177,12 +177,12 @@ namespace Domain.Core
         {
             if (!Accepted.HasValue)
             {
-                throw new AnswerQuestionsException("Answer is not accepted."); 
+                throw new AnswerQuestionsException("Answer is not accepted.");
             }
 
-            if(Sent.HasValue)
+            if (Sent.HasValue)
             {
-                throw new AnswerQuestionsException("Answer has already been sent."); 
+                throw new AnswerQuestionsException("Answer has already been sent.");
             }
 
             Sent = DateTime.Now;
