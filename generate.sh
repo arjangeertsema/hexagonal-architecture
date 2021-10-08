@@ -7,14 +7,10 @@ docker run --rm --user "$(id -u):$(id -g)" -v "${PWD}/Adapters:/local" openapito
     -o /local/Generated \
     --additional-properties=aspnetCoreVersion=5.0,buildTarget=library,operationIsAsync=true,operationResultTask=true,packageName=Adapters.Rest.Generated,swashbuckleVersion=5.0.0
 
+# Copy generated .cs files
+mkdir Adapters/Adapters.Rest/Generated
+find Adapters/Generated/src/Adapters.Rest.Generated -type f -name '*.cs' | 
+    while read P; do cp --parents "$P" Adapters/Adapters.Rest/Generated; done
 
-# Copy generated
-cp -r ./Adapters/Generated/src/Adapters.Rest.Generated ./Adapters/Adapters.Rest/Generated
-
-# Clean up
+# # Clean up
 rm -rf ./Adapters/Generated
-rm -rf ./Adapters/Adapters.Rest/Generated/Adapters.Rest.Generated.csproj
-rm -rf ./Adapters/Adapters.Rest/Generated/Adapters.Rest.Generated.nuspec
-rm -rf ./Adapters/Adapters.Rest/Generated/.gitignore
-rm -rf ./Adapters/Adapters.Rest/Generated/bin
-rm -rf ./Adapters/Adapters.Rest/Generated/obj
