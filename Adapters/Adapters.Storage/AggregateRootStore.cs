@@ -22,7 +22,7 @@ namespace Adapters.Storage.Configuration
 
         public async Task<TAggregateRoot> Get(Guid aggregateRootId, CancellationToken cancellationToken)
         {
-            var state = await mediator.Send(new GetAggregateRootStatePort(aggregateRootId), cancellationToken);
+            var state = await mediator.Ask(new GetAggregateRootStatePort(aggregateRootId), cancellationToken);
             if (state == null)
                 throw new NotFoundException($"AggregateRoot state for type `{typeof(TAggregateRoot).Name}` with id `${aggregateRootId}` is not found.");
 

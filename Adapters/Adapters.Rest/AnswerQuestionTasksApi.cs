@@ -1,12 +1,12 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Adapters.Generated.Rest.Controllers;
-using Adapters.Generated.Rest.Models;
 using Microsoft.AspNetCore.Mvc;
 using Synion.CQRS.Abstractions;
 using Domain.Abstractions.Ports.Input;
 using System.Threading;
+using Adapters.Rest.Generated.Controllers;
+using Adapters.Rest.Generated.Models;
 
 namespace Adapters.Rest
 {
@@ -23,7 +23,7 @@ namespace Adapters.Rest
                 taskId: taskId
             );
             
-            var response = await this.mediator.Send(query);
+            var response = await this.mediator.Ask(query);
             return Ok(Map(response));
         }
 

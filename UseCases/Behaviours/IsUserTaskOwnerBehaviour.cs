@@ -25,8 +25,8 @@ namespace UseCases.Behaviours
                 throw new ArgumentNullException(nameof(userTask));
             }
 
-            var identity = await mediator.Send(new GetIdentityPort(), cancellationToken);
-            return await mediator.Send(new IsUserTaskOwnerPort(identity: identity.Id, userTaskId: userTask.UserTaskId), cancellationToken);
+            var identity = await mediator.Ask(new GetIdentityPort(), cancellationToken);
+            return await mediator.Ask(new IsUserTaskOwnerPort(identity: identity.Id, userTaskId: userTask.UserTaskId), cancellationToken);
         }
     }
 

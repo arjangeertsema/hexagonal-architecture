@@ -42,7 +42,7 @@ namespace Synion.CQRS
                 .Invoke(this, new object[] { command, cancellationToken });
         }
 
-        public Task<TResponse> Send<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default)
+        public Task<TResponse> Ask<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default)
         {
             if (query is null)
             {

@@ -30,7 +30,7 @@ namespace UseCases
         {
             var aggregateRoot = await aggregateRootStore.Get(command.QuestionId, cancellationToken);
 
-            var identity = await mediator.Send(new GetIdentityPort(), cancellationToken);
+            var identity = await mediator.Ask(new GetIdentityPort(), cancellationToken);
 
             aggregateRoot.EndQuestion
             (
