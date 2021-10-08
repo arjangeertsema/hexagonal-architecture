@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Synion.CQRS.Abstractions;
 using Domain.Abstractions.Events;
 using Domain.Abstractions.Ports.Input;
-using Domain.Abstractions.Ports.Output;
 using Zeebe.Client;
 using Zeebe.Client.Api.Responses;
 using Zeebe.Client.Bootstrap.Abstractions;
@@ -19,8 +18,8 @@ namespace Adapters.Zeebe
         IDomainEventHandler<AnswerRejectedEvent>, 
         IDomainEventHandler<AnswerAcceptedEvent>, 
         IDomainEventHandler<AnswerModifiedEvent>,
-        IAsyncJobHandler<SendAnswerJob>,
-        IAsyncJobHandler<SendQuestionAnsweredEventJob>
+        IAsyncJobHandler<SendAnswerJobV1>,
+        IAsyncJobHandler<SendQuestionAnsweredEventJobV1>
     {
         private readonly IZeebeClient zeebeClient;
         private readonly IZeebeVariablesSerializer serializer;
@@ -57,7 +56,7 @@ namespace Adapters.Zeebe
             };
 
             await zeebeClient.NewPublishMessageCommand()
-                .MessageName("Message_QuestionRecieved")
+                .MessageName("Message_QuestionRecieved_V1")
                 .CorrelationKey(@event.AggregateRootId.ToString())
                 .MessageId(@event.EventId.ToString())
                 .Variables(this.serializer.Serialize(variables))
@@ -135,7 +134,7 @@ namespace Adapters.Zeebe
                 .SendWithRetry();
         }
 
-        public async Task HandleJob(SendAnswerJob job, CancellationToken cancellationToken)
+        public async Task HandleJob(SendAnswerJobV1 job, CancellationToken cancellationToken)
         {
             //TODO: set system IPrincipal with IIdentiy on thread for permission check
 
@@ -149,7 +148,7 @@ namespace Adapters.Zeebe
             await this.mediator.Send(command, cancellationToken);
         }
 
-        public async Task HandleJob(SendQuestionAnsweredEventJob job, CancellationToken cancellationToken)
+        public async Task HandleJob(SendQuestionAnsweredEventJobV1 job, CancellationToken cancellationToken)
         {
             //TODO: set system IPrincipal with IIdentiy on thread for permission check
 
@@ -165,15 +164,15 @@ namespace Adapters.Zeebe
     }
 
     [FetchVariables("QuestionId", "SendAnswerCommandId")]
-    public class SendAnswerJob : AbstractJob
+    public class SendAnswerJobV1 : AbstractJob
     {
-        public SendAnswerJob(IJob job) : base(job) { }
+        public SendAnswerJobV1(IJob job) : base(job) { }
     }
 
     [FetchVariables("QuestionId", "SendQuestionAnsweredEventCommandId")]
-    public class SendQuestionAnsweredEventJob : AbstractJob
+    public class SendQuestionAnsweredEventJobV1 : AbstractJob
     {
-        public SendQuestionAnsweredEventJob(IJob job) : base(job) { }
+        public SendQuestionAnsweredEventJobV1(IJob job) : base(job) { }
     }
 
     public class AnswerQuestionsVariables
