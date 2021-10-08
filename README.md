@@ -6,5 +6,6 @@ To build:
 
 ```bash
 bash generate.sh
+dotnet restore
 dotnet build
 ```
