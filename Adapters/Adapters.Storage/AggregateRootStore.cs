@@ -32,33 +32,44 @@ namespace Adapters.Storage.Configuration
 
         public Task Save(Guid commandId, TAggregateRoot aggregateRoot, CancellationToken cancellationToken)
         {
-            var tasks = new List<Task>();
             var changes = aggregateRoot.Commit();
+            return Send(commandId, changes, cancellationToken)
+                .ContinueWith((r) => Notify(changes, cancellationToken));
+        }
 
+        private async Task Send(Guid commandId, IEnumerable<IDomainEvent> changes, CancellationToken cancellationToken)
+        {
+            var tasks = new List<Task>();
+            
             foreach (var @event in changes)
             {
                 var task = mediator.Send(CreateSaveDomainEventPort(commandId, @event), cancellationToken)
                     .ContinueWith((s) =>
-                        mediator.Send(CreatePublishDomainEventPort(commandId, @event), cancellationToken)
+                        mediator.Notify(@event, cancellationToken)
                     );
 
                 tasks.Add(task);
             }
 
-            return Task.WhenAll(tasks);
+            await Task.WhenAll(tasks);
+        }
+
+        private async Task Notify( IEnumerable<IDomainEvent> changes, CancellationToken cancellationToken)
+        {
+            var tasks = new List<Task>();
+            
+            foreach (var @event in changes)
+            {
+                var task = mediator.Notify(@event, cancellationToken);
+                tasks.Add(task);
+            }
+
+            await Task.WhenAll(tasks);
         }
 
         private ICommand CreateSaveDomainEventPort(Guid commandId, IDomainEvent @event)
         {
             var type = typeof(SaveDomainEventPort<>);
-            var genericType = type.MakeGenericType(@event.GetType());
-            var command = Activator.CreateInstance(genericType, new object[] { commandId, @event });
-            return command as ICommand;
-        }
-
-        private ICommand CreatePublishDomainEventPort(Guid commandId, IDomainEvent @event)
-        {
-            var type = typeof(PublishDomainEventPort<>);
             var genericType = type.MakeGenericType(@event.GetType());
             var command = Activator.CreateInstance(genericType, new object[] { commandId, @event });
             return command as ICommand;
