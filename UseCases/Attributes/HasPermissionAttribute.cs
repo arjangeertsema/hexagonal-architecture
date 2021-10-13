@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Synion.CQRS.Abstractions;
+using Common.CQRS.Abstractions.Attributes;
 
 namespace UseCases.Attributes
 {

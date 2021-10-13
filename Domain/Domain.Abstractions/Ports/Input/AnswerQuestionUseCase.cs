@@ -1,10 +1,10 @@
 ﻿using System;
-using Synion.CQRS.Abstractions;
-using Synion.CQRS.Abstractions.Ports;
+using Common.CQRS.Abstractions;
+using Common.CQRS.Abstractions.Commands;
 
 namespace Domain.Abstractions.Ports.Input
 {
-    public class AnswerQuestionUseCase : IInputPort, IUserTask
+    public class AnswerQuestionUseCase : ICommand, IUserTask
     {
         public AnswerQuestionUseCase(Guid commandId, Guid questionId, long userTaskId, string answer)
         {

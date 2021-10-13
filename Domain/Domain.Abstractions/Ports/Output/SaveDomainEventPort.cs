@@ -1,10 +1,10 @@
 using System;
-using Synion.DDD.Abstractions;
-using Synion.CQRS.Abstractions.Ports;
+using Common.DDD.Abstractions;
+using Common.CQRS.Abstractions.Commands;
 
 namespace Domain.Abstractions.Ports.Output
 {
-    public class SaveDomainEventPort<TEvent> : IOutputPort
+    public class SaveDomainEventPort<TEvent> : ICommand
             where TEvent : IDomainEvent
     {
         public SaveDomainEventPort(Guid commandId, TEvent @event)

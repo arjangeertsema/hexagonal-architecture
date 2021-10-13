@@ -1,14 +1,15 @@
 using System.Threading.Tasks;
 using Domain.Abstractions.Ports.Input;
-using Synion.CQRS.Abstractions.Queries;
+using Common.IAM.Abstractions.Queries;
+using System;
 
 namespace UseCases
 {
     public class GetQuestionsUseCaseAuthorization : IQueryAuthorization<GetQuestionsUseCase, GetQuestionsUseCase.Response>
     {
-        public Task<bool> IsAuthorized(string identity, GetQuestionsUseCase query, GetQuestionsUseCase.Response response)
+        public Task Authorize(string userId, GetQuestionsUseCase query, GetQuestionsUseCase.Response response)
         {
-            throw new System.NotImplementedException();
+            throw new UnauthorizedAccessException("Not implemented....");
         }
     }
 }

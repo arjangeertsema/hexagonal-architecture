@@ -1,9 +1,9 @@
 using System;
-using Synion.CQRS.Abstractions.Ports;
+using Common.CQRS.Abstractions.Commands;
 
 namespace Domain.Abstractions.Ports.Input
 {
-    public class EndQuestionUseCase : IInputPort
+    public class EndQuestionUseCase : ICommand
     {
         public EndQuestionUseCase(Guid commandId, Guid questionId)
         {

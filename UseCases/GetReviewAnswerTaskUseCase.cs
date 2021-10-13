@@ -1,14 +1,14 @@
 using System;
 using System.Threading.Tasks;
-using Synion.CQRS.Abstractions;
+using Common.CQRS.Abstractions;
 using Domain.Abstractions.Ports.Input;
 using UseCases.Attributes;
-using Synion.CQRS.Abstractions.Ports;
+using Common.CQRS.Abstractions.Queries;
 using System.Threading;
 
 namespace UseCases
 {
-    public class GetReviewAnswerTaskUseCaseHandler : IInputPortHandler<GetReviewAnswerTaskUseCase, GetReviewAnswerTaskUseCase.Response>
+    public class GetReviewAnswerTaskUseCaseHandler : IQueryHandler<GetReviewAnswerTaskUseCase, GetReviewAnswerTaskUseCase.Response>
     {
         private readonly IMediator mediator;
 

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
-using Synion.DDD.Abstractions;
+using Common.DDD.Abstractions;
+using Domain.Abstractions;
 using Domain.Abstractions.Events;
 using Domain.Abstractions.Exceptions;
 
 namespace Domain.Core
 {
-    public class AnswerQuestionsAggregateRoot : AggregateRoot
+    public class AnswerQuestionsAggregateRoot : AggregateRoot, IAnswerQuestionsAggregateRoot
     {
         public static AnswerQuestionsAggregateRoot Start(Guid questionId, string subject, string question, string askedBy)
         {

@@ -1,20 +1,14 @@
-using Synion.CQRS.Abstractions.Ports;
+using Common.CQRS.Abstractions.Queries;
 
 namespace Domain.Abstractions.Ports.Output
 {
-    public class IsUserTaskOwnerPort : IOutputPort<bool>
+    public class IsUserTaskOwnerPort : IQuery<bool>
     {
-        public IsUserTaskOwnerPort(string identity, long userTaskId)
+        public IsUserTaskOwnerPort(long userTaskId)
         {
-            if (string.IsNullOrWhiteSpace(identity))
-            {
-                throw new System.ArgumentException($"'{nameof(identity)}' cannot be null or whitespace.", nameof(identity));
-            }
-            Identity = identity;
             UserTaskId = userTaskId;
         }
-
-        public string Identity { get; }
+        
         public long UserTaskId { get; }
     }
 }

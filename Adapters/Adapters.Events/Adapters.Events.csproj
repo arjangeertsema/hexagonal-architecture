@@ -2,7 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Domain.Abstractions\Domain.Abstractions.csproj" />
-    <ProjectReference Include="..\..\Synion\Synion.CQRS\Synion.CQRS.csproj" />
+    <ProjectReference Include="..\..\Common\Common.CQRS\Common.CQRS.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

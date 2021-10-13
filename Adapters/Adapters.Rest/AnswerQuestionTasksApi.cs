@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Synion.CQRS.Abstractions;
+using Common.CQRS.Abstractions;
 using Domain.Abstractions.Ports.Input;
 using System.Threading;
 using Adapters.Rest.Generated.Controllers;

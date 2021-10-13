@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Synion.CQRS;
-using Synion.DDD.Abstractions;
+using Common.DDD.Abstractions;
+using Common.CQRS.Abstractions;
 
 namespace Adapters.Storage.Configuration
 {
@@ -10,7 +10,7 @@ namespace Adapters.Storage.Configuration
         public static IServiceCollection AddServicesForStorageAdapter(this IServiceCollection services, IConfiguration configuration) 
         {
             return services
-                .AddMediator(typeof(IServiceCollectionExtensions).Assembly)
+                .AutowireCQRS(typeof(IServiceCollectionExtensions).Assembly)
                 .AddTransient(typeof(IAggregateRootStore<>), typeof(AggregateRootStore<>));
         }
     }

@@ -1,9 +1,9 @@
 using System;
-using Synion.CQRS.Abstractions.Ports;
+using Common.CQRS.Abstractions.Commands;
 
 namespace Domain.Abstractions.Ports.Input
 {
-    public class RegisterQuestionUseCase : IInputPort
+    public class RegisterQuestionUseCase : ICommand
     {
         public RegisterQuestionUseCase(Guid commandId, Guid questionId, string subject, string question, string askedBy)
         {

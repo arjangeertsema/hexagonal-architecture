@@ -2,11 +2,11 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Synion.CQRS.Abstractions;
-using Domain.Abstractions.Ports.Output;
+using Common.CQRS.Abstractions;
 using UseCases.Attributes;
-using Synion.CQRS.Abstractions.Commands;
-using Synion.CQRS.Abstractions.Queries;
+using Common.CQRS.Abstractions.Commands;
+using Common.CQRS.Abstractions.Queries;
+using Common.IAM.Abstractions.Queries;
 
 namespace UseCases.Behaviours
 {
@@ -19,7 +19,7 @@ namespace UseCases.Behaviours
 
         public async Task Handle(TCommand command, HasPermissionAttribute attribute, CancellationToken cancellationToken, CommandBehaviourDelegate next)
         {
-            if(! await mediator.Ask(new HasPermissionPort(attribute.Permissions.ToArray()), cancellationToken))
+            if(! await mediator.Ask(new HasPermission(attribute.Permissions.ToArray()), cancellationToken))
                 throw new UnauthorizedAccessException();
 
             await next();
@@ -35,7 +35,7 @@ namespace UseCases.Behaviours
 
         public async Task<TResponse> Handle(TQuery query, HasPermissionAttribute attribute, CancellationToken cancellationToken, QueryBehaviourDelegate<TResponse> next)
         {
-            if(! await mediator.Ask(new HasPermissionPort(attribute.Permissions.ToArray()), cancellationToken))
+            if(! await mediator.Ask(new HasPermission(attribute.Permissions.ToArray()), cancellationToken))
                 throw new UnauthorizedAccessException();
 
             return await next();

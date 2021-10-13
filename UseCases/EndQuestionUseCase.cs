@@ -1,23 +1,23 @@
 using System;
 using System.Threading.Tasks;
-using Synion.CQRS.Abstractions;
-using Synion.DDD.Abstractions;
+using Common.CQRS.Abstractions;
+using Common.DDD.Abstractions;
 using Domain.Abstractions.Ports.Input;
-using Domain.Abstractions.Ports.Output;
-using Domain.Core;
 using UseCases.Attributes;
-using Synion.CQRS.Abstractions.Ports;
 using System.Threading;
-using Synion.CQRS.Abstractions.Attributes;
+using Common.CQRS.Abstractions.Attributes;
+using Common.IAM.Abstractions.Queries;
+using Domain.Abstractions;
+using Common.CQRS.Abstractions.Commands;
 
 namespace UseCases
 {
-    public class EndQuestionUseCaseHandler : IInputPortHandler<EndQuestionUseCase>
+    public class EndQuestionUseCaseHandler : ICommandHandler<EndQuestionUseCase>
     {
         private readonly IMediator mediator;
-        private readonly IAggregateRootStore<AnswerQuestionsAggregateRoot> aggregateRootStore;
+        private readonly IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore;
 
-        public EndQuestionUseCaseHandler(IMediator mediator, IAggregateRootStore<AnswerQuestionsAggregateRoot> aggregateRootStore)
+        public EndQuestionUseCaseHandler(IMediator mediator, IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore)
         {
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));            
@@ -30,11 +30,11 @@ namespace UseCases
         {
             var aggregateRoot = await aggregateRootStore.Get(command.QuestionId, cancellationToken);
 
-            var identity = await mediator.Ask(new GetIdentityPort(), cancellationToken);
+            var userId = await mediator.Ask(new GetUserId(), cancellationToken);
 
             aggregateRoot.EndQuestion
             (
-                endedBy: identity.Id
+                endedBy: userId
             );
 
             await aggregateRootStore.Save

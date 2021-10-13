@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Adapters.Rest.Generated.Controllers;
 using Adapters.Rest.Generated.Models;
 using Microsoft.AspNetCore.Mvc;
-using Synion.CQRS.Abstractions;
+using Common.CQRS.Abstractions;
 using Domain.Abstractions.Ports.Input;
 
 namespace Adapters.Rest

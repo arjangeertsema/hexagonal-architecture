@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Synion\Synion.DDD.Abstractions\Synion.DDD.Abstractions.csproj" />
-    <ProjectReference Include="..\..\Synion\Synion.CQRS.Abstractions\Synion.CQRS.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Common\Common.DDD.Abstractions\Common.DDD.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Common\Common.CQRS.Abstractions\Common.CQRS.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

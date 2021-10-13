@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\Domain.Abstractions\Domain.Abstractions.csproj" />
-    <ProjectReference Include="..\Domain\Domain.Core\Domain.Core.csproj" />
-    <ProjectReference Include="..\Synion\Synion.CQRS\Synion.CQRS.csproj" />
+    <ProjectReference Include="..\Domain\Domain.Abstractions\Domain.Abstractions.csproj" />    
+    <ProjectReference Include="..\Common\Common.CQRS.Abstractions\Common.CQRS.Abstractions.csproj" />
+    <ProjectReference Include="..\Common\Common.IAM.Abstractions\Common.IAM.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

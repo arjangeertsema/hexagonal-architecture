@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Synion.CQRS;
+using Common.CQRS.Abstractions;
 
 namespace Adapters.Rest.Configuration
 {
@@ -10,7 +10,7 @@ namespace Adapters.Rest.Configuration
         public static IServiceCollection AddServicesForRestAdapter(this IServiceCollection services, IConfiguration configuration) 
         {
             services
-                .AddMediator(typeof(IServiceCollectionExtensions).Assembly)
+                .AutowireCQRS(typeof(IServiceCollectionExtensions).Assembly)
                 .AddControllers();
             
             return services

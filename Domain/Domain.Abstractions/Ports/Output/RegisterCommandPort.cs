@@ -1,10 +1,10 @@
 using System;
-using Synion.CQRS.Abstractions.Commands;
-using Synion.CQRS.Abstractions.Ports;
+using Common.CQRS.Abstractions.Commands;
+using Common.CQRS.Abstractions.Queries;
 
 namespace Domain.Abstractions.Ports.Output
 {
-    public class RegisterCommandPort : IOutputPort
+    public class RegisterCommandPort : ICommand
     {
         public RegisterCommandPort(ICommand command)
         {

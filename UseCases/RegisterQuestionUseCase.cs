@@ -1,33 +1,35 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Synion.CQRS.Abstractions;
-using Synion.DDD.Abstractions;
+using Common.CQRS.Abstractions;
+using Common.DDD.Abstractions;
 using Domain.Abstractions.Ports.Input;
-using Domain.Core;
 using UseCases.Attributes;
-using Synion.CQRS.Abstractions.Ports;
+using Common.CQRS.Abstractions.Commands;
 using System.Threading;
-using Synion.CQRS.Abstractions.Attributes;
+using Common.CQRS.Abstractions.Attributes;
+using Domain.Abstractions;
 
 namespace UseCases
 {
-    public class RegisterQuestionUseCaseHandler : IInputPortHandler<RegisterQuestionUseCase>
+    public class RegisterQuestionUseCaseHandler : ICommandHandler<RegisterQuestionUseCase>
     {
         private readonly IMediator mediator;
-        private readonly IAggregateRootStore<AnswerQuestionsAggregateRoot> aggregateRootStore;
+        private readonly IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore;
+        private readonly IAnswerQuestionsAggregateRootFactory aggregateRootFactory;
 
-        public RegisterQuestionUseCaseHandler(IMediator mediator, IAggregateRootStore<AnswerQuestionsAggregateRoot> aggregateRootStore)
+        public RegisterQuestionUseCaseHandler(IMediator mediator, IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore, IAnswerQuestionsAggregateRootFactory aggregateRootFactory)
         {
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));            
-         }
+            this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));
+            this.aggregateRootFactory = aggregateRootFactory ?? throw new ArgumentNullException(nameof(aggregateRootFactory));
+        }
 
         [HasPermission("a permission")]
         [Transactional]
         [MakeIdempotent]
         public async Task Handle(RegisterQuestionUseCase command, CancellationToken cancellationToken)
         {
-            var aggregateRoot = AnswerQuestionsAggregateRoot.Start
+            var aggregateRoot = this.aggregateRootFactory.Create
             (
                 questionId: command.QuestionId,
                 subject: command.Subject,
@@ -37,7 +39,7 @@ namespace UseCases
 
             await aggregateRootStore.Save
             (
-                commandId: command.CommandId, 
+                commandId: command.CommandId,
                 aggregateRoot: aggregateRoot,
                 cancellationToken: cancellationToken
             );

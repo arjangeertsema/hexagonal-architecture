@@ -1,14 +1,13 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Synion.CQRS.Abstractions;
+using Common.CQRS.Abstractions;
 using Domain.Abstractions.Events;
 using Domain.Abstractions.Ports.Input;
 using Zeebe.Client;
 using Zeebe.Client.Api.Responses;
 using Zeebe.Client.Bootstrap.Abstractions;
-using Zeebe.Client.Bootstrap.Attributes;
-using Synion.DDD.Abstractions;
+using Common.DDD.Abstractions;
 
 namespace Adapters.Zeebe
 {
@@ -23,18 +22,15 @@ namespace Adapters.Zeebe
     {
         private readonly IZeebeClient zeebeClient;
         private readonly IZeebeVariablesSerializer serializer;
-        private readonly IZeebeVariablesDeserializer deserializer;
         private readonly IMediator mediator;
 
         public AnswerQuestionsService(
             IZeebeClient zeebeClient,
             IZeebeVariablesSerializer serializer,
-            IZeebeVariablesDeserializer deserializer,
             IMediator mediator)
         {
             this.zeebeClient = zeebeClient ?? throw new ArgumentNullException(nameof(zeebeClient));;
             this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));;
-            this.deserializer = deserializer ?? throw new ArgumentNullException(nameof(deserializer));;
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));;
         }
 
@@ -60,7 +56,7 @@ namespace Adapters.Zeebe
                 .CorrelationKey(@event.AggregateRootId.ToString())
                 .MessageId(@event.EventId.ToString())
                 .Variables(this.serializer.Serialize(variables))
-                .Send();
+                .Send(cancellationToken);
         }
 
         public async Task Handle(QuestionAnsweredEvent @event, CancellationToken cancellationToken)
@@ -78,7 +74,7 @@ namespace Adapters.Zeebe
 
             await this.zeebeClient.NewCompleteJobCommand(@event.UserTaskId)
                 .Variables(this.serializer.Serialize(variables))
-                .SendWithRetry();
+                .SendWithRetry(null, cancellationToken);
         }
 
         public async Task Handle(AnswerRejectedEvent @event, CancellationToken cancellationToken)
@@ -96,7 +92,7 @@ namespace Adapters.Zeebe
 
             await this.zeebeClient.NewCompleteJobCommand(@event.UserTaskId)
                 .Variables(serializer.Serialize(variables))
-                .SendWithRetry();
+                .SendWithRetry(null, cancellationToken);
         }
 
         public async Task Handle(AnswerAcceptedEvent @event, CancellationToken cancellationToken)
@@ -113,7 +109,7 @@ namespace Adapters.Zeebe
 
             await this.zeebeClient.NewCompleteJobCommand(@event.UserTaskId)
                 .Variables(serializer.Serialize(variables))
-                .SendWithRetry();
+                .SendWithRetry(null, cancellationToken);
         }
 
         public async Task Handle(AnswerModifiedEvent @event, CancellationToken cancellationToken)
@@ -131,18 +127,17 @@ namespace Adapters.Zeebe
 
             await this.zeebeClient.NewCompleteJobCommand(@event.UserTaskId)
                 .Variables(serializer.Serialize(variables))
-                .SendWithRetry();
+                .SendWithRetry(null, cancellationToken);
         }
 
         public async Task HandleJob(SendAnswerJobV1 job, CancellationToken cancellationToken)
         {
             //TODO: set system IPrincipal with IIdentiy on thread for permission check
 
-            var variables = deserializer.Deserialize<AnswerQuestionsVariables>(job.Variables);
             var command = new SendAnswerUseCase
             (
-                commandId: variables.SendAnswerCommandId,
-                questionId: variables.QuestionId
+                commandId: job.State.SendAnswerCommandId,
+                questionId: job.State.QuestionId
             );
 
             await this.mediator.Send(command, cancellationToken);
@@ -152,33 +147,35 @@ namespace Adapters.Zeebe
         {
             //TODO: set system IPrincipal with IIdentiy on thread for permission check
 
-            var variables = deserializer.Deserialize<AnswerQuestionsVariables>(job.Variables);
             var command = new SendQuestionAnsweredEventUseCase
             (
-                commandId: variables.SendQuestionAnsweredEventCommandId,
-                questionId: variables.QuestionId
+                commandId: job.State.SendQuestionAnsweredEventCommandId,
+                questionId: job.State.QuestionId
             );
 
             await mediator.Send(command, cancellationToken);
         }
     }
 
-    [FetchVariables("QuestionId", "SendAnswerCommandId")]
-    public class SendAnswerJobV1 : AbstractJob
+    public class SendAnswerJobV1 : AbstractJob<SendAnswerJobV1.JobState>
     {
-        public SendAnswerJobV1(IJob job) : base(job) { }
+        public SendAnswerJobV1(IJob job, SendAnswerJobV1.JobState state) : base(job, state) { }
+
+        public class JobState
+        {
+            public Guid QuestionId { get; set; }
+            public Guid SendAnswerCommandId { get; set; }
+        }
     }
 
-    [FetchVariables("QuestionId", "SendQuestionAnsweredEventCommandId")]
-    public class SendQuestionAnsweredEventJobV1 : AbstractJob
+    public class SendQuestionAnsweredEventJobV1 : AbstractJob<SendQuestionAnsweredEventJobV1.JobState>
     {
-        public SendQuestionAnsweredEventJobV1(IJob job) : base(job) { }
-    }
+        public SendQuestionAnsweredEventJobV1(IJob job, SendQuestionAnsweredEventJobV1.JobState state) : base(job, state) { }
 
-    public class AnswerQuestionsVariables
-    {
-        public Guid QuestionId { get; set; }
-        public Guid SendAnswerCommandId { get; set; }
-        public Guid SendQuestionAnsweredEventCommandId { get; set; }
+        public class JobState
+        {
+            public Guid QuestionId { get; set; }
+            public Guid SendQuestionAnsweredEventCommandId { get; set; }
+        }
     }
 }

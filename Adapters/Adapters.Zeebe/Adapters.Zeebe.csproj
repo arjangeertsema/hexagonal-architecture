@@ -2,11 +2,11 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Domain.Abstractions\Domain.Abstractions.csproj" />
-    <ProjectReference Include="..\..\Synion\Synion.CQRS\Synion.CQRS.csproj" />
+    <ProjectReference Include="..\..\Common\Common.CQRS\Common.CQRS.csproj" />
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="zb-client-bootstrap" Version="0.0.4" />
+    <PackageReference Include="zb-client-bootstrap" Version="0.0.6" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Synion.CQRS.Abstractions.Ports;
+using Common.CQRS.Abstractions.Queries;
 
 namespace Domain.Abstractions.Ports.Output
 {
-    public class GetAggregateRootStatePort : IOutputPort<IEnumerable<KeyValuePair<string, string>>>
+    public class GetAggregateRootStatePort : IQuery<IEnumerable<KeyValuePair<string, string>>>
     {
         public GetAggregateRootStatePort(Guid aggregateRootId)
         {

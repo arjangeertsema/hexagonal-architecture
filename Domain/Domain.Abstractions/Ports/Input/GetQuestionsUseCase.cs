@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Synion.CQRS.Abstractions.Ports;
+using Common.CQRS.Abstractions.Queries;
 
 namespace Domain.Abstractions.Ports.Input
 {
 
-    public class GetQuestionsUseCase : IInputPort<GetQuestionsUseCase.Response>
+    public class GetQuestionsUseCase : IQuery<GetQuestionsUseCase.Response>
     {
         public GetQuestionsUseCase(int? offset, int? limit)
         {

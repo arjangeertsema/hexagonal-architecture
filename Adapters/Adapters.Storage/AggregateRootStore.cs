@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain.Abstractions.Ports.Output;
-using Synion.CQRS.Abstractions;
-using Synion.CQRS.Abstractions.Commands;
-using Synion.DDD.Abstractions;
-using Synion.DDD.Abstractions.Exceptions;
+using Common.CQRS.Abstractions;
+using Common.CQRS.Abstractions.Commands;
+using Common.DDD.Abstractions;
+using Common.DDD.Abstractions.Exceptions;
 
 namespace Adapters.Storage.Configuration
 {

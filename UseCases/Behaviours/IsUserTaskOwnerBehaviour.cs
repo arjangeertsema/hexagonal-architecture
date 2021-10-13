@@ -1,11 +1,11 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Synion.CQRS.Abstractions;
+using Common.CQRS.Abstractions;
 using Domain.Abstractions.Ports.Output;
 using UseCases.Attributes;
-using Synion.CQRS.Abstractions.Commands;
-using Synion.CQRS.Abstractions.Queries;
+using Common.CQRS.Abstractions.Commands;
+using Common.CQRS.Abstractions.Queries;
 
 namespace UseCases.Behaviours
 {
@@ -25,8 +25,7 @@ namespace UseCases.Behaviours
                 throw new ArgumentNullException(nameof(userTask));
             }
 
-            var identity = await mediator.Ask(new GetIdentityPort(), cancellationToken);
-            return await mediator.Ask(new IsUserTaskOwnerPort(identity: identity.Id, userTaskId: userTask.UserTaskId), cancellationToken);
+            return await mediator.Ask(new IsUserTaskOwnerPort(userTaskId: userTask.UserTaskId), cancellationToken);
         }
     }
 
@@ -37,8 +36,10 @@ namespace UseCases.Behaviours
 
         public async Task Handle(TCommand command, IsUserTaskOwnerAttribute attribute, CancellationToken cancellationToken, CommandBehaviourDelegate next)
         {
-            if(!await IsUserTaskOwner(command as IUserTask, cancellationToken))
-                throw new UnauthorizedAccessException();
+            var userTask = command as IUserTask;
+
+            if(!await IsUserTaskOwner(userTask, cancellationToken))
+                throw new UnauthorizedAccessException($"User is not the owner of user task with id '{userTask.UserTaskId}'.");
 
             await next();
         }
@@ -51,8 +52,10 @@ namespace UseCases.Behaviours
 
         public async Task<TResponse> Handle(TQuery query, IsUserTaskOwnerAttribute attribute, CancellationToken cancellationToken, QueryBehaviourDelegate<TResponse> next)
         {            
-            if(!await IsUserTaskOwner(query as IUserTask, cancellationToken))
-                throw new UnauthorizedAccessException();
+            var userTask = query as IUserTask;
+
+            if(!await IsUserTaskOwner(userTask, cancellationToken))
+                throw new UnauthorizedAccessException($"User is not the owner of user task with id '{userTask.UserTaskId}'.");
 
             return await next();
         }

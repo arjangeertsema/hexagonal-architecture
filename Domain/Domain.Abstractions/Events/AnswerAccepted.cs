@@ -1,6 +1,6 @@
 using System;
-using Synion.CQRS.Abstractions;
-using Synion.DDD.Abstractions;
+using Common.CQRS.Abstractions;
+using Common.DDD.Abstractions;
 
 namespace Domain.Abstractions.Events
 {

@@ -2,21 +2,22 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain.Abstractions.Ports.Output;
-using Synion.CQRS.Abstractions;
-using Synion.CQRS.Abstractions.Ports;
-using Synion.CQRS;
+using Common.CQRS.Abstractions;
 using System;
-using Synion.DDD.Abstractions;
+using Common.DDD.Abstractions;
 using System.ComponentModel;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using Common.CQRS.Abstractions.Commands;
+using Common.CQRS.Abstractions.Attributes;
+using Common.CQRS.Abstractions.Queries;
 
 namespace Adapters.Storage
 {
     [ServiceLifetime(ServiceLifetime.Singleton)]
     public class InMemoryStorageService<TEvent> :        
-        IOutputPortHandler<SaveDomainEventPort<TEvent>>,
-        IOutputPortHandler<GetAggregateRootStatePort, IEnumerable<KeyValuePair<string, string>>>
+        ICommandHandler<SaveDomainEventPort<TEvent>>,
+        IQueryHandler<GetAggregateRootStatePort, IEnumerable<KeyValuePair<string, string>>>
         where TEvent : IDomainEvent
     {
         private readonly Dictionary<Guid, Dictionary<string, string>> store;
