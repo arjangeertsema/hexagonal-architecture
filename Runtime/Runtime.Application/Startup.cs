@@ -20,7 +20,6 @@ namespace application
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                //.AddServicesForStorageAdapter(Configuration)
                 .AddServicesForZeebeAdapter(Configuration)
                 .AddServicesForRestAdapter(Configuration)
                 .AddServicesForUseCases(Configuration);
@@ -28,7 +27,8 @@ namespace application
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.ConfigureRestAdapter(Configuration, env);
+            app
+                .ConfigureRestAdapter(Configuration, env);
         }
     }
 }
