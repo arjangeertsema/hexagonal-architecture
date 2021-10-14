@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Common.CQRS.Abstractions;
-using Common.CQRS.Commands;
-using Common.CQRS.Events;
-using Common.CQRS.Queries;
 using Common.CQRS.Aspects;
 using Common.CQRS.Abstractions.Aspects;
 
@@ -14,6 +11,7 @@ namespace Common.CQRS
         {
             return services
                 .AddSingleton<IMediator, Mediator>()
+                
                 .AddScoped(typeof(AspectCommandHandler<>))
                 .AddScoped(typeof(AspectEventHandler<>))
                 .AddScoped(typeof(AspectQueryHandler<,>))

@@ -8,7 +8,7 @@ using Common.CQRS.Abstractions;
 using Common.CQRS.Abstractions.Events;
 using Common.CQRS.Abstractions.Aspects;
 
-namespace Common.CQRS.Events
+namespace Common.CQRS
 {
     internal class AspectEventHandler<TEvent> : IEventHandler<TEvent>
         where TEvent : IEvent

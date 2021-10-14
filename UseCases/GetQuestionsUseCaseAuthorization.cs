@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Domain.Abstractions.Ports.Input;
-using Common.IAM.Abstractions.Queries;
 using System;
+using Common.IAM.Abstractions;
 
 namespace UseCases
 {

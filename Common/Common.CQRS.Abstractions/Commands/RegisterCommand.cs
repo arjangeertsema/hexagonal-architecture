@@ -1,7 +1,7 @@
 using System;
 using Common.CQRS.Abstractions.Commands;
 
-namespace Domain.Abstractions.Ports.Output
+namespace Common.CQRS.Abstractions.Commands
 {
     public class RegisterCommand : ICommand
     {

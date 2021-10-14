@@ -8,7 +8,7 @@ using Common.CQRS.Abstractions.Queries;
 using Common.UserTasks.Abstractions.Attributes;
 using Common.UserTasks.Abstractions.Queries;
 
-namespace Common.UserTasks.Abstractions.Aspects
+namespace Common.UserTasks.Aspects
 {
     public abstract class IsUserTaskOwnerAspect
     {

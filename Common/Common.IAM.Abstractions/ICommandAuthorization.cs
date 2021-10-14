@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Common.CQRS.Abstractions.Commands;
 
-namespace Common.IAM.Abstractions.Commands
+namespace Common.IAM.Abstractions
 {
     public interface ICommandAuthorization<TCommand>
         where TCommand : ICommand

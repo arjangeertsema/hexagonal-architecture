@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Common.CQRS.Abstractions.Queries;
 
-namespace Common.IAM.Abstractions.Queries
+namespace Common.IAM.Abstractions
 {
     public interface IQueryAuthorization<TQuery, TResponse>
         where TQuery : IQuery<TResponse>

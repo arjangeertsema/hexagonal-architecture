@@ -1,8 +1,5 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using Common.IAM.Abstractions.Commands;
-using Common.IAM.Abstractions.Queries;
-using Common.IAM.Abstractions.Events;
 using Common.CQRS.Abstractions;
 
 namespace Common.IAM.Abstractions

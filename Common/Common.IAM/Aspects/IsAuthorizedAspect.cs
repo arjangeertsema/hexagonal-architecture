@@ -7,13 +7,12 @@ using Common.CQRS.Abstractions.Attributes;
 using Common.CQRS.Abstractions.Commands;
 using Common.CQRS.Abstractions.Events;
 using Common.CQRS.Abstractions.Queries;
+using Common.IAM.Abstractions;
 using Common.IAM.Abstractions.Attributes;
-using Common.IAM.Abstractions.Commands;
-using Common.IAM.Abstractions.Events;
 using Common.IAM.Abstractions.Queries;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Common.IAM.Abstractions.Aspects
+namespace Common.IAM.Aspects
 {
     [ServiceLifetime(ServiceLifetime.Singleton)]
     public abstract class IsAuthorizedAspect

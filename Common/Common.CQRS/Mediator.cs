@@ -7,9 +7,6 @@ using Common.CQRS.Abstractions;
 using Common.CQRS.Abstractions.Commands;
 using Common.CQRS.Abstractions.Events;
 using Common.CQRS.Abstractions.Queries;
-using Common.CQRS.Commands;
-using Common.CQRS.Events;
-using Common.CQRS.Queries;
 
 namespace Common.CQRS
 {

@@ -1,12 +1,14 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.CQRS.Abstractions;
+using Common.CQRS.Abstractions.Aspects;
 using Common.CQRS.Abstractions.Attributes;
 using Common.CQRS.Abstractions.Commands;
 using Common.CQRS.Abstractions.Exceptions;
-using Domain.Abstractions.Ports.Output;
+using Common.CQRS.Commands;
 
-namespace Common.CQRS.Abstractions.Aspects
+namespace Common.CQRS.Aspects
 {
     public class MakeIdempotentCommandAspect<TCommand> : ICommandAttributeAspect<TCommand, MakeIdempotentAttribute>
         where TCommand : ICommand

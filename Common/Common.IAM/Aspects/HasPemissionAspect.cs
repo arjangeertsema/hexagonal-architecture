@@ -9,7 +9,7 @@ using Common.CQRS.Abstractions.Queries;
 using Common.IAM.Abstractions.Attributes;
 using Common.IAM.Abstractions.Queries;
 
-namespace Common.IAM.Abstractions.Aspects
+namespace Common.IAM.Aspects
 {
     public class HasPemissionCommandAspect<TCommand> : ICommandAttributeAspect<TCommand, HasPermissionAttribute>
         where TCommand : ICommand

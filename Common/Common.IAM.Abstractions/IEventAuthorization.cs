@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Common.CQRS.Abstractions.Events;
 
-namespace Common.IAM.Abstractions.Events
+namespace Common.IAM.Abstractions
 {
     public interface IEventAuthorization<TEvent>
         where TEvent : IEvent

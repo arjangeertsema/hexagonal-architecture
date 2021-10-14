@@ -4,42 +4,42 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Common.CQRS.Abstractions;
-using Common.CQRS.Abstractions.Commands;
+using Common.CQRS.Abstractions.Queries;
 using Common.CQRS.Abstractions.Aspects;
 
-namespace Common.CQRS.Commands
+namespace Common.CQRS
 {
-    internal class AspectCommandHandler<TCommand> : ICommandHandler<TCommand>
-        where TCommand : ICommand
+    internal class AspectQueryHandler<TQuery, TResponse> : IQueryHandler<TQuery, TResponse>
+        where TQuery : IQuery<TResponse>
     {
         private readonly IServiceProvider serviceProvider;
 
-        public AspectCommandHandler(IServiceProvider serviceProvider)
+        public AspectQueryHandler(IServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
 
-        public Task Handle(TCommand command, CancellationToken cancellationToken)
+        public Task<TResponse> Handle(TQuery query, CancellationToken cancellationToken)
         {
-            var handler = serviceProvider.GetRequiredService<ICommandHandler<TCommand>>();
+            var handler = serviceProvider.GetRequiredService<IQueryHandler<TQuery, TResponse>>();
             var attributes = GetHandlerAttributes(handler);
-            Task handleDelegate() => handler.Handle(command, cancellationToken);
+            Task<TResponse> handleDelegate() => handler.Handle(query, cancellationToken);
 
-            var aspects = serviceProvider
-                .GetServices<ICommandAspect<TCommand>>()
+            var pipeline = serviceProvider
+                .GetServices<IQueryAspect<TQuery, TResponse>>()
                 .Reverse()
                 .Aggregate(
-                    seed: (CommandAspectDelegate) handleDelegate, 
-                    func: (next, behaviour) => () => behaviour.Handle(command, attributes, cancellationToken, next)
+                    seed: (QueryAspectDelegate<TResponse>) handleDelegate, 
+                    func: (next, behaviour) => () => behaviour.Handle(query, attributes, cancellationToken, next)
                 );
-
-            return aspects();
+                
+            return pipeline();
         }
 
-        private static IAttributeCollection GetHandlerAttributes(ICommandHandler<TCommand> handler) 
+        private static IAttributeCollection GetHandlerAttributes(IQueryHandler<TQuery, TResponse> handler) 
         {
-            var name = nameof(ICommandHandler<TCommand>.Handle);
-            var reference = typeof(ICommandHandler<TCommand>)
+            var name = nameof(IQueryHandler<TQuery, TResponse>.Handle);
+            var reference = typeof(IQueryHandler<TQuery, TResponse>)
                 .GetMethods()
                 .Where(m => m.Name.Equals(name))
                 .Single();
