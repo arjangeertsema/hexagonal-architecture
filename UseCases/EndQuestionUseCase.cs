@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using Common.CQRS.Abstractions;
 using Common.DDD.Abstractions;
 using Domain.Abstractions.Ports.Input;
-using UseCases.Attributes;
 using System.Threading;
 using Common.CQRS.Abstractions.Attributes;
 using Common.IAM.Abstractions.Queries;
 using Domain.Abstractions;
 using Common.CQRS.Abstractions.Commands;
+using Common.IAM.Abstractions.Attributes;
 
 namespace UseCases
 {

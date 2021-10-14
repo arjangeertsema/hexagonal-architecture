@@ -6,6 +6,7 @@ using Common.CQRS.Abstractions.Commands;
 using Common.CQRS.Abstractions.Events;
 using Common.CQRS.Abstractions.Queries;
 using Common.CQRS.Abstractions.Attributes;
+using Common.CQRS.Abstractions.Aspects;
 
 namespace Common.CQRS.Abstractions
 {
@@ -14,18 +15,23 @@ namespace Common.CQRS.Abstractions
         public static IServiceCollection AutowireCQRS(this IServiceCollection services, Assembly assembly)
         {            
             return services
-                .FindAndAddImplementations(assembly, typeof(ICommandAttributeBehaviour<,>))
-                .FindAndAddImplementations(assembly, typeof(ICommandBehaviour<>))
-                .FindAndAddImplementations(assembly, typeof(ICommandHandler<>))
-                .FindAndAddImplementations(assembly, typeof(ICommandTransactionScopeFactory<>))                
                 
-                .FindAndAddImplementations(assembly, typeof(IQueryAttributeBehaviour<,,>))
-                .FindAndAddImplementations(assembly, typeof(IQueryBehaviour<,>))
-                .FindAndAddImplementations(assembly, typeof(IQueryHandler<,>))
+                .FindAndAddImplementations(assembly, typeof(ICommandHandler<>))
+                .FindAndAddImplementations(assembly, typeof(IEventHandler<>))
+                .FindAndAddImplementations(assembly, typeof(IQueryHandler<,>))                
+                
 
-                .FindAndAddImplementations(assembly, typeof(IEventAttributeBehaviour<,>))
-                .FindAndAddImplementations(assembly, typeof(IEventBehaviour<>))
-                .FindAndAddImplementations(assembly, typeof(IEventHandler<>));
+                .FindAndAddImplementations(assembly, typeof(ICommandAspect<>))
+                .FindAndAddImplementations(assembly, typeof(IEventAspect<>))
+                .FindAndAddImplementations(assembly, typeof(IQueryAspect<,>))
+
+                .FindAndAddImplementations(assembly, typeof(ICommandAttributeAspect<,>))                
+                .FindAndAddImplementations(assembly, typeof(IEventAttributeAspect<,>))                
+                .FindAndAddImplementations(assembly, typeof(IQueryAttributeAspect<,,>))
+                
+
+                .FindAndAddImplementations(assembly, typeof(ICommandTransactionScopeFactory<>));
+                
         }
 
         public static IServiceCollection FindAndAddImplementations(this IServiceCollection services, Assembly assembly, Type genericServiceTypeDefinition)

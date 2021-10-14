@@ -2,9 +2,10 @@ using System;
 using System.Threading.Tasks;
 using Common.CQRS.Abstractions;
 using Domain.Abstractions.Ports.Input;
-using UseCases.Attributes;
 using Common.CQRS.Abstractions.Queries;
 using System.Threading;
+using Common.IAM.Abstractions.Attributes;
+using Common.UserTasks.Abstractions.Attributes;
 
 namespace UseCases
 {

@@ -4,11 +4,11 @@ namespace Domain.Abstractions
 {
     public interface IAnswerQuestionsAggregateRoot : IAggregateRoot
     {
-        void AcceptAnswer(long taskId, string acceptedBy);
-        void AnswerQuestion(long taskId, string answer, string answeredBy);
+        void AcceptAnswer(string userTaskId, string acceptedBy);
+        void AnswerQuestion(string userTaskId, string answer, string answeredBy);
         void EndQuestion(string endedBy);
-        void ModifyAnswer(long taskId, string answer, string modifiedBy);
-        void RejectAnswer(long taskId, string rejection, string rejectedBy);
+        void ModifyAnswer(string userTaskId, string answer, string modifiedBy);
+        void RejectAnswer(string userTaskId, string rejection, string rejectedBy);
         void SendAnswer();
         void SendQuestionAnsweredEvent();
     }

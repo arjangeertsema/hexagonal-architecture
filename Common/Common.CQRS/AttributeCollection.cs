@@ -10,15 +10,7 @@ namespace Common.CQRS
     {
         private readonly IEnumerable<Attribute> attributes;
 
-        public AttributeCollection(IEnumerable<Attribute> attributes)
-        {
-            if (attributes is null)
-            {
-                throw new ArgumentNullException(nameof(attributes));
-            }
-
-            this.attributes = attributes;
-        }
+        public AttributeCollection(IEnumerable<Attribute> attributes) => this.attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
 
         public IEnumerable<TAttribute> GetAttributes<TAttribute>() where TAttribute : Attribute
         {
@@ -30,7 +22,6 @@ namespace Common.CQRS
         }
 
         public TAttribute GetAttribute<TAttribute>() where TAttribute : Attribute => GetAttributes<TAttribute>().SingleOrDefault();
-
         public TAttribute GetRequiredAttribute<TAttribute>() where TAttribute : Attribute => GetAttributes<TAttribute>().Single();
 
         public IEnumerator<Attribute> GetEnumerator() => attributes.GetEnumerator();

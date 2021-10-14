@@ -1,12 +1,12 @@
 ﻿using System;
-using Common.CQRS.Abstractions;
 using Common.CQRS.Abstractions.Commands;
+using Common.UserTasks.Abstractions;
 
 namespace Domain.Abstractions.Ports.Input
 {
     public class AcceptAnswerUseCase : ICommand, IUserTask
     {
-        public AcceptAnswerUseCase(Guid commandId, Guid questionId, long userTaskId)
+        public AcceptAnswerUseCase(Guid commandId, Guid questionId, string userTaskId)
         {
             CommandId = commandId;
             QuestionId = questionId;
@@ -15,6 +15,6 @@ namespace Domain.Abstractions.Ports.Input
 
         public Guid CommandId { get; }
         public Guid QuestionId { get; }
-        public long UserTaskId { get; }
+        public string UserTaskId { get; }
     }
 }

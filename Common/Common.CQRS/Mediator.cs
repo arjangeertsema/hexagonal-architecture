@@ -69,7 +69,7 @@ namespace Common.CQRS
         private Task SendCommand<TCommand>(TCommand command, CancellationToken cancellationToken)
             where TCommand : ICommand
         {
-            var handler = serviceProvider.GetRequiredService<BehaviourCommandHandler<TCommand>>();
+            var handler = serviceProvider.GetRequiredService<AspectCommandHandler<TCommand>>();
             return handler.Handle(command, cancellationToken);
         }
 
@@ -81,14 +81,14 @@ namespace Common.CQRS
                 throw new ArgumentNullException(nameof(query));
             }
 
-            var handler = serviceProvider.GetRequiredService<BehaviourQueryHandler<TQuery, TResponse>>();
+            var handler = serviceProvider.GetRequiredService<AspectQueryHandler<TQuery, TResponse>>();
             return handler.Handle(query, cancellationToken);
         }
 
         private Task NotifyEvent<TEvent>(TEvent @event, CancellationToken cancellationToken)
             where TEvent : IEvent
         {
-            var handler = serviceProvider.GetRequiredService<BehaviourEventHandler<TEvent>>();
+            var handler = serviceProvider.GetRequiredService<AspectEventHandler<TEvent>>();
             return handler.Handle(@event, cancellationToken);
         }
     }

@@ -1,21 +1,21 @@
 using System;
-using Common.CQRS.Abstractions;
+using Common.UserTasks.Abstractions;
 using Common.CQRS.Abstractions.Queries;
 
 namespace Domain.Abstractions.Ports.Input
 {        
     public class GetAnswerQuestionTaskUseCase : IQuery<GetAnswerQuestionTaskUseCase.Response>, IUserTask
     {
-        public GetAnswerQuestionTaskUseCase(long taskId)
+        public GetAnswerQuestionTaskUseCase(string userTaskId)
         {
-            UserTaskId = taskId;
+            UserTaskId = userTaskId;
         }
 
-        public long UserTaskId { get; }
+        public string UserTaskId { get; }
 
         public class Response
         {
-            public Response(Guid QuestionId, long userTaskId, DateTime askedOn, string askedBy, string subject, string question)
+            public Response(Guid QuestionId, string userTaskId, DateTime askedOn, string askedBy, string subject, string question)
             {
                 if (string.IsNullOrEmpty(askedBy))
                 {
@@ -41,7 +41,7 @@ namespace Domain.Abstractions.Ports.Input
             }
 
             public Guid QuestionId { get; }
-            public long UserTaskId { get; }
+            public string UserTaskId { get; }
             public DateTime AskedOn { get; }
             public string AskedBy { get; }
             public string Subject { get; }

@@ -16,24 +16,24 @@ namespace Adapters.Rest
 
         public AnswerQuestionTasksApi(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
-        public override async Task<IActionResult> GetAnswerQuestionTask([FromRoute(Name = "task_id"), Required] long taskId)
+        public override async Task<IActionResult> GetAnswerQuestionTask([FromRoute(Name = "task_id"), Required] string userTaskId)
         {
             var query = new GetAnswerQuestionTaskUseCase
             (
-                taskId: taskId
+                userTaskId: userTaskId
             );
             
             var response = await this.mediator.Ask(query);
             return Ok(Map(response));
         }
 
-        public override async Task<IActionResult> AnswerQuestion([FromRoute(Name = "task_id"), Required] long taskId, [FromBody] AnswerQuestion answerQuestion)
+        public override async Task<IActionResult> AnswerQuestion([FromRoute(Name = "task_id"), Required] string userTaskId, [FromBody] AnswerQuestion answerQuestion)
         {
             var command = new AnswerQuestionUseCase
             (
                 commandId: answerQuestion.CommandId,
                 questionId: answerQuestion.QuestionId,
-                userTaskId: taskId, answer: answerQuestion.Answer
+                userTaskId: userTaskId, answer: answerQuestion.Answer
             );
 
             await this.mediator.Send(command);
@@ -44,7 +44,7 @@ namespace Adapters.Rest
         {
             return new AnswerQuestionTask()
             {
-                TaskId = response.UserTaskId,
+                UserTaskId = response.UserTaskId,
                 QuestionId = response.QuestionId,
                 RecievedOn = response.AskedOn,
                 Subject = response.Subject,

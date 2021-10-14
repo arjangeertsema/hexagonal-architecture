@@ -1,13 +1,13 @@
 ﻿using System;
-using Common.CQRS.Abstractions;
 using Common.CQRS.Abstractions.Commands;
+using Common.UserTasks.Abstractions;
 
 namespace Domain.Abstractions.Ports.Input
 {
     public class RejectAnswerUseCase : ICommand, IUserTask
     {
 
-        public RejectAnswerUseCase(Guid commandId, Guid questionId, long userTaskId, string rejection)
+        public RejectAnswerUseCase(Guid commandId, Guid questionId, string userTaskId, string rejection)
         {
             if (string.IsNullOrWhiteSpace(rejection))
             {
@@ -21,7 +21,7 @@ namespace Domain.Abstractions.Ports.Input
 
         public Guid CommandId { get; }
         public Guid QuestionId { get; }
-        public long UserTaskId { get; set; }
+        public string UserTaskId { get; set; }
         public string Rejection { get; set; }
     }
 }

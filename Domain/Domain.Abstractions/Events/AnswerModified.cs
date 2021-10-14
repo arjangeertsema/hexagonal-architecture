@@ -1,12 +1,13 @@
 using System;
 using Common.CQRS.Abstractions;
 using Common.DDD.Abstractions;
+using Common.UserTasks.Abstractions;
 
 namespace Domain.Abstractions.Events
 {
     public class AnswerModifiedEvent : DomainEvent, IUserTask
     {
-        public AnswerModifiedEvent(Guid aggregateId, long userTaskId, string answer, string modifiedBy, DateTime modified)
+        public AnswerModifiedEvent(Guid aggregateId, string userTaskId, string answer, string modifiedBy, DateTime modified)
             : base(aggregateId)
 
         {
@@ -26,7 +27,7 @@ namespace Domain.Abstractions.Events
             Modified = modified;
         }
 
-        public long UserTaskId { get; }
+        public string UserTaskId { get; }
         public string Answer { get; }
         public string ModifiedBy { get; }
         public DateTime Modified { get; }

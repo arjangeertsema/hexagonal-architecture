@@ -72,7 +72,7 @@ namespace Adapters.Zeebe
                 @event.AnsweredBy
             };
 
-            await this.zeebeClient.NewCompleteJobCommand(@event.UserTaskId)
+            await this.zeebeClient.NewCompleteJobCommand(long.Parse(@event.UserTaskId))
                 .Variables(this.serializer.Serialize(variables))
                 .SendWithRetry(null, cancellationToken);
         }
@@ -90,7 +90,7 @@ namespace Adapters.Zeebe
                 @event.Rejection
             };
 
-            await this.zeebeClient.NewCompleteJobCommand(@event.UserTaskId)
+            await this.zeebeClient.NewCompleteJobCommand(long.Parse(@event.UserTaskId))
                 .Variables(serializer.Serialize(variables))
                 .SendWithRetry(null, cancellationToken);
         }
@@ -107,7 +107,7 @@ namespace Adapters.Zeebe
                 @event.AcceptedBy
             };
 
-            await this.zeebeClient.NewCompleteJobCommand(@event.UserTaskId)
+            await this.zeebeClient.NewCompleteJobCommand(long.Parse(@event.UserTaskId))
                 .Variables(serializer.Serialize(variables))
                 .SendWithRetry(null, cancellationToken);
         }
@@ -125,14 +125,14 @@ namespace Adapters.Zeebe
                 @event.ModifiedBy
             };
 
-            await this.zeebeClient.NewCompleteJobCommand(@event.UserTaskId)
+            await this.zeebeClient.NewCompleteJobCommand(long.Parse(@event.UserTaskId))
                 .Variables(serializer.Serialize(variables))
                 .SendWithRetry(null, cancellationToken);
         }
 
         public async Task HandleJob(SendAnswerJobV1 job, CancellationToken cancellationToken)
         {
-            //TODO: set system IPrincipal with IIdentiy on thread for permission check
+            //TODO: authenticate system for thread (Common.IAM).
 
             var command = new SendAnswerUseCase
             (
@@ -145,7 +145,7 @@ namespace Adapters.Zeebe
 
         public async Task HandleJob(SendQuestionAnsweredEventJobV1 job, CancellationToken cancellationToken)
         {
-            //TODO: set system IPrincipal with IIdentiy on thread for permission check
+            //TODO: authenticate system for thread (Common.IAM).
 
             var command = new SendQuestionAnsweredEventUseCase
             (

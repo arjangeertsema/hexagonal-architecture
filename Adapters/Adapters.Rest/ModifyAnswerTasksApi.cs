@@ -15,24 +15,24 @@ namespace Adapters.Rest
 
         public ModifyAnswerTasksApi(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
-        public override async Task<IActionResult> GetModifyAnswerTask([FromRoute(Name = "task_id"), Required] long taskId)
+        public override async Task<IActionResult> GetModifyAnswerTask([FromRoute(Name = "task_id"), Required] string userTaskId)
         {
             var query = new GetModifyAnswerTaskUseCase
             (
-                userTaskId: taskId
+                userTaskId: userTaskId
             );
 
             var response = await this.mediator.Ask(query);
             return Ok(Map(response));
         }
 
-        public override async Task<IActionResult> ModifyAnswer([FromRoute(Name = "task_id"), Required] long taskId, [FromBody] ModifyAnswer modifyAnswer)
+        public override async Task<IActionResult> ModifyAnswer([FromRoute(Name = "task_id"), Required] string userTaskId, [FromBody] ModifyAnswer modifyAnswer)
         {
             var command = new ModifyAnswerUseCase
             (
                 commandId: modifyAnswer.CommandId,
                 questionId: modifyAnswer.QuestionId,
-                userTaskId: taskId, 
+                userTaskId: userTaskId, 
                 answer: modifyAnswer.Answer
             );
             
@@ -45,7 +45,7 @@ namespace Adapters.Rest
             return new ModifyAnswerTask()
             {
                 QuestionId = response.QuestionId,
-                TaskId = response.UserTaskId,
+                UserTaskId = response.UserTaskId,
                 RecievedOn = response.AskedOn,
                 Subject = response.Subject,
                 Question = response.Question,

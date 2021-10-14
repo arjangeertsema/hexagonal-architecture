@@ -1,12 +1,12 @@
 using System;
-using Common.CQRS.Abstractions;
 using Common.DDD.Abstractions;
+using Common.UserTasks.Abstractions;
 
 namespace Domain.Abstractions.Events
 {
     public class AnswerRejectedEvent : DomainEvent, IUserTask
     {
-        public AnswerRejectedEvent(Guid aggregateId, long userTaskId, string rejection, string rejectedBy, DateTime rejected)
+        public AnswerRejectedEvent(Guid aggregateId, string userTaskId, string rejection, string rejectedBy, DateTime rejected)
             : base(aggregateId)
 
         {
@@ -26,7 +26,7 @@ namespace Domain.Abstractions.Events
             Rejected = rejected;
         }
 
-        public long UserTaskId { get; }
+        public string UserTaskId { get; }
         public string Rejection { get; }
         public string RejectedBy { get; }
         public DateTime Rejected { get; }

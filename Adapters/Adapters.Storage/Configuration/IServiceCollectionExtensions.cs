@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Configuration;
+/*using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Common.DDD.Abstractions;
 using Common.CQRS.Abstractions;
@@ -15,3 +15,4 @@ namespace Adapters.Storage.Configuration
         }
     }
 }
+*/

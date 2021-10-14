@@ -50,7 +50,7 @@ namespace Domain.Core
             : base(id, state)
         { }
 
-        public void AnswerQuestion(long taskId, string answer, string answeredBy)
+        public void AnswerQuestion(string userTaskId, string answer, string answeredBy)
         {
             if (string.IsNullOrWhiteSpace(answer))
             {
@@ -71,10 +71,10 @@ namespace Domain.Core
             AnsweredBy = answeredBy;
             Answered = DateTime.Now;
 
-            RaiseEvent(new QuestionAnsweredEvent(Id, taskId, Answer, AnsweredBy, Answered.Value));
+            RaiseEvent(new QuestionAnsweredEvent(Id, userTaskId, Answer, AnsweredBy, Answered.Value));
         }
 
-        public void AcceptAnswer(long taskId, string acceptedBy)
+        public void AcceptAnswer(string userTaskId, string acceptedBy)
         {
             if (string.IsNullOrWhiteSpace(acceptedBy))
             {
@@ -99,10 +99,10 @@ namespace Domain.Core
             AcceptedBy = acceptedBy;
             Accepted = DateTime.Now;
 
-            RaiseEvent(new AnswerAcceptedEvent(Id, taskId, AcceptedBy, Accepted.Value));
+            RaiseEvent(new AnswerAcceptedEvent(Id, userTaskId, AcceptedBy, Accepted.Value));
         }
 
-        public void RejectAnswer(long taskId, string rejection, string rejectedBy)
+        public void RejectAnswer(string userTaskId, string rejection, string rejectedBy)
         {
             if (string.IsNullOrWhiteSpace(rejection))
             {
@@ -133,10 +133,10 @@ namespace Domain.Core
             RejectedBy = rejectedBy;
             Rejected = DateTime.Now;
 
-            RaiseEvent(new AnswerRejectedEvent(Id, taskId, Rejection, RejectedBy, Rejected.Value));
+            RaiseEvent(new AnswerRejectedEvent(Id, userTaskId, Rejection, RejectedBy, Rejected.Value));
         }
 
-        public void ModifyAnswer(long taskId, string answer, string modifiedBy)
+        public void ModifyAnswer(string userTaskId, string answer, string modifiedBy)
         {
             if (string.IsNullOrWhiteSpace(answer))
             {
@@ -172,7 +172,7 @@ namespace Domain.Core
             ModifiedBy = modifiedBy;
             Modified = DateTime.Now;
 
-            RaiseEvent(new AnswerModifiedEvent(Id, taskId, Answer, ModifiedBy, Modified.Value));
+            RaiseEvent(new AnswerModifiedEvent(Id, userTaskId, Answer, ModifiedBy, Modified.Value));
         }
         public void SendAnswer()
         {

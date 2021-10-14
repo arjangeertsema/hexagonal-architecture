@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +11,7 @@ using Common.DDD.Abstractions.Exceptions;
 namespace Adapters.Storage.Configuration
 {
     public class AggregateRootStore<TAggregateRoot> : IAggregateRootStore<TAggregateRoot>
-         where TAggregateRoot : AggregateRoot
+         where TAggregateRoot : IAggregateRoot
     {
         private readonly IMediator mediator;
 
@@ -76,3 +76,4 @@ namespace Adapters.Storage.Configuration
         }
     }
 }
+*/
