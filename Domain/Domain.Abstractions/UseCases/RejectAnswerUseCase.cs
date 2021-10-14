@@ -2,7 +2,7 @@
 using Common.CQRS.Abstractions.Commands;
 using Common.UserTasks.Abstractions;
 
-namespace Domain.Abstractions.Ports.Input
+namespace Domain.Abstractions.UseCases
 {
     public class RejectAnswerUseCase : ICommand, IUserTask
     {

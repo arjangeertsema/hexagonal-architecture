@@ -1,17 +1,17 @@
 using System;
 using Common.CQRS.Abstractions.Commands;
 
-namespace Domain.Abstractions.Ports.Input
+namespace Domain.Abstractions.UseCases
 {
-    public class SendAnswerUseCase : ICommand
+    public class EndQuestionUseCase : ICommand
     {
-        public SendAnswerUseCase(Guid commandId, Guid questionId)
+        public EndQuestionUseCase(Guid commandId, Guid questionId)
         {
             CommandId = commandId;
             QuestionId = questionId;
         }
 
         public Guid CommandId { get; }
-        public Guid QuestionId { get; }
+        public Guid QuestionId { get; set; }
     }
 }

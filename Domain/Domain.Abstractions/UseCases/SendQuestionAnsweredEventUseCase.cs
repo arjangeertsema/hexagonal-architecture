@@ -1,7 +1,7 @@
 using System;
 using Common.CQRS.Abstractions.Commands;
 
-namespace Domain.Abstractions.Ports.Input
+namespace Domain.Abstractions.UseCases
 {
     public class SendQuestionAnsweredEventUseCase : ICommand
     {

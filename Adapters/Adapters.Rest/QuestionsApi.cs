@@ -6,7 +6,7 @@ using Adapters.Rest.Generated.Controllers;
 using Adapters.Rest.Generated.Models;
 using Microsoft.AspNetCore.Mvc;
 using Common.CQRS.Abstractions;
-using Domain.Abstractions.Ports.Input;
+using Domain.Abstractions.UseCases;
 
 namespace Adapters.Rest
 {

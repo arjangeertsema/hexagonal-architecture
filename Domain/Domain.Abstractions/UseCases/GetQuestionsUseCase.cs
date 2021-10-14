@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Common.CQRS.Abstractions.Queries;
 
-namespace Domain.Abstractions.Ports.Input
+namespace Domain.Abstractions.UseCases
 {
 
     public class GetQuestionsUseCase : IQuery<GetQuestionsUseCase.Response>

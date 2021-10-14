@@ -6,7 +6,6 @@ using Common.CQRS.Abstractions.Aspects;
 using Common.CQRS.Abstractions.Attributes;
 using Common.CQRS.Abstractions.Commands;
 using Common.CQRS.Abstractions.Exceptions;
-using Common.CQRS.Commands;
 
 namespace Common.CQRS.Aspects
 {

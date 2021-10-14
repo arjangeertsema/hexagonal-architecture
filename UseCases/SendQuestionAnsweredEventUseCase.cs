@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Common.CQRS.Abstractions;
 using Common.DDD.Abstractions;
-using Domain.Abstractions.Ports.Input;
+using Domain.Abstractions.UseCases;
 using Common.CQRS.Abstractions.Commands;
 using System.Threading;
 using Common.CQRS.Abstractions.Attributes;

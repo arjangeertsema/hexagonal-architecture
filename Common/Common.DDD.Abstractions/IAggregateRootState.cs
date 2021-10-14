@@ -2,7 +2,7 @@ using System;
 
 namespace Common.DDD.Abstractions
 {
-    public interface IAggregateRoot
+    public interface IAggregateRootState
     {
         Guid Id { get; }
     }

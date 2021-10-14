@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Common.CQRS.Abstractions;
 using Domain.Abstractions.Events;
-using Domain.Abstractions.Ports.Input;
+using Domain.Abstractions.UseCases;
 using Zeebe.Client;
 using Zeebe.Client.Api.Responses;
 using Zeebe.Client.Bootstrap.Abstractions;

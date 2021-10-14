@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Common.DDD.Abstractions;
 using Domain.Abstractions;
 using Domain.Abstractions.Events;
@@ -7,7 +6,7 @@ using Domain.Abstractions.Exceptions;
 
 namespace Domain.Core
 {
-    public class AnswerQuestionsAggregateRoot : AggregateRoot, IAnswerQuestionsAggregateRoot
+    public class AnswerQuestionsAggregateRoot : EventSourcedAggregateRoot, IAnswerQuestionsAggregateRoot
     {
         public static AnswerQuestionsAggregateRoot Start(Guid questionId, string subject, string question, string askedBy)
         {
@@ -20,8 +19,7 @@ namespace Domain.Core
             );
         }
 
-        private AnswerQuestionsAggregateRoot(Guid id, string subject, string question, string askedBy)
-            : base(id)
+        private AnswerQuestionsAggregateRoot(Guid id, string subject, string question, string askedBy) : base()
         {
             if (string.IsNullOrWhiteSpace(subject))
             {
@@ -38,17 +36,16 @@ namespace Domain.Core
                 throw new ArgumentException($"'{nameof(askedBy)}' cannot be null or whitespace.", nameof(askedBy));
             }
 
-            Subject = subject;
-            Question = question;
-            AskedBy = askedBy;
-            Asked = DateTime.Now;
-
-            RaiseEvent(new QuestionRecievedEvent(Id, Subject, Question, AskedBy, Asked));
+            RaiseEvent(new QuestionRecievedEvent(Id, subject, question, askedBy, DateTime.Now));
         }
 
-        public AnswerQuestionsAggregateRoot(Guid id, IEnumerable<KeyValuePair<string, string>> state)
-            : base(id, state)
-        { }
+        internal void Apply(QuestionRecievedEvent @event)
+        {
+            Subject = @event.Subject;
+            Question = @event.Question;
+            AskedBy = @event.AskedBy;
+            Asked = @event.Asked;
+        }
 
         public void AnswerQuestion(string userTaskId, string answer, string answeredBy)
         {
@@ -71,7 +68,14 @@ namespace Domain.Core
             AnsweredBy = answeredBy;
             Answered = DateTime.Now;
 
-            RaiseEvent(new QuestionAnsweredEvent(Id, userTaskId, Answer, AnsweredBy, Answered.Value));
+            RaiseEvent(new QuestionAnsweredEvent(Id, userTaskId, answer, answeredBy, DateTime.Now));
+        }
+
+        internal void Apply(QuestionAnsweredEvent @event)
+        {
+            Answer = @event.Answer;
+            AnsweredBy = @event.AnsweredBy;
+            Answered = @event.Answered;
         }
 
         public void AcceptAnswer(string userTaskId, string acceptedBy)
@@ -96,10 +100,13 @@ namespace Domain.Core
                 throw new AnswerQuestionsException("Answer may not be reviewed by the same person.");
             }
 
-            AcceptedBy = acceptedBy;
-            Accepted = DateTime.Now;
+            RaiseEvent(new AnswerAcceptedEvent(Id, userTaskId, acceptedBy, DateTime.Now));
+        }
 
-            RaiseEvent(new AnswerAcceptedEvent(Id, userTaskId, AcceptedBy, Accepted.Value));
+        internal void Apply(AnswerAcceptedEvent @event)
+        {
+            AcceptedBy = @event.AcceptedBy;
+            Accepted = @event.Accepted;
         }
 
         public void RejectAnswer(string userTaskId, string rejection, string rejectedBy)
@@ -129,11 +136,14 @@ namespace Domain.Core
                 throw new AnswerQuestionsException("Answer may not be reviewed by the same person.");
             }
 
-            Rejection = rejection;
-            RejectedBy = rejectedBy;
-            Rejected = DateTime.Now;
+            RaiseEvent(new AnswerRejectedEvent(Id, userTaskId, rejection, rejectedBy, DateTime.Now));
+        }
 
-            RaiseEvent(new AnswerRejectedEvent(Id, userTaskId, Rejection, RejectedBy, Rejected.Value));
+        internal void Apply(AnswerRejectedEvent @event)
+        {
+            Rejection = @event.Rejection;
+            RejectedBy = @event.RejectedBy;
+            Rejected = @event.Rejected;
         }
 
         public void ModifyAnswer(string userTaskId, string answer, string modifiedBy)
@@ -168,12 +178,16 @@ namespace Domain.Core
                 throw new AnswerQuestionsException("Answer must be modified by the same person.");
             }
 
-            Answer = answer;
-            ModifiedBy = modifiedBy;
-            Modified = DateTime.Now;
-
-            RaiseEvent(new AnswerModifiedEvent(Id, userTaskId, Answer, ModifiedBy, Modified.Value));
+            RaiseEvent(new AnswerModifiedEvent(Id, userTaskId, answer, modifiedBy, DateTime.Now));
         }
+
+        internal void Apply(AnswerModifiedEvent @event)
+        {
+            Answer = @event.Answer;
+            ModifiedBy = @event.ModifiedBy;
+            Modified = @event.Modified;
+        }
+
         public void SendAnswer()
         {
             if (!Accepted.HasValue)
@@ -184,11 +198,14 @@ namespace Domain.Core
             if (Sent.HasValue)
             {
                 throw new AnswerQuestionsException("Answer has already been sent.");
-            }
+            };
 
-            Sent = DateTime.Now;
+            RaiseEvent(new AnswerSentEvent(Id, DateTime.Now));
+        }
 
-            RaiseEvent(new AnswerSentEvent(Id, Sent.Value));
+        internal void Apply(AnswerSentEvent @event)
+        {
+            Sent = @event.Sent;
         }
 
         public void SendQuestionAnsweredEvent()

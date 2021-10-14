@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Common.CQRS.Abstractions;
-using Domain.Abstractions.Ports.Input;
+using Domain.Abstractions.UseCases;
 using System.Threading;
 using Adapters.Rest.Generated.Controllers;
 using Adapters.Rest.Generated.Models;

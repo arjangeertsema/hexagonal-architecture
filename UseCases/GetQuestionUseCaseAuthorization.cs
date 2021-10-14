@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Domain.Abstractions.Ports.Input;
+using Domain.Abstractions.UseCases;
 using System;
 using Common.IAM.Abstractions;
 

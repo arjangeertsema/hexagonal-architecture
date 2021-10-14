@@ -5,6 +5,7 @@ using Common.CQRS.Abstractions;
 using Common.CQRS.Abstractions.Aspects;
 using Common.CQRS.Abstractions.Commands;
 using Common.CQRS.Abstractions.Queries;
+using Common.UserTasks.Abstractions;
 using Common.UserTasks.Abstractions.Attributes;
 using Common.UserTasks.Abstractions.Queries;
 
@@ -42,6 +43,7 @@ namespace Common.UserTasks.Aspects
             await next();
         }
     }
+    
     public class IsUserTaskOwnerQyeryAspect<TQuery, TResponse> : IsUserTaskOwnerAspect, IQueryAttributeAspect<TQuery, TResponse, IsUserTaskOwnerAttribute>
         where TQuery : IQuery<TResponse>
     {
