@@ -20,9 +20,9 @@ namespace Runtime.Application
         public void ConfigureServices(IServiceCollection services)
         {
             services
+                .AddServicesForUseCases(Configuration)
                 .AddServicesForZeebeAdapter(Configuration)
-                .AddServicesForRestAdapter(Configuration)
-                .AddServicesForUseCases(Configuration);
+                .AddServicesForRestAdapter(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
