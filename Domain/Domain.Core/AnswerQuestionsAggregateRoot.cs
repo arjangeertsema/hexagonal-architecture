@@ -64,10 +64,6 @@ namespace Domain.Core
                 throw new AnswerQuestionsException("Question is already answered.");
             }
 
-            Answer = answer;
-            AnsweredBy = answeredBy;
-            Answered = DateTime.Now;
-
             RaiseEvent(new QuestionAnsweredEvent(Id, userTaskId, answer, answeredBy, DateTime.Now));
         }
 
