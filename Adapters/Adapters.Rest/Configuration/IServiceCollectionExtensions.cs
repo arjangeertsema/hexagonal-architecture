@@ -11,7 +11,9 @@ namespace Adapters.Rest.Configuration
         {
             services
                 .AutowireCQRS(typeof(IServiceCollectionExtensions).Assembly)
-                .AddControllers()
+                .AddControllers();
+            
+            return services
                 .AddSwaggerGen(c =>
                 {
                     c.SwaggerDoc("v1", new OpenApiInfo { Title = "application", Version = "v1" });

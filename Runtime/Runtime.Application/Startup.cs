@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Adapters.Rest.Configuration;
 using UseCases.Configuration;
 
-namespace application
+namespace Runtime.Application
 {
     public class Startup
     {

@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\Common.DDD.Abstractions\Common.DDD.Abstractions.csproj" />
-    <ProjectReference Include="..\..\Common\Common.CQRS.Abstractions\Common.CQRS.Abstractions.csproj" />
-    <ProjectReference Include="..\..\Common\Common.UserTasks.Abstractions\Common.UserTasks.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\common-library\Common.DDD.Abstractions\Common.DDD.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\common-library\Common.CQRS.Abstractions\Common.CQRS.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\common-library\Common.UserTasks.Abstractions\Common.UserTasks.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
