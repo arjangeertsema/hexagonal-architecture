@@ -7,7 +7,7 @@ namespace Adapters.Rest.Configuration
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddServicesForRestAdapter(this IServiceCollection services, IConfiguration configuration) 
+        public static IServiceCollection AddRestAdapterServices(this IServiceCollection services, IConfiguration configuration) 
         {
             services
                 .AutowireCQRS(typeof(IServiceCollectionExtensions).Assembly)

@@ -5,6 +5,7 @@ using Domain.Abstractions.UseCases;
 using Common.CQRS.Abstractions.Queries;
 using System.Threading;
 using Common.IAM.Abstractions.Attributes;
+using Domain.Abstractions.Ports;
 
 namespace UseCases
 {
@@ -14,9 +15,16 @@ namespace UseCases
 
         public GetQuestionsUseCaseHandler(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
-        [HasPermission("a permission")]
+        [HasPermission("GET_QUESTION")]
         [IsAuthorized]
-        public Task<GetQuestionsUseCase.Response> Handle(GetQuestionsUseCase query, CancellationToken cancellationToken)
+        public async Task<GetQuestionsUseCase.Response> Handle(GetQuestionsUseCase query, CancellationToken cancellationToken)
+        {
+            var instance = await mediator.Ask(new GetAnswerQuestionsInstances(query.Limit, query.Offset));
+
+            return Map(instance);
+        }
+
+        private GetQuestionsUseCase.Response Map(GetAnswerQuestionsInstances.Response instance)
         {
             throw new NotImplementedException();
         }

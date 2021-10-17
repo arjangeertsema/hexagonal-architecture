@@ -20,9 +20,12 @@ namespace Runtime.Application
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddServicesForUseCases(Configuration)
-                .AddServicesForZeebeAdapter(Configuration)
-                .AddServicesForRestAdapter(Configuration);
+                .AddCommonCQRSServices(Configuration)
+                .AddCommonIAMServices(Configuration)
+                .AddCommonUserTasksServices(Configuration)
+                .AddUseCasesServices(Configuration)
+                .AddZeebeAdapterServices(Configuration)
+                .AddRestAdapterServices(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

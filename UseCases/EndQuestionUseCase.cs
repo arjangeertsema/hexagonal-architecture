@@ -23,7 +23,7 @@ namespace UseCases
             this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));            
          }
 
-        [HasPermission("a permission")]
+        [HasPermission("END_QUESTION")]
         [Transactional]
         [MakeIdempotent]
         public async Task Handle(EndQuestionUseCase command, CancellationToken cancellationToken)

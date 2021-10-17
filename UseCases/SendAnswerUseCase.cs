@@ -23,7 +23,7 @@ namespace UseCases
          }
 
         
-        [HasPermission("a permission")]
+        [HasPermission("SEND_ANSWER")]
         [Transactional]
         [MakeIdempotent]
         public async Task Handle(SendAnswerUseCase command, CancellationToken cancellationToken)

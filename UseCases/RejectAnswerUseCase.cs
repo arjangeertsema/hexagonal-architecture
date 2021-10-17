@@ -24,7 +24,7 @@ namespace UseCases
             this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));            
          }
 
-        [HasPermission("a permission")]
+        [HasPermission("REVIEW_ANSWER")]
         [IsUserTaskOwner]
         [Transactional]
         [MakeIdempotent]

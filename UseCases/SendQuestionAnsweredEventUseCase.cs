@@ -22,7 +22,7 @@ namespace UseCases
             this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));           
          }
 
-        [HasPermission("a permission")]
+        [HasPermission("SEND_QUESTION_ANSWERED")]
         [Transactional]
         [MakeIdempotent]
         public async Task Handle(SendQuestionAnsweredEventUseCase command, CancellationToken cancellationToken)

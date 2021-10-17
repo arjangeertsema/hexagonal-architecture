@@ -24,7 +24,7 @@ namespace UseCases
             this.aggregateRootFactory = aggregateRootFactory ?? throw new ArgumentNullException(nameof(aggregateRootFactory));
         }
 
-        [HasPermission("a permission")]
+        [HasPermission("ASK_QUESTION")]
         [Transactional]
         [MakeIdempotent]
         public async Task Handle(RegisterQuestionUseCase command, CancellationToken cancellationToken)
