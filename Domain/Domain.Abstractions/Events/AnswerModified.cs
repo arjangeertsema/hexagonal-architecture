@@ -5,7 +5,7 @@ using Common.UserTasks.Abstractions;
 
 namespace Domain.Abstractions.Events
 {
-    public class AnswerModifiedEvent : DomainEvent, IUserTask
+    public class AnswerModifiedEvent : DomainEvent, IUserTaskId
     {
         public AnswerModifiedEvent(Guid aggregateId, string userTaskId, string answer, string modifiedBy, DateTime modified)
             : base(aggregateId)

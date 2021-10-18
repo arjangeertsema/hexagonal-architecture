@@ -2,7 +2,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Domain.Abstractions\Domain.Abstractions.csproj" />
-    <ProjectReference Include="..\..\..\common-library\Common.CQRS\Common.CQRS.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -1,13 +1,12 @@
 using Common.CQRS.Abstractions;
 using Common.IAM.Abstractions;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace UseCases.Configuration
+namespace Domain.UseCases.Configuration
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddUseCasesServices(this IServiceCollection services, IConfiguration configuration) 
+        public static IServiceCollection AddDomainUseCasesServices(this IServiceCollection services) 
         {
             var assembly = typeof(IServiceCollectionExtensions).Assembly;
 

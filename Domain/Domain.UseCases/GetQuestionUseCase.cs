@@ -6,9 +6,12 @@ using Common.CQRS.Abstractions.Queries;
 using System.Threading;
 using Common.IAM.Abstractions.Attributes;
 using Domain.Abstractions.Ports;
+using Microsoft.Extensions.DependencyInjection;
+using Common.CQRS.Abstractions.Attributes;
 
-namespace UseCases
+namespace Domain.UseCases
 {
+    [ServiceLifetime(ServiceLifetime.Singleton)]
     public class GetQuestionUseCaseHandler : IQueryHandler<GetQuestionUseCase, GetQuestionUseCase.Response>
     {
         private readonly IMediator mediator;

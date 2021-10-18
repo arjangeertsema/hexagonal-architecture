@@ -3,42 +3,39 @@ using System.Threading.Tasks;
 using Common.CQRS.Abstractions;
 using Common.DDD.Abstractions;
 using Domain.Abstractions.UseCases;
-using Common.CQRS.Abstractions.Commands;
 using System.Threading;
 using Common.CQRS.Abstractions.Attributes;
-using Domain.Abstractions;
 using Common.IAM.Abstractions.Queries;
+using Domain.Abstractions;
 using Common.IAM.Abstractions.Attributes;
-using Common.UserTasks.Abstractions.Attributes;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace UseCases
+namespace Domain.UseCases
 {
-    public class RejectAnswerUseCaseHandler : ICommandHandler<RejectAnswerUseCase>
+    [ServiceLifetime(ServiceLifetime.Singleton)]
+    public class EndQuestionUseCaseHandler : ICommandHandler<EndQuestionUseCase>
     {
         private readonly IMediator mediator;
         private readonly IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore;
 
-        public RejectAnswerUseCaseHandler(IMediator mediator, IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore)
+        public EndQuestionUseCaseHandler(IMediator mediator, IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore)
         {
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));            
          }
 
-        [HasPermission("REVIEW_ANSWER")]
-        [IsUserTaskOwner]
+        [HasPermission("END_QUESTION")]
         [Transactional]
         [MakeIdempotent]
-        public async Task Handle(RejectAnswerUseCase command, CancellationToken cancellationToken)
+        public async Task Handle(EndQuestionUseCase command, CancellationToken cancellationToken)
         {
             var aggregateRoot = await aggregateRootStore.Get(command.QuestionId, cancellationToken);
 
             var userId = await mediator.Ask(new GetUserId(), cancellationToken);
 
-            aggregateRoot.RejectAnswer
+            aggregateRoot.EndQuestion
             (
-                userTaskId: command.UserTaskId, 
-                rejection: command.Rejection, 
-                rejectedBy: userId
+                endedBy: userId
             );
 
             await aggregateRootStore.Save

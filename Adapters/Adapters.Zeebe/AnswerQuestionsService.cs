@@ -8,9 +8,13 @@ using Zeebe.Client;
 using Zeebe.Client.Api.Responses;
 using Zeebe.Client.Bootstrap.Abstractions;
 using Common.DDD.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
+using Common.CQRS.Abstractions.Attributes;
+using Common.IAM.Abstractions.Commands;
 
 namespace Adapters.Zeebe
 {
+    [ServiceLifetime(ServiceLifetime.Scoped)]
     public class AnswerQuestionsService : 
         IDomainEventHandler<QuestionRecievedEvent>,
         IDomainEventHandler<QuestionAnsweredEvent>, 
@@ -29,9 +33,9 @@ namespace Adapters.Zeebe
             IZeebeVariablesSerializer serializer,
             IMediator mediator)
         {
-            this.zeebeClient = zeebeClient ?? throw new ArgumentNullException(nameof(zeebeClient));;
-            this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));;
-            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));;
+            this.zeebeClient = zeebeClient ?? throw new ArgumentNullException(nameof(zeebeClient));
+            this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         public async Task Handle(QuestionRecievedEvent @event, CancellationToken cancellationToken)
@@ -132,7 +136,7 @@ namespace Adapters.Zeebe
 
         public async Task HandleJob(SendAnswerJobV1 job, CancellationToken cancellationToken)
         {
-            //TODO: authenticate system for thread (Common.IAM).
+            await mediator.Send(new AuthenticateSystem(Guid.NewGuid()));
 
             var command = new SendAnswerUseCase
             (
@@ -145,7 +149,7 @@ namespace Adapters.Zeebe
 
         public async Task HandleJob(SendQuestionAnsweredEventJobV1 job, CancellationToken cancellationToken)
         {
-            //TODO: authenticate system for thread (Common.IAM).
+            await mediator.Send(new AuthenticateSystem(Guid.NewGuid()));
 
             var command = new SendQuestionAnsweredEventUseCase
             (

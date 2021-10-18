@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.6.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseCases", "UseCases\UseCases.csproj", "{C06F3E6C-87A9-406F-AF39-872B37A2D05C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adapters", "Adapters", "{250CAF78-49C6-45DF-893E-35F91350B25B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapters.Events", "Adapters\Adapters.Events\Adapters.Events.csproj", "{0B87DA57-0962-4262-8948-7215C1EF36F8}"
@@ -37,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.UserTasks.Abstractio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.UserTasks", "..\common-library\Common.UserTasks\Common.UserTasks.csproj", "{CDA1CB69-93F5-4C0D-9A07-8BBE42BEFE7D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.UseCases", "Domain\Domain.UseCases\Domain.UseCases.csproj", "{B20B92CB-6AD0-4B86-B20D-EAAF9858F511}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,18 +50,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C06F3E6C-87A9-406F-AF39-872B37A2D05C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C06F3E6C-87A9-406F-AF39-872B37A2D05C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C06F3E6C-87A9-406F-AF39-872B37A2D05C}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{C06F3E6C-87A9-406F-AF39-872B37A2D05C}.Debug|x64.Build.0 = Debug|Any CPU
-		{C06F3E6C-87A9-406F-AF39-872B37A2D05C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{C06F3E6C-87A9-406F-AF39-872B37A2D05C}.Debug|x86.Build.0 = Debug|Any CPU
-		{C06F3E6C-87A9-406F-AF39-872B37A2D05C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C06F3E6C-87A9-406F-AF39-872B37A2D05C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C06F3E6C-87A9-406F-AF39-872B37A2D05C}.Release|x64.ActiveCfg = Release|Any CPU
-		{C06F3E6C-87A9-406F-AF39-872B37A2D05C}.Release|x64.Build.0 = Release|Any CPU
-		{C06F3E6C-87A9-406F-AF39-872B37A2D05C}.Release|x86.ActiveCfg = Release|Any CPU
-		{C06F3E6C-87A9-406F-AF39-872B37A2D05C}.Release|x86.Build.0 = Release|Any CPU
 		{0B87DA57-0962-4262-8948-7215C1EF36F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0B87DA57-0962-4262-8948-7215C1EF36F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B87DA57-0962-4262-8948-7215C1EF36F8}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -218,6 +206,18 @@ Global
 		{CDA1CB69-93F5-4C0D-9A07-8BBE42BEFE7D}.Release|x64.Build.0 = Release|Any CPU
 		{CDA1CB69-93F5-4C0D-9A07-8BBE42BEFE7D}.Release|x86.ActiveCfg = Release|Any CPU
 		{CDA1CB69-93F5-4C0D-9A07-8BBE42BEFE7D}.Release|x86.Build.0 = Release|Any CPU
+		{B20B92CB-6AD0-4B86-B20D-EAAF9858F511}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B20B92CB-6AD0-4B86-B20D-EAAF9858F511}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B20B92CB-6AD0-4B86-B20D-EAAF9858F511}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B20B92CB-6AD0-4B86-B20D-EAAF9858F511}.Debug|x64.Build.0 = Debug|Any CPU
+		{B20B92CB-6AD0-4B86-B20D-EAAF9858F511}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B20B92CB-6AD0-4B86-B20D-EAAF9858F511}.Debug|x86.Build.0 = Debug|Any CPU
+		{B20B92CB-6AD0-4B86-B20D-EAAF9858F511}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B20B92CB-6AD0-4B86-B20D-EAAF9858F511}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B20B92CB-6AD0-4B86-B20D-EAAF9858F511}.Release|x64.ActiveCfg = Release|Any CPU
+		{B20B92CB-6AD0-4B86-B20D-EAAF9858F511}.Release|x64.Build.0 = Release|Any CPU
+		{B20B92CB-6AD0-4B86-B20D-EAAF9858F511}.Release|x86.ActiveCfg = Release|Any CPU
+		{B20B92CB-6AD0-4B86-B20D-EAAF9858F511}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0B87DA57-0962-4262-8948-7215C1EF36F8} = {250CAF78-49C6-45DF-893E-35F91350B25B}
@@ -226,5 +226,6 @@ Global
 		{08CF36AC-90AD-4A40-A406-BEEFDB158DD5} = {8DF1549B-A4F6-474E-9ABC-C30E3ABE6D7E}
 		{BEB4D3A5-1307-4ABD-8E0C-4ACDF061D3F8} = {8DF1549B-A4F6-474E-9ABC-C30E3ABE6D7E}
 		{96DFD10C-D274-43BA-A149-06FED4C93580} = {8FF2A273-4776-4136-8A0A-49B678357C2A}
+		{B20B92CB-6AD0-4B86-B20D-EAAF9858F511} = {8DF1549B-A4F6-474E-9ABC-C30E3ABE6D7E}
 	EndGlobalSection
 EndGlobal

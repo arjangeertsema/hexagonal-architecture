@@ -8,9 +8,12 @@ using Common.IAM.Abstractions.Attributes;
 using Common.UserTasks.Abstractions.Attributes;
 using Common.UserTasks.Abstractions.Queries;
 using Domain.Abstractions.Ports;
+using Common.CQRS.Abstractions.Attributes;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace UseCases
+namespace Domain.UseCases
 {
+    [ServiceLifetime(ServiceLifetime.Singleton)]
     public class GetReviewAnswerTaskUseCaseHandler : IQueryHandler<GetReviewAnswerTaskUseCase, GetReviewAnswerTaskUseCase.Response>
     {
         private readonly IMediator mediator;

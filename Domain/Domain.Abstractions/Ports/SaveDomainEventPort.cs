@@ -1,6 +1,6 @@
 using System;
 using Common.DDD.Abstractions;
-using Common.CQRS.Abstractions.Commands;
+using Common.CQRS.Abstractions;
 
 namespace Domain.Abstractions.Ports.Output
 {

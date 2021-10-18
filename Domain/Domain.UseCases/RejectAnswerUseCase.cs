@@ -7,38 +7,39 @@ using System.Threading;
 using Common.CQRS.Abstractions.Attributes;
 using Domain.Abstractions;
 using Common.IAM.Abstractions.Queries;
-using Common.CQRS.Abstractions.Commands;
 using Common.IAM.Abstractions.Attributes;
 using Common.UserTasks.Abstractions.Attributes;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace UseCases
+namespace Domain.UseCases
 {
-    public class ModifyAnswerUseCaseHandler : ICommandHandler<ModifyAnswerUseCase>
+    [ServiceLifetime(ServiceLifetime.Singleton)]
+    public class RejectAnswerUseCaseHandler : ICommandHandler<RejectAnswerUseCase>
     {
         private readonly IMediator mediator;
         private readonly IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore;
 
-        public ModifyAnswerUseCaseHandler(IMediator mediator, IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore)
+        public RejectAnswerUseCaseHandler(IMediator mediator, IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore)
         {
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));           
-        }
+            this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));            
+         }
 
-        [HasPermission("ANSWER_QUESTION")]
+        [HasPermission("REVIEW_ANSWER")]
         [IsUserTaskOwner]
         [Transactional]
         [MakeIdempotent]
-        public async Task Handle(ModifyAnswerUseCase command, CancellationToken cancellationToken)
+        public async Task Handle(RejectAnswerUseCase command, CancellationToken cancellationToken)
         {
             var aggregateRoot = await aggregateRootStore.Get(command.QuestionId, cancellationToken);
 
             var userId = await mediator.Ask(new GetUserId(), cancellationToken);
 
-            aggregateRoot.ModifyAnswer
+            aggregateRoot.RejectAnswer
             (
                 userTaskId: command.UserTaskId, 
-                answer: command.Answer, 
-                modifiedBy: userId
+                rejection: command.Rejection, 
+                rejectedBy: userId
             );
 
             await aggregateRootStore.Save

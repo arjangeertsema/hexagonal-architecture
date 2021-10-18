@@ -1,5 +1,5 @@
 using System;
-using Common.CQRS.Abstractions.Commands;
+using Common.CQRS.Abstractions;
 
 namespace Domain.Abstractions.UseCases
 {

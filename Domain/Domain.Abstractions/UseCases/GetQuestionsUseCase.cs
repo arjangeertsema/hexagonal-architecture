@@ -4,7 +4,6 @@ using Common.CQRS.Abstractions.Queries;
 
 namespace Domain.Abstractions.UseCases
 {
-
     public class GetQuestionsUseCase : IQuery<GetQuestionsUseCase.Response>
     {
         public GetQuestionsUseCase(int? offset, int? limit)

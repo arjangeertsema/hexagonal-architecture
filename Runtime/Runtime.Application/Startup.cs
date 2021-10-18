@@ -4,7 +4,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Adapters.Rest.Configuration;
-using UseCases.Configuration;
+using Domain.UseCases.Configuration;
+using Common.CQRS.Configuration;
+using Common.IAM.Configuration;
+using Common.UserTasks.Configuration;
+using Domain.Core.Configuration;
 
 namespace Runtime.Application
 {
@@ -20,12 +24,18 @@ namespace Runtime.Application
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddCommonCQRSServices(Configuration)
+                // Add Common implementations
+                .AddCommonCQRSServices()
                 .AddCommonIAMServices(Configuration)
-                .AddCommonUserTasksServices(Configuration)
-                .AddUseCasesServices(Configuration)
+                .AddCommonUserTasksServices()
+                
+                // Add Domain implementations
+                .AddDomainCoreServices()
+                .AddDomainUseCasesServices()
+                
+                // Add Adapter implementations
                 .AddZeebeAdapterServices(Configuration)
-                .AddRestAdapterServices(Configuration);
+                .AddRestAdapterServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

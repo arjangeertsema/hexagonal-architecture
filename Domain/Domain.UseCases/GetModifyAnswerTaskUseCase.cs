@@ -8,9 +8,12 @@ using Common.IAM.Abstractions.Attributes;
 using Common.UserTasks.Abstractions.Attributes;
 using Common.UserTasks.Abstractions.Queries;
 using Domain.Abstractions.Ports;
+using Microsoft.Extensions.DependencyInjection;
+using Common.CQRS.Abstractions.Attributes;
 
-namespace UseCases
+namespace Domain.UseCases
 {
+    [ServiceLifetime(ServiceLifetime.Singleton)]
     public class GetModifyAnswerTaskUseCaseHandler : IQueryHandler<GetModifyAnswerTaskUseCase, GetModifyAnswerTaskUseCase.Response>
     {
         private readonly IMediator mediator;

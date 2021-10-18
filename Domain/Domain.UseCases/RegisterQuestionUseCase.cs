@@ -3,14 +3,15 @@ using System.Threading.Tasks;
 using Common.CQRS.Abstractions;
 using Common.DDD.Abstractions;
 using Domain.Abstractions.UseCases;
-using Common.CQRS.Abstractions.Commands;
 using System.Threading;
 using Common.CQRS.Abstractions.Attributes;
 using Domain.Abstractions;
 using Common.IAM.Abstractions.Attributes;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace UseCases
+namespace Domain.UseCases
 {
+    [ServiceLifetime(ServiceLifetime.Singleton)]
     public class RegisterQuestionUseCaseHandler : ICommandHandler<RegisterQuestionUseCase>
     {
         private readonly IMediator mediator;

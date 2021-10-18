@@ -4,7 +4,7 @@ using Common.CQRS.Abstractions.Queries;
 
 namespace Domain.Abstractions.UseCases
 {        
-    public class GetAnswerQuestionTaskUseCase : IQuery<GetAnswerQuestionTaskUseCase.Response>, IUserTask
+    public class GetAnswerQuestionTaskUseCase : IQuery<GetAnswerQuestionTaskUseCase.Response>, IUserTaskId
     {
         public GetAnswerQuestionTaskUseCase(string userTaskId)
         {

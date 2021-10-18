@@ -1,12 +1,11 @@
 ﻿using System;
-using Common.CQRS.Abstractions.Commands;
+using Common.CQRS.Abstractions;
 using Common.UserTasks.Abstractions;
 
 namespace Domain.Abstractions.UseCases
 {
-    public class RejectAnswerUseCase : ICommand, IUserTask
+    public class RejectAnswerUseCase : ICommand, IUserTaskId
     {
-
         public RejectAnswerUseCase(Guid commandId, Guid questionId, string userTaskId, string rejection)
         {
             if (string.IsNullOrWhiteSpace(rejection))

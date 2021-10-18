@@ -5,37 +5,33 @@ using Common.DDD.Abstractions;
 using Domain.Abstractions.UseCases;
 using System.Threading;
 using Common.CQRS.Abstractions.Attributes;
-using Common.IAM.Abstractions.Queries;
 using Domain.Abstractions;
-using Common.CQRS.Abstractions.Commands;
 using Common.IAM.Abstractions.Attributes;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace UseCases
+namespace Domain.UseCases
 {
-    public class EndQuestionUseCaseHandler : ICommandHandler<EndQuestionUseCase>
+    [ServiceLifetime(ServiceLifetime.Singleton)]
+    public class SendAnswerUseCaseHandler : ICommandHandler<SendAnswerUseCase>
     {
         private readonly IMediator mediator;
         private readonly IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore;
 
-        public EndQuestionUseCaseHandler(IMediator mediator, IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore)
+        public SendAnswerUseCaseHandler(IMediator mediator, IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore)
         {
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));            
+            this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));         
          }
 
-        [HasPermission("END_QUESTION")]
+        
+        [HasPermission("SEND_ANSWER")]
         [Transactional]
         [MakeIdempotent]
-        public async Task Handle(EndQuestionUseCase command, CancellationToken cancellationToken)
+        public async Task Handle(SendAnswerUseCase command, CancellationToken cancellationToken)
         {
             var aggregateRoot = await aggregateRootStore.Get(command.QuestionId, cancellationToken);
 
-            var userId = await mediator.Ask(new GetUserId(), cancellationToken);
-
-            aggregateRoot.EndQuestion
-            (
-                endedBy: userId
-            );
+            aggregateRoot.SendAnswer();
 
             await aggregateRootStore.Save
             (

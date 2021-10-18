@@ -1,16 +1,13 @@
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Common.CQRS.Abstractions;
 
 namespace Adapters.Rest.Configuration
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddRestAdapterServices(this IServiceCollection services, IConfiguration configuration) 
+        public static IServiceCollection AddRestAdapterServices(this IServiceCollection services) 
         {
             services
-                .AutowireCQRS(typeof(IServiceCollectionExtensions).Assembly)
                 .AddControllers();
             
             return services

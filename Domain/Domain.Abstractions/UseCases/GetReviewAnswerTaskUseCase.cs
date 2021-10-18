@@ -4,7 +4,7 @@ using Common.UserTasks.Abstractions;
 
 namespace Domain.Abstractions.UseCases
 {
-    public class GetReviewAnswerTaskUseCase : IQuery<GetReviewAnswerTaskUseCase.Response>, IUserTask
+    public class GetReviewAnswerTaskUseCase : IQuery<GetReviewAnswerTaskUseCase.Response>, IUserTaskId
     {
         public GetReviewAnswerTaskUseCase(string userTaskId)
         {

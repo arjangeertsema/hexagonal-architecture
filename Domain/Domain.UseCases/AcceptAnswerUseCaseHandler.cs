@@ -5,40 +5,40 @@ using Common.DDD.Abstractions;
 using Domain.Abstractions.UseCases;
 using System.Threading;
 using Common.CQRS.Abstractions.Attributes;
-using Domain.Abstractions;
 using Common.IAM.Abstractions.Queries;
-using Common.CQRS.Abstractions.Commands;
+using Domain.Abstractions;
 using Common.IAM.Abstractions.Attributes;
 using Common.UserTasks.Abstractions.Attributes;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace UseCases
-{
-    public class AnswerQuestionUseCaseHandler : ICommandHandler<AnswerQuestionUseCase>
+namespace Domain.UseCases
+{    
+    [ServiceLifetime(ServiceLifetime.Singleton)]
+    public class AcceptAnswerUseCaseHandler : ICommandHandler<AcceptAnswerUseCase>
     {
         private readonly IMediator mediator;
         private readonly IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore;
 
-        public AnswerQuestionUseCaseHandler(IMediator mediator, IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore)
+        public AcceptAnswerUseCaseHandler(IMediator mediator, IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore)
         {
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));           
-        }
+            this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));         
+         }
 
-        [HasPermission("ANSWER_QUESTION")]
+        [HasPermission("REVIEW_ANSWER")]
         [IsUserTaskOwner]
         [Transactional]
         [MakeIdempotent]
-        public async Task Handle(AnswerQuestionUseCase command, CancellationToken cancellationToken)
+        public async Task Handle(AcceptAnswerUseCase command, CancellationToken cancellationToken)
         {
             var aggregateRoot = await aggregateRootStore.Get(command.QuestionId, cancellationToken);
 
             var userId = await mediator.Ask(new GetUserId(), cancellationToken);
 
-            aggregateRoot.AnswerQuestion
+            aggregateRoot.AcceptAnswer
             (
                 userTaskId: command.UserTaskId, 
-                answer: command.Answer, 
-                answeredBy: userId
+                acceptedBy: userId
             );
 
             await aggregateRootStore.Save

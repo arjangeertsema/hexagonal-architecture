@@ -1,10 +1,10 @@
 ﻿using System;
-using Common.CQRS.Abstractions.Commands;
+using Common.CQRS.Abstractions;
 using Common.UserTasks.Abstractions;
 
 namespace Domain.Abstractions.UseCases
 {
-    public class AcceptAnswerUseCase : ICommand, IUserTask
+    public class AcceptAnswerUseCase : ICommand, IUserTaskId
     {
         public AcceptAnswerUseCase(Guid commandId, Guid questionId, string userTaskId)
         {

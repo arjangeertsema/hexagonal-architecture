@@ -6,10 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\Domain.Abstractions\Domain.Abstractions.csproj" />    
-    <ProjectReference Include="..\..\common-library\Common.CQRS.Abstractions\Common.CQRS.Abstractions.csproj" />
-    <ProjectReference Include="..\..\common-library\Common.IAM.Abstractions\Common.IAM.Abstractions.csproj" />
-    <ProjectReference Include="..\..\common-library\Common.UserTasks.Abstractions\Common.UserTasks.Abstractions.csproj" />
+    <ProjectReference Include="..\Domain.Abstractions\Domain.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\common-library\Common.CQRS.Abstractions\Common.CQRS.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\common-library\Common.IAM.Abstractions\Common.IAM.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\common-library\Common.UserTasks.Abstractions\Common.UserTasks.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
