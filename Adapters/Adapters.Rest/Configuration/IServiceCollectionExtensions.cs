@@ -8,7 +8,9 @@ namespace Adapters.Rest.Configuration
         public static IServiceCollection AddRestAdapterServices(this IServiceCollection services) 
         {
             services
-                .AddControllers();
+                .AddControllers(config => {
+                    
+                });
             
             return services
                 .AddSwaggerGen(c =>

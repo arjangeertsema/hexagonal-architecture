@@ -20,7 +20,7 @@ namespace Adapters.Rest.Configuration
             return app
                 .UseHttpsRedirection()
                 .UseRouting()
-                .UseAuthorization()
+                
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapControllers();
