@@ -19,10 +19,7 @@ namespace Domain.UseCases
     {
         private readonly IMediator mediator;
 
-        public RejectAnswerUseCaseHandler(IMediator mediator)
-        {
-            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        }
+        public RejectAnswerUseCaseHandler(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
         [HasPermission("REVIEW_ANSWER")]
         [IsUserTaskOwner]

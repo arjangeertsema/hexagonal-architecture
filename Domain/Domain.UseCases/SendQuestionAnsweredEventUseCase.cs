@@ -17,10 +17,7 @@ namespace Domain.UseCases
     {
         private readonly IMediator mediator;
 
-        public SendQuestionAnsweredEventUseCaseHandler(IMediator mediator)
-        {
-            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));        
-        }
+        public SendQuestionAnsweredEventUseCaseHandler(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
         [HasPermission("SEND_QUESTION_ANSWERED")]
         [Transactional]
