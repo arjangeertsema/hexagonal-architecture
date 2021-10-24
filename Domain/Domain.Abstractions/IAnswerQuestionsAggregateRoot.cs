@@ -2,7 +2,7 @@ using Common.DDD.Abstractions;
 
 namespace Domain.Abstractions
 {
-    public interface IAnswerQuestionsAggregateRoot : IAggregateRoot
+    public interface IAnswerQuestionsAggregateRoot : IAggregateRoot, IEventSourcedAggregateRoot
     {
         void AcceptAnswer(string userTaskId, string acceptedBy);
         void AnswerQuestion(string userTaskId, string answer, string answeredBy);
