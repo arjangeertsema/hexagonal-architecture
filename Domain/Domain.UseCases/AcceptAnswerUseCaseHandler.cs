@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Common.CQRS.Abstractions;
-using Common.DDD.Abstractions;
 using Domain.Abstractions.UseCases;
 using System.Threading;
 using Common.CQRS.Abstractions.Attributes;
@@ -14,7 +13,7 @@ using Common.DDD.Abstractions.Queries;
 using Common.DDD.Abstractions.Commands;
 
 namespace Domain.UseCases
-{    
+{
     [ServiceLifetime(ServiceLifetime.Singleton)]
     public class AcceptAnswerUseCaseHandler : ICommandHandler<AcceptAnswerUseCase>
     {
@@ -38,7 +37,7 @@ namespace Domain.UseCases
                 acceptedBy: userId
             );
 
-            await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot>(command.CommandId, aggregateRoot), cancellationToken);
+            await mediator.Send(SaveAggregateRootFactory.Create(command.CommandId, aggregateRoot), cancellationToken);
         }
     }
 }

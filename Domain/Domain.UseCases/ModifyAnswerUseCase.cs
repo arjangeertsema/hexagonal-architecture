@@ -38,7 +38,7 @@ namespace Domain.UseCases
                 modifiedBy: userId
             );
 
-            await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot>(command.CommandId, aggregateRoot), cancellationToken);
+            await mediator.Send(SaveAggregateRootFactory.Create(command.CommandId, aggregateRoot), cancellationToken);
         }
     }
 }
