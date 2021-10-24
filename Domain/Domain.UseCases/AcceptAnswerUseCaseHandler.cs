@@ -10,6 +10,8 @@ using Domain.Abstractions;
 using Common.IAM.Abstractions.Attributes;
 using Common.UserTasks.Abstractions.Attributes;
 using Microsoft.Extensions.DependencyInjection;
+using Common.DDD.Abstractions.Queries;
+using Common.DDD.Abstractions.Commands;
 
 namespace Domain.UseCases
 {    
@@ -17,13 +19,11 @@ namespace Domain.UseCases
     public class AcceptAnswerUseCaseHandler : ICommandHandler<AcceptAnswerUseCase>
     {
         private readonly IMediator mediator;
-        private readonly IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore;
 
-        public AcceptAnswerUseCaseHandler(IMediator mediator, IAggregateRootStore<IAnswerQuestionsAggregateRoot> aggregateRootStore)
+        public AcceptAnswerUseCaseHandler(IMediator mediator)
         {
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            this.aggregateRootStore = aggregateRootStore ?? throw new ArgumentNullException(nameof(aggregateRootStore));         
-         }
+        }
 
         [HasPermission("REVIEW_ANSWER")]
         [IsUserTaskOwner]
@@ -31,7 +31,7 @@ namespace Domain.UseCases
         [MakeIdempotent]
         public async Task Handle(AcceptAnswerUseCase command, CancellationToken cancellationToken)
         {
-            var aggregateRoot = await aggregateRootStore.Get(command.QuestionId, cancellationToken);
+            var aggregateRoot = await mediator.Ask(new GetAggregateRoot<IAnswerQuestionsAggregateRoot>(command.QuestionId), cancellationToken);
 
             var userId = await mediator.Ask(new GetUserId(), cancellationToken);
 
@@ -41,12 +41,7 @@ namespace Domain.UseCases
                 acceptedBy: userId
             );
 
-            await aggregateRootStore.Save
-            (
-                commandId: command.CommandId, 
-                aggregateRoot: aggregateRoot,
-                cancellationToken: cancellationToken
-            );
+            await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot>(command.CommandId, aggregateRoot), cancellationToken);
         }
     }
 }

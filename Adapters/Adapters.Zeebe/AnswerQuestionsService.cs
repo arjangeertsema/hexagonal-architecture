@@ -11,6 +11,7 @@ using Common.DDD.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Common.CQRS.Abstractions.Attributes;
 using Common.IAM.Abstractions.Commands;
+using Zeebe.Client.Bootstrap.Extensions;
 
 namespace Adapters.Zeebe
 {
@@ -24,17 +25,13 @@ namespace Adapters.Zeebe
         IAsyncJobHandler<SendAnswerJobV1>,
         IAsyncJobHandler<SendQuestionAnsweredEventJobV1>
     {
+        private const string QUESTION_RECIEVED_MESSAGE = "Message_QuestionRecieved_V1";
         private readonly IZeebeClient zeebeClient;
-        private readonly IZeebeVariablesSerializer serializer;
         private readonly IMediator mediator;
 
-        public AnswerQuestionsService(
-            IZeebeClient zeebeClient,
-            IZeebeVariablesSerializer serializer,
-            IMediator mediator)
+        public AnswerQuestionsService(IZeebeClient zeebeClient, IMediator mediator)
         {
             this.zeebeClient = zeebeClient ?? throw new ArgumentNullException(nameof(zeebeClient));
-            this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
@@ -45,21 +42,18 @@ namespace Adapters.Zeebe
                 throw new ArgumentNullException(nameof(@event));
             }
 
-            var variables = new {
+            var state = new {
                 @event.AggregateRootId,
-                @event.Subject,
-                @event.Question,
-                @event.Asked,
-                @event.AskedBy,
                 SendAnswerCommandId = Guid.NewGuid(),
                 SendQuestionAnsweredEventCommandId = Guid.NewGuid()
             };
 
+            //TODO: create own builder to enforce company start process policy.
             await zeebeClient.NewPublishMessageCommand()
-                .MessageName("Message_QuestionRecieved_V1")
+                .MessageName(QUESTION_RECIEVED_MESSAGE)
                 .CorrelationKey(@event.AggregateRootId.ToString())
                 .MessageId(@event.EventId.ToString())
-                .Variables(this.serializer.Serialize(variables))
+                .State(state)
                 .Send(cancellationToken);
         }
 
@@ -77,7 +71,7 @@ namespace Adapters.Zeebe
             };
 
             await this.zeebeClient.NewCompleteJobCommand(long.Parse(@event.UserTaskId))
-                .Variables(this.serializer.Serialize(variables))
+                .State(variables)
                 .SendWithRetry(null, cancellationToken);
         }
 
@@ -95,7 +89,7 @@ namespace Adapters.Zeebe
             };
 
             await this.zeebeClient.NewCompleteJobCommand(long.Parse(@event.UserTaskId))
-                .Variables(serializer.Serialize(variables))
+                .State(variables)
                 .SendWithRetry(null, cancellationToken);
         }
 
@@ -112,7 +106,7 @@ namespace Adapters.Zeebe
             };
 
             await this.zeebeClient.NewCompleteJobCommand(long.Parse(@event.UserTaskId))
-                .Variables(serializer.Serialize(variables))
+                .State(variables)
                 .SendWithRetry(null, cancellationToken);
         }
 
@@ -130,13 +124,13 @@ namespace Adapters.Zeebe
             };
 
             await this.zeebeClient.NewCompleteJobCommand(long.Parse(@event.UserTaskId))
-                .Variables(serializer.Serialize(variables))
+                .Sate(variables)
                 .SendWithRetry(null, cancellationToken);
         }
 
         public async Task HandleJob(SendAnswerJobV1 job, CancellationToken cancellationToken)
         {
-            await mediator.Send(new AuthenticateSystem(Guid.NewGuid()));
+            await mediator.Send(new AuthenticateSystem(Guid.NewGuid()), cancellationToken);
 
             var command = new SendAnswerUseCase
             (
@@ -149,7 +143,7 @@ namespace Adapters.Zeebe
 
         public async Task HandleJob(SendQuestionAnsweredEventJobV1 job, CancellationToken cancellationToken)
         {
-            await mediator.Send(new AuthenticateSystem(Guid.NewGuid()));
+            await mediator.Send(new AuthenticateSystem(Guid.NewGuid()), cancellationToken);
 
             var command = new SendQuestionAnsweredEventUseCase
             (
