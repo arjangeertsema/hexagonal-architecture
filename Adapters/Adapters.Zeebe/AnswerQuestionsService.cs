@@ -124,7 +124,7 @@ namespace Adapters.Zeebe
             };
 
             await this.zeebeClient.NewCompleteJobCommand(long.Parse(@event.UserTaskId))
-                .Sate(variables)
+                .State(variables)
                 .SendWithRetry(null, cancellationToken);
         }
 
