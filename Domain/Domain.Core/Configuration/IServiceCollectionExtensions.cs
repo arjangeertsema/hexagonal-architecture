@@ -1,4 +1,4 @@
-using Domain.Abstractions;
+using Common.DDD.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Domain.Core.Configuration
@@ -10,7 +10,7 @@ namespace Domain.Core.Configuration
             var assembly = typeof(IServiceCollectionExtensions).Assembly;
 
             return services
-                .AddSingleton<IAnswerQuestionsAggregateRoot, AnswerQuestionsAggregateRoot>();
+                .AutowireDDD(assembly);
         }
     }
 }

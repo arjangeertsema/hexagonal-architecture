@@ -7,6 +7,7 @@
 
   <ItemGroup>    
     <ProjectReference Include="..\..\..\common-library\Common.CQRS\Common.CQRS.csproj" />
+    <ProjectReference Include="..\..\..\common-library\Common.DDD\Common.DDD.csproj" />
     <ProjectReference Include="..\..\..\common-library\Common.IAM\Common.IAM.csproj" />
     <ProjectReference Include="..\..\..\common-library\Common.UserTasks\Common.UserTasks.csproj" />    
 

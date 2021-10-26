@@ -9,6 +9,7 @@ using Common.CQRS.Configuration;
 using Common.IAM.Configuration;
 using Common.UserTasks.Configuration;
 using Domain.Core.Configuration;
+using Common.DDD.Configuration;
 
 namespace Runtime.Application
 {
@@ -26,6 +27,7 @@ namespace Runtime.Application
             services
                 // Add Common implementations
                 .AddCommonCQRSServices()
+                .AddCommonDDDServices()
                 .AddCommonIAMServices(Configuration)
                 .AddCommonUserTasksServices()
                 
