@@ -34,6 +34,9 @@ namespace Adapters.EF
         public async Task Handle(SaveAggregateRootEvent<TEvent> command, CancellationToken cancellationToken)
         {
             var @event = (IVersionedDomainEvent)command.Event;
+            
+            await CheckVersions(@event);
+
             var serialized = await serializer.Serialize(@event);
 
             var model = new DomainEventModel()
@@ -46,6 +49,22 @@ namespace Adapters.EF
             };
 
             await dbContext.DomainEvents.AddAsync(model);
+        }
+
+        private async Task CheckVersions(IVersionedDomainEvent @event)
+        {
+            var version = await dbContext.DomainEvents
+                .Where(e => e.AggregateRootId == @event.AggregateRootId)
+                .Select(e => e.Version)
+                .DefaultIfEmpty()
+                .MaxAsync();
+
+            if ((@event.Version == 1 && version != default(long)) ||
+                (version == default(long) && @event.Version != 1) ||
+                (version != default(long) && version == @event.Version - 1)) 
+            {                
+                throw new Exception($"Database version {version} and event version {@event.Version} are out of bounds.");
+            }
         }
 
         public async Task<IEnumerable<IVersionedDomainEvent>> Handle(GetAggregateRootEvents query, CancellationToken cancellationToken)

@@ -8,5 +8,11 @@ namespace Adapters.EF
         public DBContext(DbContextOptions<DBContext> options) : base(options) { }
 
         public DbSet<DomainEventModel> DomainEvents { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+            modelBuilder.Entity<DomainEventModel>()
+                .HasKey(e => new { e.AggregateRootId, e.Version });
+        }
     }
 }
