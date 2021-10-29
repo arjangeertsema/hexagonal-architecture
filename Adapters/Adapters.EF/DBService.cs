@@ -16,7 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Adapters.EF
 {
     [ServiceLifetime(ServiceLifetime.Scoped)]
-    public class DomainEventService<TEvent> :
+    public class DBService<TEvent> :
         ICommandHandler<SaveAggregateRootEvent<TEvent>>,
         IQueryHandler<GetAggregateRootEvents, IEnumerable<IVersionedDomainEvent>>
         where TEvent : IVersionedDomainEvent
@@ -24,7 +24,7 @@ namespace Adapters.EF
         private readonly DBContext dbContext;
         private readonly ISerializer serializer;
         private readonly IDeserializer deserializer;
-        public DomainEventService(DBContext dbContext, ISerializer serializer, IDeserializer deserializer)
+        public DBService(DBContext dbContext, ISerializer serializer, IDeserializer deserializer)
         {
             this.dbContext = dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
             this.serializer = serializer ?? throw new System.ArgumentNullException(nameof(serializer));
@@ -54,7 +54,6 @@ namespace Adapters.EF
                 .Where(e => e.AggregateRootId == query.AggregateRootId)
                 .OrderBy(e => e.Version)
                 .ToListAsync();
-
 
             var tasks = events
                 .Select(e => {

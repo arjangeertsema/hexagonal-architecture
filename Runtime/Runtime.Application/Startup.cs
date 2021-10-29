@@ -10,6 +10,7 @@ using Common.IAM.Configuration;
 using Common.UserTasks.Configuration;
 using Domain.Core.Configuration;
 using Common.DDD.Configuration;
+using Adapters.EF.Configuration;
 
 namespace Runtime.Application
 {
@@ -30,14 +31,15 @@ namespace Runtime.Application
                 .AddCommonDDDServices()
                 .AddCommonIAMServices(Configuration)
                 .AddCommonUserTasksServices()
-                
+
                 // Add Domain implementations
                 .AddDomainCoreServices()
                 .AddDomainUseCasesServices()
-                
+
                 // Add Adapter implementations
-                .AddZeebeAdapterServices(Configuration)
-                .AddRestAdapterServices();
+                .AddEFAdapterServices(Configuration)
+                .AddRestAdapterServices()
+                .AddZeebeAdapterServices(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

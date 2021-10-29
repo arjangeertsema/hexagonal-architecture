@@ -10,6 +10,5 @@ namespace Adapters.EF.Models
         public string Assembly { get; set; }
         public string Type { get; set; }
         public string Event { get; set; }
-        public DateTime? Published { get; set; }
     }
 }
