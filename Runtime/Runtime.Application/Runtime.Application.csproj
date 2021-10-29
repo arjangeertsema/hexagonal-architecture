@@ -14,7 +14,7 @@
     <ProjectReference Include="..\..\Domain\Domain.Core\Domain.Core.csproj" />
     <ProjectReference Include="..\..\Domain\Domain.UseCases\Domain.UseCases.csproj" />
     
-    <ProjectReference Include="..\..\Adapters\Adapters.Events\Adapters.Events.csproj" />
+    <ProjectReference Include="..\..\Adapters\Adapters.Azure\Adapters.Azure.csproj" />
     <ProjectReference Include="..\..\Adapters\Adapters.Rest\Adapters.Rest.csproj" />    
     <ProjectReference Include="..\..\Adapters\Adapters.Zeebe\Adapters.Zeebe.csproj" />
   </ItemGroup>

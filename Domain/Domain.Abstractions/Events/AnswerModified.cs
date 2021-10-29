@@ -1,11 +1,10 @@
 using System;
-using Common.CQRS.Abstractions;
 using Common.DDD.Abstractions;
 using Common.UserTasks.Abstractions;
 
 namespace Domain.Abstractions.Events
 {
-    public class AnswerModifiedEvent : DomainEvent, IUserTaskId
+    public class AnswerModifiedEvent : VersionedDomainEvent, IUserTaskId
     {
         public AnswerModifiedEvent(Guid aggregateId, string userTaskId, string answer, string modifiedBy, DateTime modified)
             : base(aggregateId)

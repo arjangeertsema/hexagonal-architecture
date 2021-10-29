@@ -5,7 +5,7 @@ VisualStudioVersion = 16.6.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adapters", "Adapters", "{250CAF78-49C6-45DF-893E-35F91350B25B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapters.Events", "Adapters\Adapters.Events\Adapters.Events.csproj", "{0B87DA57-0962-4262-8948-7215C1EF36F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapters.Azure", "Adapters\Adapters.Azure\Adapters.Azure.csproj", "{0B87DA57-0962-4262-8948-7215C1EF36F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adapters.Rest", "Adapters\Adapters.Rest\Adapters.Rest.csproj", "{803745A2-95B8-448C-BAB7-720B3BE88FFA}"
 EndProject

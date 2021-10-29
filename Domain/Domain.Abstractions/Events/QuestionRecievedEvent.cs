@@ -3,7 +3,7 @@ using Common.DDD.Abstractions;
 
 namespace Domain.Abstractions.Events
 {
-    public class QuestionRecievedEvent : DomainEvent
+    public class QuestionRecievedEvent : VersionedDomainEvent
     {
         public QuestionRecievedEvent(Guid aggregateId, string subject, string question, string askedBy, DateTime asked) 
             : base(aggregateId)

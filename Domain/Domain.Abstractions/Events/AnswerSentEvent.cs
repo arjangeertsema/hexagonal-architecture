@@ -3,7 +3,7 @@ using Common.DDD.Abstractions;
 
 namespace Domain.Abstractions.Events
 {
-    public class AnswerSentEvent : DomainEvent
+    public class AnswerSentEvent : VersionedDomainEvent
     {
 
         public AnswerSentEvent(Guid aggregateId, DateTime sent)
