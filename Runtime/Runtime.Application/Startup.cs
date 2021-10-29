@@ -11,6 +11,7 @@ using Common.UserTasks.Configuration;
 using Domain.Core.Configuration;
 using Common.DDD.Configuration;
 using Adapters.EF.Configuration;
+using Adapters.SMTP.Configuration;
 
 namespace Runtime.Application
 {
@@ -39,6 +40,7 @@ namespace Runtime.Application
                 // Add Adapter implementations
                 .AddEFAdapterServices(Configuration)
                 .AddRestAdapterServices()
+                .AddSMTPAdapterServices(Configuration)
                 .AddZeebeAdapterServices(Configuration);
         }
 

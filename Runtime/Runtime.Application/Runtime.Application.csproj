@@ -16,6 +16,7 @@
     
     <ProjectReference Include="..\..\Adapters\Adapters.EF\Adapters.EF.csproj" />
     <ProjectReference Include="..\..\Adapters\Adapters.Rest\Adapters.Rest.csproj" />    
+    <ProjectReference Include="..\..\Adapters\Adapters.SMTP\Adapters.SMTP.csproj" />
     <ProjectReference Include="..\..\Adapters\Adapters.Zeebe\Adapters.Zeebe.csproj" />
   </ItemGroup>
 
