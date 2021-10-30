@@ -11,6 +11,7 @@ using Common.UserTasks.Abstractions.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 using Common.DDD.Abstractions.Queries;
 using Common.DDD.Abstractions.Commands;
+using Domain.Abstractions.Ports;
 
 namespace Domain.UseCases
 {
@@ -37,6 +38,7 @@ namespace Domain.UseCases
                 acceptedBy: userId
             );
 
+            await mediator.Send(new CompleteUserTaskPort(command.CommandId, command.UserTaskId), cancellationToken);
             await mediator.Send(SaveAggregateRootFactory.Create(command.CommandId, aggregateRoot), cancellationToken);
         }
     }

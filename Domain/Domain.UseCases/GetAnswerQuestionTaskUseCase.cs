@@ -26,7 +26,7 @@ namespace Domain.UseCases
         {
             var task = await mediator.Ask(new GetUserTask(query.UserTaskId));
             var questionId = Guid.Parse(task.ReferenceId);            
-            var instance = await mediator.Ask(new GetAnswerQuestionsInstance(questionId));
+            var instance = await mediator.Ask(new GetAnswerQuestionPort(questionId));
 
             return Map(task, instance);            
         }

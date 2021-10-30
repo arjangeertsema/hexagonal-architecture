@@ -3,12 +3,12 @@ using Common.CQRS.Abstractions.Queries;
 
 namespace Domain.Abstractions.Ports
 {
-    public class GetAnswerQuestionsInstances : IQuery<GetAnswerQuestionsInstances.Response>
+    public class GetAnswerQuestionsPort : IQuery<GetAnswerQuestionsPort.Response>
     {
-        public GetAnswerQuestionsInstances()
+        public GetAnswerQuestionsPort()
         { }
 
-        public GetAnswerQuestionsInstances(int? limit, int? offset)
+        public GetAnswerQuestionsPort(int? limit, int? offset)
         {
             Limit = limit;
             Offset = offset;

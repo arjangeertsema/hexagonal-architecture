@@ -3,9 +3,9 @@ using Common.CQRS.Abstractions;
 
 namespace Domain.Abstractions.UseCases
 {
-    public class SendQuestionAnsweredEventUseCase : ICommand
+    public class PublishQuestionAnsweredEventUseCase : ICommand
     {
-        public SendQuestionAnsweredEventUseCase(Guid commandId, Guid questionId)
+        public PublishQuestionAnsweredEventUseCase(Guid commandId, Guid questionId)
         {
             CommandId = commandId;
             QuestionId = questionId;

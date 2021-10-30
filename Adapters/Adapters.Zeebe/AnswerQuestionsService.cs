@@ -12,16 +12,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Common.CQRS.Abstractions.Attributes;
 using Common.IAM.Abstractions.Commands;
 using Zeebe.Client.Bootstrap.Extensions;
+using Domain.Abstractions.Ports;
 
 namespace Adapters.Zeebe
 {
     [ServiceLifetime(ServiceLifetime.Scoped)]
     public class AnswerQuestionsService : 
         IDomainEventHandler<QuestionRecievedEvent>,
-        IDomainEventHandler<QuestionAnsweredEvent>, 
-        IDomainEventHandler<AnswerRejectedEvent>, 
-        IDomainEventHandler<AnswerAcceptedEvent>, 
-        IDomainEventHandler<AnswerModifiedEvent>,
+        ICommandHandler<CompleteUserTaskPort>,
         IAsyncJobHandler<SendAnswerJobV1>,
         IAsyncJobHandler<SendQuestionAnsweredEventJobV1>
     {
@@ -57,75 +55,14 @@ namespace Adapters.Zeebe
                 .Send(cancellationToken);
         }
 
-        public async Task Handle(QuestionAnsweredEvent @event, CancellationToken cancellationToken)
+        public Task Handle(CompleteUserTaskPort command, CancellationToken cancellationToken)
         {
-            if (@event is null)
-            {
-                throw new ArgumentNullException(nameof(@event));
-            }
+            var builder = this.zeebeClient.NewCompleteJobCommand(long.Parse(command.UserTaskId));
 
-            var variables = new {
-                @event.Answer,
-                @event.Answered,
-                @event.AnsweredBy
-            };
-
-            await this.zeebeClient.NewCompleteJobCommand(long.Parse(@event.UserTaskId))
-                .State(variables)
-                .SendWithRetry(null, cancellationToken);
-        }
-
-        public async Task Handle(AnswerRejectedEvent @event, CancellationToken cancellationToken)
-        {
-            if (@event is null)
-            {
-                throw new ArgumentNullException(nameof(@event));
-            }
-
-            var variables = new {
-                @event.Rejected,
-                @event.RejectedBy,
-                @event.Rejection
-            };
-
-            await this.zeebeClient.NewCompleteJobCommand(long.Parse(@event.UserTaskId))
-                .State(variables)
-                .SendWithRetry(null, cancellationToken);
-        }
-
-        public async Task Handle(AnswerAcceptedEvent @event, CancellationToken cancellationToken)
-        {
-            if (@event is null)
-            {
-                throw new ArgumentNullException(nameof(@event));
-            }
-
-            var variables = new {
-                @event.Accepted,
-                @event.AcceptedBy
-            };
-
-            await this.zeebeClient.NewCompleteJobCommand(long.Parse(@event.UserTaskId))
-                .State(variables)
-                .SendWithRetry(null, cancellationToken);
-        }
-
-        public async Task Handle(AnswerModifiedEvent @event, CancellationToken cancellationToken)
-        {
-            if (@event is null)
-            {
-                throw new ArgumentNullException(nameof(@event));
-            }
-
-            var variables = new {
-                @event.Answer,
-                @event.Modified,
-                @event.ModifiedBy
-            };
-
-            await this.zeebeClient.NewCompleteJobCommand(long.Parse(@event.UserTaskId))
-                .State(variables)
-                .SendWithRetry(null, cancellationToken);
+            if(command.State != null)
+                builder = builder.State(command.State);
+                
+            return builder.SendWithRetry(null, cancellationToken);
         }
 
         public async Task HandleJob(SendAnswerJobV1 job, CancellationToken cancellationToken)

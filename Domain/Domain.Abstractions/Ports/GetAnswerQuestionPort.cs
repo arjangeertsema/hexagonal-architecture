@@ -3,9 +3,9 @@ using Common.CQRS.Abstractions.Queries;
 
 namespace Domain.Abstractions.Ports
 {
-    public class GetAnswerQuestionsInstance : IQuery<GetAnswerQuestionsInstance.Response>
+    public class GetAnswerQuestionPort : IQuery<GetAnswerQuestionPort.Response>
     {
-        public GetAnswerQuestionsInstance(Guid questionId)
+        public GetAnswerQuestionPort(Guid questionId)
         {
             QuestionId = questionId;
         }

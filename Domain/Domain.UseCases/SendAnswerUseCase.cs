@@ -9,6 +9,7 @@ using Common.IAM.Abstractions.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 using Common.DDD.Abstractions.Commands;
 using Common.DDD.Abstractions.Queries;
+using Domain.Abstractions.Ports;
 
 namespace Domain.UseCases
 {
@@ -28,6 +29,7 @@ namespace Domain.UseCases
 
             aggregateRoot.SendAnswer();
 
+            //await mediator.Send(new SendMessagePort(command.CommandId));
             await mediator.Send(SaveAggregateRootFactory.Create(command.CommandId, aggregateRoot), cancellationToken);
         }
     }

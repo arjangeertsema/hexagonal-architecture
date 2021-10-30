@@ -9,25 +9,28 @@ using Common.IAM.Abstractions.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 using Common.DDD.Abstractions.Commands;
 using Common.DDD.Abstractions.Queries;
+using Domain.Abstractions.Ports;
+using Domain.Abstractions.Events;
 
 namespace Domain.UseCases
 {
     [ServiceLifetime(ServiceLifetime.Singleton)]
-    public class SendQuestionAnsweredEventUseCaseHandler : ICommandHandler<SendQuestionAnsweredEventUseCase>
+    public class PublishQuestionAnsweredEventUseCaseHandler : ICommandHandler<PublishQuestionAnsweredEventUseCase>
     {
         private readonly IMediator mediator;
 
-        public SendQuestionAnsweredEventUseCaseHandler(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        public PublishQuestionAnsweredEventUseCaseHandler(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
-        [HasPermission("SEND_QUESTION_ANSWERED")]
+        [HasPermission("PUBLISH_QUESTION_ANSWERED_EVENT")]
         [Transactional]
         [MakeIdempotent]
-        public async Task Handle(SendQuestionAnsweredEventUseCase command, CancellationToken cancellationToken)
+        public async Task Handle(PublishQuestionAnsweredEventUseCase command, CancellationToken cancellationToken)
         {
             var aggregateRoot = await mediator.Ask(new GetAggregateRoot<IAnswerQuestionsAggregateRoot>(command.QuestionId), cancellationToken);
 
             aggregateRoot.SendQuestionAnsweredEvent();
 
+            await mediator.Send(new PublishEventPort<QuesionAnswerdIntegrationEvent>(command.CommandId, new QuesionAnswerdIntegrationEvent(command.QuestionId)));
             await mediator.Send(SaveAggregateRootFactory.Create(command.CommandId, aggregateRoot), cancellationToken);
         }
     }

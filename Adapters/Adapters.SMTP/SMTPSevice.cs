@@ -4,12 +4,13 @@ using System.Threading.Tasks;
 using Adapters.SMTP.Configuration;
 using Common.CQRS.Abstractions;
 using Domain.Abstractions.Events;
+using Domain.Abstractions.Ports;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 
 namespace Adapters.SMTP
 {
-    public class SMTPService : IEventHandler<AnswerSentEvent>
+    public class SMTPService : ICommandHandler<SendMessagePort>
     {
         private SMTPOptions smtpOptions;
 
@@ -21,10 +22,10 @@ namespace Adapters.SMTP
             this.smtpOptions = smtpOptions.Value;
 
         }
-        
-        public async Task Handle(AnswerSentEvent @event, CancellationToken cancellationToken)
+
+        public async Task Handle(SendMessagePort command, CancellationToken cancellationToken)
         {
-            var message = CreateMessage(@event);
+            var message = Map(command);
 
             using (var client = new SmtpClient())
             {
@@ -36,7 +37,7 @@ namespace Adapters.SMTP
             }
         }
 
-        private MimeKit.MimeMessage CreateMessage(AnswerSentEvent @event)
+        private MimeKit.MimeMessage Map(SendMessagePort command)
         {
             throw new NotImplementedException();
         }

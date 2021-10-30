@@ -26,12 +26,12 @@ namespace Domain.UseCases
         {
             var task = await mediator.Ask(new GetUserTask(query.UserTaskId));
             var questionId = Guid.Parse(task.ReferenceId);
-            var instance = await mediator.Ask(new GetAnswerQuestionsInstance(questionId));
+            var instance = await mediator.Ask(new GetAnswerQuestionPort(questionId));
 
             return Map(task, instance);
         }
 
-        private GetModifyAnswerTaskUseCase.Response Map(GetUserTask.Response task, GetAnswerQuestionsInstance.Response instance)
+        private GetModifyAnswerTaskUseCase.Response Map(GetUserTask.Response task, GetAnswerQuestionPort.Response instance)
         {
             throw new NotImplementedException();
         }

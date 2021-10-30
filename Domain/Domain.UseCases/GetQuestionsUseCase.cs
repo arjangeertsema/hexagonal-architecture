@@ -22,12 +22,12 @@ namespace Domain.UseCases
         [IsAuthorized]
         public async Task<GetQuestionsUseCase.Response> Handle(GetQuestionsUseCase query, CancellationToken cancellationToken)
         {
-            var instance = await mediator.Ask(new GetAnswerQuestionsInstances(query.Limit, query.Offset));
+            var instance = await mediator.Ask(new GetAnswerQuestionsPort(query.Limit, query.Offset));
 
             return Map(instance);
         }
 
-        private GetQuestionsUseCase.Response Map(GetAnswerQuestionsInstances.Response instance)
+        private GetQuestionsUseCase.Response Map(GetAnswerQuestionsPort.Response instance)
         {
             throw new NotImplementedException();
         }
