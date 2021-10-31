@@ -3,6 +3,7 @@ using Common.DDD.Abstractions;
 using Domain.Abstractions;
 using Domain.Abstractions.Events;
 using Domain.Abstractions.Exceptions;
+using Domain.Abstractions.ValueTypes;
 
 namespace Domain.Core
 {
@@ -184,7 +185,7 @@ namespace Domain.Core
             Modified = @event.Modified;
         }
 
-        public void SendAnswer()
+        public Message SendAnswer()
         {
             if (!Accepted.HasValue)
             {
@@ -197,6 +198,8 @@ namespace Domain.Core
             };
 
             RaiseEvent(new AnswerSentEvent(Id, DateTime.Now));
+
+            throw new NotImplementedException();
         }
 
         internal void Apply(AnswerSentEvent @event)

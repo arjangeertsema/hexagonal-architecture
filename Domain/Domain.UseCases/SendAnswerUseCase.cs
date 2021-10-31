@@ -27,9 +27,9 @@ namespace Domain.UseCases
         {
             var aggregateRoot = await mediator.Ask(new GetAggregateRoot<IAnswerQuestionsAggregateRoot>(command.QuestionId), cancellationToken);
 
-            aggregateRoot.SendAnswer();
+            var message = aggregateRoot.SendAnswer();
 
-            //await mediator.Send(new SendMessagePort(command.CommandId));
+            await mediator.Send(new SendMessagePort(command.CommandId, message));
             await mediator.Send(SaveAggregateRootFactory.Create(command.CommandId, aggregateRoot), cancellationToken);
         }
     }

@@ -1,4 +1,5 @@
 using Common.DDD.Abstractions;
+using Domain.Abstractions.ValueTypes;
 
 namespace Domain.Abstractions
 {
@@ -9,7 +10,7 @@ namespace Domain.Abstractions
         void EndQuestion(string endedBy);
         void ModifyAnswer(string userTaskId, string answer, string modifiedBy);
         void RejectAnswer(string userTaskId, string rejection, string rejectedBy);
-        void SendAnswer();
+        Message SendAnswer();
         void SendQuestionAnsweredEvent();
     }
 }

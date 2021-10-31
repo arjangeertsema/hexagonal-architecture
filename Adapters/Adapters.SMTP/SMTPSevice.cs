@@ -39,7 +39,11 @@ namespace Adapters.SMTP
 
         private MimeKit.MimeMessage Map(SendMessagePort command)
         {
+            var message = new MimeKit.MimeMessage();
+
             throw new NotImplementedException();
+
+            return message;
         }
     }
 }
