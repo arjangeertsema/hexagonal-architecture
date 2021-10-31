@@ -30,7 +30,7 @@ namespace Domain.UseCases
 
             aggregateRoot.SendQuestionAnsweredEvent();
 
-            await mediator.Send(new PublishEventPort<QuesionAnswerdIntegrationEvent>(command.CommandId, new QuesionAnswerdIntegrationEvent(command.QuestionId)));
+            await mediator.Send(new PublishEventPort<QuestionAnswerdIntegrationEvent>(command.CommandId, new QuestionAnswerdIntegrationEvent(command.QuestionId)));
             await mediator.Send(SaveAggregateRootFactory.Create(command.CommandId, aggregateRoot), cancellationToken);
         }
     }

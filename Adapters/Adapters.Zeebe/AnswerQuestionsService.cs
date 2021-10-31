@@ -82,7 +82,7 @@ namespace Adapters.Zeebe
         {
             await mediator.Send(new AuthenticateSystem(Guid.NewGuid()), cancellationToken);
 
-            var command = new SendQuestionAnsweredEventUseCase
+            var command = new PublishQuestionAnsweredEventUseCase
             (
                 commandId: job.State.SendQuestionAnsweredEventCommandId,
                 questionId: job.State.QuestionId

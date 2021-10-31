@@ -34,12 +34,12 @@ namespace Domain.UseCases
 
             aggregateRoot.RejectAnswer
             (
-                userTaskId: command.UserTaskId, 
-                rejection: command.Rejection, 
+                userTaskId: command.UserTaskId,
+                rejection: command.Rejection,
                 rejectedBy: userId
             );
 
-            await mediator.Send(new CompleteUserTaskPort(command.CommandId, command.UserTaskId, new {ReviewResult = "Accepted" }), cancellationToken);
+            await mediator.Send(new CompleteUserTaskPort(command.CommandId, command.UserTaskId, new { ReviewResult = "Accepted" }), cancellationToken);
             await mediator.Send(SaveAggregateRootFactory.Create(command.CommandId, aggregateRoot), cancellationToken);
         }
     }

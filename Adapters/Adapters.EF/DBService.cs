@@ -18,7 +18,9 @@ namespace Adapters.EF
     [ServiceLifetime(ServiceLifetime.Scoped)]
     public class DBService<TEvent> :
         ICommandHandler<SaveAggregateRootEvent<TEvent>>,
-        IQueryHandler<GetAggregateRootEvents, IEnumerable<IVersionedDomainEvent>>
+        IQueryHandler<GetAggregateRootEvents, IEnumerable<IVersionedDomainEvent>>,
+        IQueryHandler<GetUnpublishedDomainEvents, IEnumerable<IDomainEvent>>,
+        ICommandHandler<SetDomainEventPublished>
         where TEvent : IVersionedDomainEvent
     {
         private readonly DBContext dbContext;
@@ -42,6 +44,7 @@ namespace Adapters.EF
             var model = new DomainEventModel()
             {
                 EventId = @event.EventId,
+                Created  = DateTime.UtcNow,
                 AggregateRootId = @event.AggregateRootId,
                 Version = @event.Version,
                 Type = @event.GetType().FullName,
@@ -72,17 +75,50 @@ namespace Adapters.EF
             var events = await dbContext.DomainEvents
                 .Where(e => e.AggregateRootId == query.AggregateRootId)
                 .OrderBy(e => e.Version)
+                .ToListAsync();            
+
+            return await Map(events);
+        }
+
+        public async Task<IEnumerable<IDomainEvent>> Handle(GetUnpublishedDomainEvents query, CancellationToken cancellationToken)
+        {
+            var events = await dbContext.DomainEvents
+                .Where(e => e.Published.HasValue == false)
+                .OrderBy(e => e.Created)
+                .Take(query.BatchSize)
                 .ToListAsync();
 
-            var tasks = events
-                .Select(e => {
-                    var type = Type.GetType(e.Type);
-                    return deserializer.Deserialize(type, e.Event);
-                });
+            return await Map(events);
+        }
 
+        public async Task Handle(SetDomainEventPublished command, CancellationToken cancellationToken)
+        {
+            var model = await dbContext.DomainEvents.FirstOrDefaultAsync(e =>
+                e.AggregateRootId == command.DomainEvent.AggregateRootId &&
+                e.EventId == command.DomainEvent.EventId);
+
+            if(model == null)
+                throw new KeyNotFoundException($"DomainEvent not found for aggregate root {command.DomainEvent.AggregateRootId} with id {command.DomainEvent.EventId}.");
+
+            if(model.Published.HasValue)
+                return;
+
+            model.Published = DateTime.UtcNow;
+            await dbContext.SaveChangesAsync();
+        }
+
+        private async Task<IEnumerable<IVersionedDomainEvent>> Map(List<DomainEventModel> events)
+        {
+            var tasks = events.Select(Map);
             await Task.WhenAll(tasks);
+            return tasks.Select(t => t.Result);
+        }
 
-            return tasks.Select(t => (IVersionedDomainEvent)t.Result);
+        private Task<IVersionedDomainEvent> Map(DomainEventModel model)
+        {
+            var type = Type.GetType(model.Type);
+            return deserializer.Deserialize(type, model.Event)
+                .ContinueWith(t => (IVersionedDomainEvent) t.Result);
         }
     }
 }

@@ -3,9 +3,9 @@ using Common.CQRS.Abstractions;
 
 namespace Domain.Abstractions.Events
 {
-    public class QuesionAnswerdIntegrationEvent : IEvent
+    public class QuestionAnswerdIntegrationEvent : IEvent
     {
-        public QuesionAnswerdIntegrationEvent(Guid questionId)
+        public QuestionAnswerdIntegrationEvent(Guid questionId)
         {
             this.EventId = Guid.NewGuid();
             this.QuestionId = questionId;

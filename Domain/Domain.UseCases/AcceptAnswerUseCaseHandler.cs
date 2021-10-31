@@ -38,7 +38,7 @@ namespace Domain.UseCases
                 acceptedBy: userId
             );
 
-            await mediator.Send(new CompleteUserTaskPort(command.CommandId, command.UserTaskId), cancellationToken);
+            await mediator.Send(new CompleteUserTaskPort(command.CommandId, command.UserTaskId, new {ReviewResult = "Accepted" }), cancellationToken);
             await mediator.Send(SaveAggregateRootFactory.Create(command.CommandId, aggregateRoot), cancellationToken);
         }
     }
