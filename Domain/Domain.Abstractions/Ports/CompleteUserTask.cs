@@ -1,11 +1,8 @@
-using System;
-using Common.CQRS.Abstractions;
-
 namespace Domain.Abstractions.Ports
 {
-    public class CompleteUserTaskPort : ICommand
+    public class CompleteUserTask : ICommand
     {
-        public CompleteUserTaskPort(Guid commandId, string userTaskId, object state = null)
+        public CompleteUserTask(Guid commandId, string userTaskId, object state = null)
         {
             if (string.IsNullOrWhiteSpace(userTaskId))
             {

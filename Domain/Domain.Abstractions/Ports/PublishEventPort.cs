@@ -1,18 +1,14 @@
-using System;
-using Common.CQRS.Abstractions;
+namespace Domain.Abstractions.Ports;
 
-namespace Domain.Abstractions.Ports
+public class PublishEvent<TEvent> : ICommand
+    where TEvent : IEvent
 {
-    public class PublishEventPort<TEvent> : ICommand
-        where TEvent : IEvent
+    public PublishEvent(Guid commandId, TEvent @event)
     {
-        public PublishEventPort(Guid commandId, TEvent @event)
-        {
-            CommandId = commandId;
-            Event = @event;
-        }
-
-        public Guid CommandId { get; }
-        public TEvent Event { get; }
+        CommandId = commandId;
+        Event = @event;
     }
+
+    public Guid CommandId { get; }
+    public TEvent Event { get; }
 }

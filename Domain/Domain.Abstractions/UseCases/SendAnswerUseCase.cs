@@ -1,17 +1,13 @@
-using System;
-using Common.CQRS.Abstractions;
+namespace Domain.Abstractions.UseCases;
 
-namespace Domain.Abstractions.UseCases
+public class SendAnswerUseCase : ICommand
 {
-    public class SendAnswerUseCase : ICommand
+    public SendAnswerUseCase(Guid commandId, Guid questionId)
     {
-        public SendAnswerUseCase(Guid commandId, Guid questionId)
-        {
-            CommandId = commandId;
-            QuestionId = questionId;
-        }
-
-        public Guid CommandId { get; }
-        public Guid QuestionId { get; }
+        CommandId = commandId;
+        QuestionId = questionId;
     }
+
+    public Guid CommandId { get; }
+    public Guid QuestionId { get; }
 }

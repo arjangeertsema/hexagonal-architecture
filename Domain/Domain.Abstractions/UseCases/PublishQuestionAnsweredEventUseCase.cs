@@ -1,17 +1,13 @@
-using System;
-using Common.CQRS.Abstractions;
+namespace Domain.Abstractions.UseCases;
 
-namespace Domain.Abstractions.UseCases
+public class PublishQuestionAnsweredEventUseCase : ICommand
 {
-    public class PublishQuestionAnsweredEventUseCase : ICommand
+    public PublishQuestionAnsweredEventUseCase(Guid commandId, Guid questionId)
     {
-        public PublishQuestionAnsweredEventUseCase(Guid commandId, Guid questionId)
-        {
-            CommandId = commandId;
-            QuestionId = questionId;
-        }
-
-        public Guid CommandId { get; }
-        public Guid QuestionId { get; }
+        CommandId = commandId;
+        QuestionId = questionId;
     }
+
+    public Guid CommandId { get; }
+    public Guid QuestionId { get; }
 }

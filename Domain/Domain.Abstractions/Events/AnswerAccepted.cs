@@ -1,26 +1,21 @@
-using System;
-using Common.DDD.Abstractions;
-using Common.UserTasks.Abstractions;
+namespace Domain.Abstractions.Events;
 
-namespace Domain.Abstractions.Events
+public class AnswerAcceptedEvent : VersionedDomainEvent<AnswerQuestionId>, IUserTaskId
 {
-    public class AnswerAcceptedEvent : VersionedDomainEvent, IUserTaskId
+    public AnswerAcceptedEvent(AnswerQuestionId aggregateId, string userTaskId, string acceptedBy, DateTime accepted)
+        : base(aggregateId)
     {
-        public AnswerAcceptedEvent(Guid aggregateId, string userTaskId, string acceptedBy, DateTime accepted)
-            : base(aggregateId)
+        if (string.IsNullOrWhiteSpace(acceptedBy))
         {
-            if (string.IsNullOrWhiteSpace(acceptedBy))
-            {
-                throw new ArgumentException($"'{nameof(acceptedBy)}' cannot be null or whitespace.", nameof(acceptedBy));
-            }
-
-            UserTaskId = userTaskId;
-            AcceptedBy = acceptedBy;
-            Accepted = accepted;
+            throw new ArgumentException($"'{nameof(acceptedBy)}' cannot be null or whitespace.", nameof(acceptedBy));
         }
 
-        public string UserTaskId { get; }
-        public string AcceptedBy { get; }
-        public DateTime Accepted { get; }
+        UserTaskId = userTaskId;
+        AcceptedBy = acceptedBy;
+        Accepted = accepted;
     }
+
+    public string UserTaskId { get; }
+    public string AcceptedBy { get; }
+    public DateTime Accepted { get; }
 }

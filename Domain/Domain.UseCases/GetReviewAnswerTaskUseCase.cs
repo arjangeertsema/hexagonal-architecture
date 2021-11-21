@@ -1,39 +1,25 @@
-using System;
-using System.Threading.Tasks;
-using Common.CQRS.Abstractions;
-using Domain.Abstractions.UseCases;
-using Common.CQRS.Abstractions.Queries;
-using System.Threading;
-using Common.IAM.Abstractions.Attributes;
-using Common.UserTasks.Abstractions.Attributes;
-using Common.UserTasks.Abstractions.Queries;
-using Domain.Abstractions.Ports;
-using Common.CQRS.Abstractions.Attributes;
-using Microsoft.Extensions.DependencyInjection;
+namespace Domain.UseCases;
 
-namespace Domain.UseCases
+[ServiceLifetime(ServiceLifetime.Singleton)]
+public class GetReviewAnswerTaskUseCaseHandler : IQueryHandler<GetReviewAnswerTaskUseCase, GetReviewAnswerTaskUseCase.Response>
 {
-    [ServiceLifetime(ServiceLifetime.Singleton)]
-    public class GetReviewAnswerTaskUseCaseHandler : IQueryHandler<GetReviewAnswerTaskUseCase, GetReviewAnswerTaskUseCase.Response>
+    private readonly IMediator mediator;
+
+    public GetReviewAnswerTaskUseCaseHandler(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+
+    [HasPermission("REVIEW_ANSWER")]
+    [IsUserTaskOwner]
+    public async Task<GetReviewAnswerTaskUseCase.Response> Handle(GetReviewAnswerTaskUseCase query, CancellationToken cancellationToken)
     {
-        private readonly IMediator mediator;
+        var task = await mediator.Ask(new GetUserTask(query.UserTaskId));
+        var questionId = Guid.Parse(task.ReferenceId);
+        var instance = await mediator.Ask(new GetAnswerQuestion(questionId));
 
-        public GetReviewAnswerTaskUseCaseHandler(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        return Map(task, instance);
+    }
 
-        [HasPermission("REVIEW_ANSWER")]
-        [IsUserTaskOwner]
-        public async Task<GetReviewAnswerTaskUseCase.Response> Handle(GetReviewAnswerTaskUseCase query, CancellationToken cancellationToken)
-        {
-            var task = await mediator.Ask(new GetUserTask(query.UserTaskId));
-            var questionId = Guid.Parse(task.ReferenceId);
-            var instance = await mediator.Ask(new GetAnswerQuestionPort(questionId));
-
-            return Map(task, instance);
-        }
-
-        private GetReviewAnswerTaskUseCase.Response Map(GetUserTask.Response task, GetAnswerQuestionPort.Response instance)
-        {
-            throw new NotImplementedException();
-        }
+    private GetReviewAnswerTaskUseCase.Response Map(GetUserTask.Response task, GetAnswerQuestion.Response instance)
+    {
+        throw new NotImplementedException();
     }
 }

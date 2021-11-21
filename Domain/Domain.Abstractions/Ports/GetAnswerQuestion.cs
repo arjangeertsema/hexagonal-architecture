@@ -1,11 +1,8 @@
-using System;
-using Common.CQRS.Abstractions.Queries;
-
 namespace Domain.Abstractions.Ports
 {
-    public class GetAnswerQuestionPort : IQuery<GetAnswerQuestionPort.Response>
+    public class GetAnswerQuestion : IQuery<GetAnswerQuestion.Response>
     {
-        public GetAnswerQuestionPort(Guid questionId)
+        public GetAnswerQuestion(Guid questionId)
         {
             QuestionId = questionId;
         }

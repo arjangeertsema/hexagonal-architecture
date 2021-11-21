@@ -1,53 +1,37 @@
-using Adapters.Zeebe.Configuration;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Adapters.Rest.Configuration;
-using Domain.UseCases.Configuration;
-using Common.CQRS.Configuration;
-using Common.IAM.Configuration;
-using Common.UserTasks.Configuration;
-using Domain.Core.Configuration;
-using Common.DDD.Configuration;
-using Adapters.EF.Configuration;
-using Adapters.SMTP.Configuration;
-
-namespace Runtime.Application
+namespace Runtime.Application;
+public class Startup
 {
-    public class Startup
+    public Startup(IConfiguration configuration)
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        Configuration = configuration;
+    }
 
-        public IConfiguration Configuration { get; }
+    public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services
-                // Add Common implementations
-                .AddCommonCQRSServices()
-                .AddCommonDDDServices()
-                .AddCommonIAMServices(Configuration)
-                .AddCommonUserTasksServices()
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services
+            // Add Common implementations
+            .AddCommonCQRSServices()
+            .AddCommonDDDServices()
+            .AddCommonIAMServices(Configuration)
+            .AddCommonUserTasksServices()
 
-                // Add Domain implementations
-                .AddDomainCoreServices()
-                .AddDomainUseCasesServices()
+            // Add Domain implementations
+            .AddDomainCoreServices()
+            .AddDomainUseCasesServices()
 
-                // Add Adapter implementations
-                .AddEFAdapterServices(Configuration)
-                .AddRestAdapterServices()
-                .AddSMTPAdapterServices(Configuration)
-                .AddZeebeAdapterServices(Configuration);
-        }
+            // Add Adapter implementations
+            .AddEFAdapterServices(Configuration)
+            .AddRestAdapterServices()
+            .AddSMTPAdapterServices(Configuration)
+            .AddZeebeAdapterServices(Configuration);
+    }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            app
-                .ConfigureRestAdapter(Configuration, env);
-        }
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        app
+            .ConfigureRestAdapter(Configuration, env);
     }
 }
+

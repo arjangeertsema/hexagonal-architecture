@@ -1,18 +1,14 @@
-using System;
-using Common.DDD.Abstractions;
+namespace Domain.Abstractions.Events;
 
-namespace Domain.Abstractions.Events
+public class AnswerSentEvent : VersionedDomainEvent<AnswerQuestionId>
 {
-    public class AnswerSentEvent : VersionedDomainEvent
+
+    public AnswerSentEvent(AnswerQuestionId aggregateId, DateTime sent)
+        : base(aggregateId)
+
     {
-
-        public AnswerSentEvent(Guid aggregateId, DateTime sent)
-            : base(aggregateId)
-
-        {
-            Sent = sent;
-        }
-
-        public DateTime Sent { get; }
+        Sent = sent;
     }
+
+    public DateTime Sent { get; }
 }

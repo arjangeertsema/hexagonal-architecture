@@ -1,17 +1,13 @@
-using System;
-using Common.CQRS.Abstractions;
+namespace Domain.Abstractions.UseCases;
 
-namespace Domain.Abstractions.UseCases
+public class EndQuestionUseCase : ICommand
 {
-    public class EndQuestionUseCase : ICommand
+    public EndQuestionUseCase(Guid commandId, Guid questionId)
     {
-        public EndQuestionUseCase(Guid commandId, Guid questionId)
-        {
-            CommandId = commandId;
-            QuestionId = questionId;
-        }
-
-        public Guid CommandId { get; }
-        public Guid QuestionId { get; set; }
+        CommandId = commandId;
+        QuestionId = questionId;
     }
+
+    public Guid CommandId { get; }
+    public Guid QuestionId { get; set; }
 }

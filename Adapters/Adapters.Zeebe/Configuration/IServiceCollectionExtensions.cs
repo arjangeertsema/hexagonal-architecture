@@ -1,17 +1,11 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Zeebe.Client.Bootstrap.Extensions;
-using Common.CQRS.Abstractions;
+namespace Adapters.Zeebe.Configuration;
 
-namespace Adapters.Zeebe.Configuration
+public static class IServiceCollectionExtensions
 {
-    public static class IServiceCollectionExtensions
+    public static IServiceCollection AddZeebeAdapterServices(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddZeebeAdapterServices(this IServiceCollection services, IConfiguration configuration) 
-        {
-            return services
-                .AutowireCQRS(typeof(IServiceCollectionExtensions).Assembly)
-                .BootstrapZeebe(configuration.GetSection("ZeebeBootstrap"), typeof(IServiceCollectionExtensions).Assembly);
-        }
+        return services
+            .AutowireCQRS(typeof(IServiceCollectionExtensions).Assembly)
+            .BootstrapZeebe(configuration.GetSection("ZeebeBootstrap"), typeof(IServiceCollectionExtensions).Assembly);
     }
 }
