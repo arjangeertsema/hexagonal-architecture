@@ -16,7 +16,7 @@ public class SendAnswerUseCaseHandler : ICommandHandler<SendAnswerUseCase>
 
         var message = aggregateRoot.SendAnswer();
 
-        await mediator.Send(new SendMessage(command.CommandId, message));
         await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(command.CommandId, aggregateRoot), cancellationToken);
+        await mediator.Send(new SendMessage(command.CommandId, message));
     }
 }
