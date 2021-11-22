@@ -1,12 +1,8 @@
-using System;
-using Common.DDD.Abstractions;
-using Common.UserTasks.Abstractions;
-
 namespace Domain.Abstractions.Events
 {
-    public class QuestionAnsweredEvent : VersionedDomainEvent, IUserTaskId
+    public class QuestionAnsweredEvent : VersionedDomainEvent<AnswerQuestionId>, IUserTaskId
     {
-        public QuestionAnsweredEvent(Guid aggregateId, string userTaskId, string answer, string answeredBy, DateTime answered)
+        public QuestionAnsweredEvent(AnswerQuestionId aggregateId, string userTaskId, string answer, string answeredBy, DateTime answered)
             : base(aggregateId)
 
         {

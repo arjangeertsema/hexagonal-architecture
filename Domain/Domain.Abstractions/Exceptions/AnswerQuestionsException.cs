@@ -1,10 +1,7 @@
-using System;
+namespace Domain.Abstractions.Exceptions;
 
-namespace Domain.Abstractions.Exceptions
+public class AnswerQuestionsException : Exception
 {
-    public class AnswerQuestionsException : Exception
-    {
-        public AnswerQuestionsException(string message) 
-          : base(message) { }
-    }
+    public AnswerQuestionsException(string message)
+      : base(message) { }
 }

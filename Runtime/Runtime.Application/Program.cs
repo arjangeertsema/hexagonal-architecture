@@ -1,20 +1,24 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+var builder = WebApplication.CreateBuilder(args);
 
-namespace Runtime.Application
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+builder.Services
+    .AddCommonCQRSServices()
+    .AddCommonDDDServices()
+    .AddCommonIAMServices(builder.Configuration)
+    .AddCommonUserTasksServices()
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
-}
+    // Add Domain implementations
+    .AddDomainCoreServices()
+    .AddDomainUseCasesServices()
+
+    // Add Adapter implementations
+    .AddEFAdapterServices(builder.Configuration)
+    .AddRestAdapterServices()
+    .AddSMTPAdapterServices(builder.Configuration)
+    .AddZeebeAdapterServices(builder.Configuration);
+
+var app = builder.Build();
+
+app
+    .ConfigureRestAdapter(builder.Configuration, app.Environment);
+
+app.Run();

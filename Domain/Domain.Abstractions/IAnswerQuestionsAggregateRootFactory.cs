@@ -1,9 +1,6 @@
-using System;
+namespace Domain.Abstractions;
 
-namespace Domain.Abstractions
+public interface IAnswerQuestionsAggregateRootFactory
 {
-    public interface IAnswerQuestionsAggregateRootFactory
-    {
-         IAnswerQuestionsAggregateRoot Create(Guid questionId, string subject, string question, string askedBy);
-    }
+    IAnswerQuestionsAggregateRoot Create(AnswerQuestionId questionId, string subject, string question, string askedBy);
 }

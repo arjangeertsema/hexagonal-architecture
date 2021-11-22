@@ -3,15 +3,16 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Domain.Abstractions\Domain.Abstractions.csproj" />
     <ProjectReference Include="..\..\..\common-library\Common.IAM.Abstractions\Common.IAM.Abstractions.csproj" />
-    <ProjectReference Include="..\..\..\..\zeebe\zeebe-client-csharp-bootstrap\src\Zeebe.Client.Bootstrap\Zeebe.Client.Bootstrap.csproj" />
+    <!-- <ProjectReference Include="..\..\..\..\zeebe\zeebe-client-csharp-bootstrap\src\Zeebe.Client.Bootstrap\Zeebe.Client.Bootstrap.csproj" /> -->
   </ItemGroup>
   
   <ItemGroup>
-    <!-- <PackageReference Include="zb-client-bootstrap" Version="0.0.8" /> -->
+    <PackageReference Include="zb-client-bootstrap" Version="0.1.0" />
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Adapters.Zeebe</RootNamespace>
   </PropertyGroup>
 

@@ -1,8 +1,7 @@
-namespace Domain.Abstractions.ValueTypes
+namespace Domain.Abstractions.ValueTypes;
+
+public struct Recipient
 {
-    public struct Recipient
-    {
-        public string Name { get; }
-        public string EmailAddress { get; }
-    }
+    public string Name { get; }
+    public string EmailAddress { get; }
 }

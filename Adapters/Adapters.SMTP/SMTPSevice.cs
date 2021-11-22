@@ -1,49 +1,38 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Adapters.SMTP.Configuration;
-using Common.CQRS.Abstractions;
-using Domain.Abstractions.Events;
-using Domain.Abstractions.Ports;
-using MailKit.Net.Smtp;
-using Microsoft.Extensions.Options;
+﻿namespace Adapters.SMTP;
 
-namespace Adapters.SMTP
+public class SMTPService : ICommandHandler<SendMessage>
 {
-    public class SMTPService : ICommandHandler<SendMessagePort>
+    private SMTPOptions smtpOptions;
+
+    public SMTPService(IOptions<SMTPOptions> smtpOptions)
     {
-        private SMTPOptions smtpOptions;
+        if (smtpOptions == null || smtpOptions.Value == null)
+            throw new ArgumentNullException(nameof(smtpOptions));
 
-        public SMTPService(IOptions<SMTPOptions> smtpOptions)
+        this.smtpOptions = smtpOptions.Value;
+
+    }
+
+    public async Task Handle(SendMessage command, CancellationToken cancellationToken)
+    {
+        var message = Map(command);
+
+        using (var client = new SmtpClient())
         {
-            if(smtpOptions == null || smtpOptions.Value == null)
-                throw new ArgumentNullException(nameof(smtpOptions));
+            await client.ConnectAsync(smtpOptions.Host, smtpOptions.Port, true, cancellationToken);
+            client.AuthenticationMechanisms.Remove("XOAUTH2");
 
-            this.smtpOptions = smtpOptions.Value;
-
+            await client.AuthenticateAsync(smtpOptions.UserName, smtpOptions.Password);
+            await client.SendAsync(message, cancellationToken);
         }
+    }
 
-        public async Task Handle(SendMessagePort command, CancellationToken cancellationToken)
-        {
-            var message = Map(command);
+    private MimeKit.MimeMessage Map(SendMessage command)
+    {
+        var message = new MimeKit.MimeMessage();
 
-            using (var client = new SmtpClient())
-            {
-                await client.ConnectAsync(smtpOptions.Host, smtpOptions.Port, true, cancellationToken);
-                client.AuthenticationMechanisms.Remove("XOAUTH2");
-                
-                await client.AuthenticateAsync(smtpOptions.UserName, smtpOptions.Password);
-                await client.SendAsync(message, cancellationToken);
-            }
-        }
+        throw new NotImplementedException();
 
-        private MimeKit.MimeMessage Map(SendMessagePort command)
-        {
-            var message = new MimeKit.MimeMessage();
-
-            throw new NotImplementedException();
-
-            return message;
-        }
+        return message;
     }
 }

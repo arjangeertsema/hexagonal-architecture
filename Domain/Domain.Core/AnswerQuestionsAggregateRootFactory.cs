@@ -1,11 +1,7 @@
-using System;
-using Domain.Abstractions;
+namespace Domain.Core;
 
-namespace Domain.Core
+public class AnswerQuestionsAggregateRootFactory : IAnswerQuestionsAggregateRootFactory
 {
-    public class AnswerQuestionsAggregateRootFactory : IAnswerQuestionsAggregateRootFactory
-    {
-        public IAnswerQuestionsAggregateRoot Create(Guid questionId, string subject, string question, string askedBy) 
-            => AnswerQuestionsAggregateRoot.Start(questionId, subject, question, askedBy);
-    }
+    public IAnswerQuestionsAggregateRoot Create(AnswerQuestionId questionId, string subject, string question, string askedBy)
+        => AnswerQuestionsAggregateRoot.Start(questionId, subject, question, askedBy);
 }
