@@ -2,7 +2,7 @@ namespace Domain.Core;
 
 public class AnswerQuestionsAggregateRoot : EventSourcedAggregateRoot<AnswerQuestionId>, IAnswerQuestionsAggregateRoot
 {
-    public static AnswerQuestionsAggregateRoot Start(Guid questionId, string subject, string question, string askedBy)
+    public static AnswerQuestionsAggregateRoot Start(AnswerQuestionId questionId, string subject, string question, string askedBy)
     {
         return new AnswerQuestionsAggregateRoot
         (
@@ -13,7 +13,7 @@ public class AnswerQuestionsAggregateRoot : EventSourcedAggregateRoot<AnswerQues
         );
     }
 
-    private AnswerQuestionsAggregateRoot(Guid id, string subject, string question, string askedBy) : base()
+    private AnswerQuestionsAggregateRoot(AnswerQuestionId id, string subject, string question, string askedBy) : base()
     {
         if (string.IsNullOrWhiteSpace(subject))
         {

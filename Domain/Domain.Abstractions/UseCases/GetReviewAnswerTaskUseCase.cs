@@ -11,9 +11,9 @@ public class GetReviewAnswerTaskUseCase : IQuery<GetReviewAnswerTaskUseCase.Resp
 
     public class Response
     {
-        public Guid QuestionId { get; }
+        public AnswerQuestionId QuestionId { get; }
 
-        public Response(Guid questionId, string userTaskId, DateTime askedOn, string askedBy, string subject, string question, string answer)
+        public Response(AnswerQuestionId questionId, string userTaskId, DateTime askedOn, string askedBy, string subject, string question, string answer)
         {
             if (string.IsNullOrEmpty(askedBy))
             {

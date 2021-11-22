@@ -22,7 +22,7 @@ public class ReviewAnswerTasksApi : ReviewAnswerTasksApiController
         var command = new AcceptAnswerUseCase
         (
             commandId: acceptAnswer.CommandId,
-            questionId: acceptAnswer.QuestionId,
+            questionId: new AnswerQuestionId(acceptAnswer.QuestionId),
             userTaskId: userTaskId
         );
 
@@ -35,7 +35,7 @@ public class ReviewAnswerTasksApi : ReviewAnswerTasksApiController
         var command = new RejectAnswerUseCase
         (
             commandId: rejectAnswer.CommandId,
-            questionId: rejectAnswer.QuestionId,
+            questionId: new AnswerQuestionId(rejectAnswer.QuestionId),
             userTaskId: userTaskId,
             rejection: rejectAnswer.Rejection
         );
@@ -48,7 +48,7 @@ public class ReviewAnswerTasksApi : ReviewAnswerTasksApiController
     {
         return new ReviewAnswerTask()
         {
-            QuestionId = response.QuestionId,
+            QuestionId = response.QuestionId.Id,
             UserTaskId = response.UserTaskId,
             RecievedOn = response.AskedOn,
             Subject = response.Subject,

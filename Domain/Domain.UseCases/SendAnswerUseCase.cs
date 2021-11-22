@@ -12,8 +12,7 @@ public class SendAnswerUseCaseHandler : ICommandHandler<SendAnswerUseCase>
     [MakeIdempotent]
     public async Task Handle(SendAnswerUseCase command, CancellationToken cancellationToken)
     {
-        var questionId = new AnswerQuestionId(command.QuestionId);
-        var aggregateRoot = await mediator.Ask(new GetAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(questionId), cancellationToken);
+        var aggregateRoot = await mediator.Ask(new GetAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(command.QuestionId), cancellationToken);
 
         var message = aggregateRoot.SendAnswer();
 

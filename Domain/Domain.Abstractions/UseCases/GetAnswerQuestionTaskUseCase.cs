@@ -11,7 +11,7 @@ public class GetAnswerQuestionTaskUseCase : IQuery<GetAnswerQuestionTaskUseCase.
 
     public class Response
     {
-        public Response(Guid QuestionId, string userTaskId, DateTime askedOn, string askedBy, string subject, string question)
+        public Response(AnswerQuestionId QuestionId, string userTaskId, DateTime askedOn, string askedBy, string subject, string question)
         {
             if (string.IsNullOrEmpty(askedBy))
             {
@@ -36,7 +36,7 @@ public class GetAnswerQuestionTaskUseCase : IQuery<GetAnswerQuestionTaskUseCase.
             Question = question;
         }
 
-        public Guid QuestionId { get; }
+        public AnswerQuestionId QuestionId { get; }
         public string UserTaskId { get; }
         public DateTime AskedOn { get; }
         public string AskedBy { get; }

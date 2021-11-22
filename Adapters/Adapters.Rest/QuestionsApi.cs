@@ -11,7 +11,7 @@ public class QuestionsApi : QuestionsApiController
         var command = new RegisterQuestionUseCase
         (
             commandId: registerQuestion.CommandId,
-            questionId: registerQuestion.QuestionId,
+            questionId: new AnswerQuestionId(registerQuestion.QuestionId),
             subject: registerQuestion.Subject,
             question: registerQuestion.Question,
             askedBy: registerQuestion.Sender
@@ -35,7 +35,7 @@ public class QuestionsApi : QuestionsApiController
     {
         var query = new GetQuestionUseCase
         (
-            questionId: questionId
+            questionId: new AnswerQuestionId(questionId)
         );
 
         var response = await mediator.Ask(query);
@@ -47,7 +47,7 @@ public class QuestionsApi : QuestionsApiController
         var command = new EndQuestionUseCase
         (
             commandId: endQuestion.CommandId,
-            questionId: questionId
+            questionId: new AnswerQuestionId(questionId)
         );
 
         await this.mediator.Send(command);
@@ -66,7 +66,7 @@ public class QuestionsApi : QuestionsApiController
     {
         return new QuestionsModel()
         {
-            QuestionId = item.QuestionId,
+            QuestionId = item.QuestionId.Id,
             RecievedOn = item.AskedOn,
             LastActivityOn = item.LastActivityOn,
             Subject = item.Subject,

@@ -2,7 +2,7 @@
 
 public class AnswerQuestionUseCase : ICommand, IUserTaskId
 {
-    public AnswerQuestionUseCase(Guid commandId, Guid questionId, string userTaskId, string answer)
+    public AnswerQuestionUseCase(Guid commandId, AnswerQuestionId questionId, string userTaskId, string answer)
     {
         if (string.IsNullOrWhiteSpace(answer))
         {
@@ -16,7 +16,7 @@ public class AnswerQuestionUseCase : ICommand, IUserTaskId
     }
 
     public Guid CommandId { get; }
-    public Guid QuestionId { get; }
+    public AnswerQuestionId QuestionId { get; }
     public string UserTaskId { get; set; }
     public string Answer { get; set; }
 }

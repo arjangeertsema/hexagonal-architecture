@@ -1,18 +1,15 @@
 namespace Adapters.EF;
 
 [ServiceLifetime(ServiceLifetime.Scoped)]
-public class DBService<TEvent, TId> :
+public class EventStore<TId> :
     ICommandHandler<SaveAggregateRootEvent<TId>>,
-    IQueryHandler<GetAggregateRootEvents<TId>, IEnumerable<IVersionedDomainEvent<TId>>>,
-    IQueryHandler<GetUnpublishedDomainEvents, IEnumerable<IDomainEvent<TId>>>,
-    ICommandHandler<SetDomainEventPublished>
-    where TEvent : IVersionedDomainEvent<TId>
+    IQueryHandler<GetAggregateRootEvents<TId>, IEnumerable<IVersionedDomainEvent<TId>>>
     where TId : IEntityId
 {
     private readonly DBContext dbContext;
     private readonly ISerializer serializer;
     private readonly IDeserializer deserializer;
-    public DBService(DBContext dbContext, ISerializer serializer, IDeserializer deserializer)
+    public EventStore(DBContext dbContext, ISerializer serializer, IDeserializer deserializer)
     {
         this.dbContext = dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
         this.serializer = serializer ?? throw new System.ArgumentNullException(nameof(serializer));
@@ -31,7 +28,7 @@ public class DBService<TEvent, TId> :
         {
             EventId = @event.EventId,
             Created = DateTime.UtcNow,
-            AggregateRootId = @event.AggregateRootId,
+            AggregateRootId = @event.AggregateRootId.ToString(),
             Version = @event.Version,
             Type = @event.GetType().FullName,
             Event = serialized
@@ -43,7 +40,7 @@ public class DBService<TEvent, TId> :
     private async Task CheckVersions(IVersionedDomainEvent<TId> @event)
     {
         var version = await dbContext.DomainEvents
-            .Where(e => e.AggregateRootId == @event.AggregateRootId)
+            .Where(e => e.AggregateRootId.Equals(@event.AggregateRootId.ToString()))
             .Select(e => e.Version)
             .DefaultIfEmpty()
             .MaxAsync();
@@ -59,38 +56,11 @@ public class DBService<TEvent, TId> :
     public async Task<IEnumerable<IVersionedDomainEvent<TId>>> Handle(GetAggregateRootEvents<TId> query, CancellationToken cancellationToken)
     {
         var events = await dbContext.DomainEvents
-            .Where(e => e.AggregateRootId == query.AggregateRootId)
+            .Where(e => e.AggregateRootId.Equals(query.AggregateRootId.ToString()))
             .OrderBy(e => e.Version)
             .ToListAsync();
 
         return await Map(events);
-    }
-
-    public async Task<IEnumerable<IDomainEvent<TId>>> Handle(GetUnpublishedDomainEvents query, CancellationToken cancellationToken)
-    {
-        var events = await dbContext.DomainEvents
-            .Where(e => e.Published.HasValue == false)
-            .OrderBy(e => e.Created)
-            .Take(query.BatchSize)
-            .ToListAsync();
-
-        return await Map(events);
-    }
-
-    public async Task Handle(SetDomainEventPublished command, CancellationToken cancellationToken)
-    {
-        var model = await dbContext.DomainEvents.FirstOrDefaultAsync(e =>
-            e.AggregateRootId == command.DomainEvent.AggregateRootId &&
-            e.EventId == command.DomainEvent.EventId);
-
-        if (model == null)
-            throw new KeyNotFoundException($"DomainEvent not found for aggregate root {command.DomainEvent.AggregateRootId} with id {command.DomainEvent.EventId}.");
-
-        if (model.Published.HasValue)
-            return;
-
-        model.Published = DateTime.UtcNow;
-        await dbContext.SaveChangesAsync();
     }
 
     private async Task<IEnumerable<IVersionedDomainEvent<TId>>> Map(List<DomainEventModel> events)
@@ -100,10 +70,10 @@ public class DBService<TEvent, TId> :
         return tasks.Select(t => t.Result);
     }
 
-    private Task<IVersionedDomainEvent> Map(DomainEventModel model)
+    private Task<IVersionedDomainEvent<TId>> Map(DomainEventModel model)
     {
         var type = Type.GetType(model.Type);
         return deserializer.Deserialize(type, model.Event)
-            .ContinueWith(t => (IVersionedDomainEvent)t.Result);
+            .ContinueWith(t => (IVersionedDomainEvent<TId>)t.Result);
     }
 }

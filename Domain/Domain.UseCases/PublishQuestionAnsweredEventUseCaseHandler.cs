@@ -12,8 +12,7 @@ public class PublishQuestionAnsweredEventUseCaseHandler : ICommandHandler<Publis
     [MakeIdempotent]
     public async Task Handle(PublishQuestionAnsweredEventUseCase command, CancellationToken cancellationToken)
     {
-        var questionId = new AnswerQuestionId(command.QuestionId);
-        var aggregateRoot = await mediator.Ask(new GetAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(questionId), cancellationToken);
+        var aggregateRoot = await mediator.Ask(new GetAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(command.QuestionId), cancellationToken);
 
         aggregateRoot.SendQuestionAnsweredEvent();
 

@@ -1,3 +1,4 @@
+global using Domain.Abstractions;
 global using Common.CQRS.Abstractions;
 global using Domain.Abstractions.UseCases;
 

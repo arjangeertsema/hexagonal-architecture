@@ -2,7 +2,7 @@
 
 public class AcceptAnswerUseCase : ICommand, IUserTaskId
 {
-    public AcceptAnswerUseCase(Guid commandId, Guid questionId, string userTaskId)
+    public AcceptAnswerUseCase(Guid commandId, AnswerQuestionId questionId, string userTaskId)
     {
         CommandId = commandId;
         QuestionId = questionId;
@@ -10,6 +10,6 @@ public class AcceptAnswerUseCase : ICommand, IUserTaskId
     }
 
     public Guid CommandId { get; }
-    public Guid QuestionId { get; }
+    public AnswerQuestionId QuestionId { get; }
     public string UserTaskId { get; }
 }

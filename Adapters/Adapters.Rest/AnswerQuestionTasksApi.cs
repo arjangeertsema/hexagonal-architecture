@@ -1,3 +1,5 @@
+
+
 namespace Adapters.Rest;
 
 public class AnswerQuestionTasksApi : AnswerQuestionTasksApiController
@@ -22,7 +24,7 @@ public class AnswerQuestionTasksApi : AnswerQuestionTasksApiController
         var command = new AnswerQuestionUseCase
         (
             commandId: answerQuestion.CommandId,
-            questionId: answerQuestion.QuestionId,
+            questionId: new AnswerQuestionId(answerQuestion.QuestionId),
             userTaskId: userTaskId, answer: answerQuestion.Answer
         );
 
@@ -35,7 +37,7 @@ public class AnswerQuestionTasksApi : AnswerQuestionTasksApiController
         return new AnswerQuestionTask()
         {
             UserTaskId = response.UserTaskId,
-            QuestionId = response.QuestionId,
+            QuestionId = response.QuestionId.Id,
             RecievedOn = response.AskedOn,
             Subject = response.Subject,
             Question = response.Question,

@@ -22,7 +22,7 @@ public class ModifyAnswerTasksApi : ModifyAnswerTasksApiController
         var command = new ModifyAnswerUseCase
         (
             commandId: modifyAnswer.CommandId,
-            questionId: modifyAnswer.QuestionId,
+            questionId: new AnswerQuestionId(modifyAnswer.QuestionId),
             userTaskId: userTaskId,
             answer: modifyAnswer.Answer
         );
@@ -35,7 +35,7 @@ public class ModifyAnswerTasksApi : ModifyAnswerTasksApiController
     {
         return new ModifyAnswerTask()
         {
-            QuestionId = response.QuestionId,
+            QuestionId = response.QuestionId.Id,
             UserTaskId = response.UserTaskId,
             RecievedOn = response.AskedOn,
             Subject = response.Subject,

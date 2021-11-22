@@ -23,7 +23,7 @@ public class GetQuestionsUseCase : IQuery<GetQuestionsUseCase.Response>
         public class Item
         {
 
-            public Item(Guid questionId, string subject, string question, string askedBy, DateTime askedOn, DateTime lastActivityOn, int status)
+            public Item(AnswerQuestionId questionId, string subject, string question, string askedBy, DateTime askedOn, DateTime lastActivityOn, int status)
             {
                 if (string.IsNullOrEmpty(subject))
                 {
@@ -48,7 +48,7 @@ public class GetQuestionsUseCase : IQuery<GetQuestionsUseCase.Response>
                 LastActivityOn = lastActivityOn;
                 Status = status;
             }
-            public Guid QuestionId { get; }
+            public AnswerQuestionId QuestionId { get; }
             public string Subject { get; }
             public string Question { get; }
             public string AskedBy { get; }

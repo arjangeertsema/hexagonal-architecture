@@ -2,12 +2,12 @@ namespace Domain.Abstractions.Events;
 
 public class QuestionAnswerdIntegrationEvent : IEvent
 {
-    public QuestionAnswerdIntegrationEvent(Guid questionId)
+    public QuestionAnswerdIntegrationEvent(AnswerQuestionId questionId)
     {
         this.EventId = Guid.NewGuid();
         this.QuestionId = questionId;
     }
 
     public Guid EventId { get; }
-    public Guid QuestionId { get; }
+    public AnswerQuestionId QuestionId { get; }
 }

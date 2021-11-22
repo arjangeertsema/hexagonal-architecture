@@ -83,7 +83,7 @@ public class SendAnswerJobV1 : AbstractJob<SendAnswerJobV1.JobState>
 
     public class JobState
     {
-        public Guid QuestionId { get; set; }
+        public AnswerQuestionId QuestionId { get; set; }
         public Guid SendAnswerCommandId { get; set; }
     }
 }
@@ -94,7 +94,7 @@ public class SendQuestionAnsweredEventJobV1 : AbstractJob<SendQuestionAnsweredEv
 
     public class JobState
     {
-        public Guid QuestionId { get; set; }
+        public AnswerQuestionId QuestionId { get; set; }
         public Guid SendQuestionAnsweredEventCommandId { get; set; }
     }
 }

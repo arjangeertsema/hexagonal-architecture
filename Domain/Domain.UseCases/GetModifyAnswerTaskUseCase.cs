@@ -12,7 +12,7 @@ public class GetModifyAnswerTaskUseCaseHandler : IQueryHandler<GetModifyAnswerTa
     public async Task<GetModifyAnswerTaskUseCase.Response> Handle(GetModifyAnswerTaskUseCase query, CancellationToken cancellationToken)
     {
         var task = await mediator.Ask(new GetUserTask(query.UserTaskId));
-        var questionId = Guid.Parse(task.ReferenceId);
+        var questionId = new AnswerQuestionId(task.ReferenceId);
         var instance = await mediator.Ask(new GetAnswerQuestion(questionId));
 
         return Map(task, instance);
