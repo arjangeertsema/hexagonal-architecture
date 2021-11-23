@@ -1,12 +1,15 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddCQRSCommonServices()
-    .AddEFCQRSCommonServices(builder.Configuration)
-    .AddDDDCommonServices()
-    .AddEFDDDCommonServices(builder.Configuration)
+    // Add common services
+    .AddCQRSCommonServices()    
+    .AddDDDCommonServices()    
     .AddIAMCommonServices(builder.Configuration)
     .AddUserTasksCommonServices()
+
+    // Add common adapters
+    .AddEFCQRSCommonServices(builder.Configuration)
+    .AddEFDDDCommonServices(builder.Configuration)
     .AddZeebeUserTasksCommonServices(builder.Configuration)
 
     // Add Domain implementations
