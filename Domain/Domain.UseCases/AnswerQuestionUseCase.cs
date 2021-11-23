@@ -24,7 +24,7 @@ public class AnswerQuestionUseCaseHandler : ICommandHandler<AnswerQuestionUseCas
             answeredBy: userId
         );
 
-        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(command.CommandId, aggregateRoot), cancellationToken);
+        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRoot), cancellationToken);
         await mediator.Send(new CompleteUserTask(command.CommandId, command.UserTaskId), cancellationToken);
     }
 }

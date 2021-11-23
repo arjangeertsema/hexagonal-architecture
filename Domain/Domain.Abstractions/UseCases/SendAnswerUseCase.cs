@@ -1,13 +1,11 @@
 namespace Domain.Abstractions.UseCases;
 
-public class SendAnswerUseCase : ICommand
+public class SendAnswerUseCase : Command
 {
-    public SendAnswerUseCase(Guid commandId, AnswerQuestionId questionId)
+    public SendAnswerUseCase(Guid commandId, AnswerQuestionId questionId) : base(commandId)
     {
-        CommandId = commandId;
         QuestionId = questionId;
     }
-
-    public Guid CommandId { get; }
+    
     public AnswerQuestionId QuestionId { get; }
 }

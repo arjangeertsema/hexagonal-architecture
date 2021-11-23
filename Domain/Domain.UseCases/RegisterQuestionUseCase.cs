@@ -25,6 +25,6 @@ public class RegisterQuestionUseCaseHandler : ICommandHandler<RegisterQuestionUs
             askedBy: command.AskedBy
         );
 
-        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(command.CommandId, aggregateRoot), cancellationToken);
+        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRoot), cancellationToken);
     }
 }

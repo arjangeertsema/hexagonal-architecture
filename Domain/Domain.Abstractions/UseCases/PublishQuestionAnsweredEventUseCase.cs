@@ -1,13 +1,11 @@
 namespace Domain.Abstractions.UseCases;
 
-public class PublishQuestionAnsweredEventUseCase : ICommand
+public class PublishQuestionAnsweredEventUseCase : Command
 {
-    public PublishQuestionAnsweredEventUseCase(Guid commandId, AnswerQuestionId questionId)
+    public PublishQuestionAnsweredEventUseCase(Guid commandId, AnswerQuestionId questionId) : base(commandId)
     {
-        CommandId = commandId;
         QuestionId = questionId;
     }
-
-    public Guid CommandId { get; }
+    
     public AnswerQuestionId QuestionId { get; }
 }

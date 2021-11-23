@@ -21,6 +21,6 @@ public class EndQuestionUseCaseHandler : ICommandHandler<EndQuestionUseCase>
             endedBy: userId
         );
 
-        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(command.CommandId, aggregateRoot), cancellationToken);
+        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRoot), cancellationToken);
     }
 }

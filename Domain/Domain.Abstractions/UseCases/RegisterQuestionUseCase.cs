@@ -1,8 +1,8 @@
 namespace Domain.Abstractions.UseCases;
 
-public class RegisterQuestionUseCase : ICommand
+public class RegisterQuestionUseCase : Command
 {
-    public RegisterQuestionUseCase(Guid commandId, AnswerQuestionId questionId, string subject, string question, string askedBy)
+    public RegisterQuestionUseCase(Guid commandId, AnswerQuestionId questionId, string subject, string question, string askedBy) : base(commandId)
     {
         if (string.IsNullOrWhiteSpace(subject))
         {
@@ -19,13 +19,12 @@ public class RegisterQuestionUseCase : ICommand
             throw new ArgumentException($"'{nameof(askedBy)}' cannot be null or empty.", nameof(askedBy));
         }
 
-        CommandId = commandId;
         QuestionId = questionId;
         Subject = subject;
         Question = question;
         AskedBy = askedBy;
     }
-    public Guid CommandId { get; }
+
     public AnswerQuestionId QuestionId { get; set; }
     public string Subject { get; }
     public string Question { get; }

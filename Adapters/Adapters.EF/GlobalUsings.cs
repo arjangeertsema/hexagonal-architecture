@@ -1,5 +1,7 @@
 global using Common.CQRS.Abstractions;
 global using Common.CQRS.Abstractions.Attributes;
+global using Common.CQRS.Abstractions.Commands;
+global using Common.CQRS.Abstractions.Exceptions;
 global using Common.CQRS.Abstractions.Queries;
 global using Common.DDD.Abstractions;
 global using Common.DDD.Abstractions.Commands;

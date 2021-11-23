@@ -16,7 +16,7 @@ public class PublishQuestionAnsweredEventUseCaseHandler : ICommandHandler<Publis
 
         aggregateRoot.SendQuestionAnsweredEvent();
 
-        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(command.CommandId, aggregateRoot), cancellationToken);
+        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRoot), cancellationToken);
         await mediator.Send(new PublishEvent<QuestionAnswerdIntegrationEvent>(command.CommandId, new QuestionAnswerdIntegrationEvent(command.QuestionId)));        
     }
 }
