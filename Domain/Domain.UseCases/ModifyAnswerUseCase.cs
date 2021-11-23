@@ -25,6 +25,6 @@ public class ModifyAnswerUseCaseHandler : ICommandHandler<ModifyAnswerUseCase>
         );
 
         await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRoot), cancellationToken);
-        await mediator.Send(new CompleteUserTask(command.CommandId, command.UserTaskId), cancellationToken);
+        await mediator.Send(new CompleteUserTask(command.UserTaskId), cancellationToken);
     }
 }

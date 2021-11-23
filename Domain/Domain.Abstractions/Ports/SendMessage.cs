@@ -1,14 +1,11 @@
 namespace Domain.Abstractions.Ports;
 
-public class SendMessage : ICommand
+public class SendMessage : Command
 {
-    public SendMessage(Guid commandId, Message message)
+    public SendMessage(Message message) : base(Guid.NewGuid())
     {
-        CommandId = commandId;
         Message = message;
-
     }
 
-    public Guid CommandId { get; }
     public Message Message { get; }
 }

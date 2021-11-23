@@ -1,7 +1,7 @@
 namespace Adapters.Zeebe;
 
 [ServiceLifetime(ServiceLifetime.Scoped)]
-public class AnswerQuestionsService :
+public class ZeebeService :
     IDomainEventHandler<QuestionRecievedEvent, AnswerQuestionId>,
     ICommandHandler<CompleteUserTask>,
     IAsyncJobHandler<SendAnswerJobV1>,
@@ -12,7 +12,7 @@ public class AnswerQuestionsService :
     private readonly IMediator mediator;
     private readonly ZeebeClientBootstrapOptions options;
 
-    public AnswerQuestionsService(IZeebeClient zeebeClient, IMediator mediator, IOptions<ZeebeClientBootstrapOptions> options)
+    public ZeebeService(IZeebeClient zeebeClient, IMediator mediator, IOptions<ZeebeClientBootstrapOptions> options)
     {
         this.zeebeClient = zeebeClient ?? throw new ArgumentNullException(nameof(zeebeClient));
         this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
