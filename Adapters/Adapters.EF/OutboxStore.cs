@@ -2,44 +2,63 @@ namespace Adapters.EF;
 
 [ServiceLifetime(ServiceLifetime.Scoped)]
 public class OutboxStore :
-    IQueryHandler<GetUnpublishedDomainEvents, IEnumerable<GetUnpublishedDomainEvents.Response>>,
-    ICommandHandler<SetDomainEventPublished>
+    IQueryHandler<GetDomainEvents, IEnumerable<GetDomainEvents.Response>>,
+    IQueryHandler<GetLastPublishedEventId, Guid>,
+    ICommandHandler<SetLastPublishedEventId>
 {
     private readonly DBContext dbContext;
-    private readonly ISerializer serializer;
-    private readonly IDeserializer deserializer;
-    public OutboxStore(DBContext dbContext, ISerializer serializer, IDeserializer deserializer)
-    {
-        this.dbContext = dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
-        this.serializer = serializer ?? throw new System.ArgumentNullException(nameof(serializer));
-        this.deserializer = deserializer ?? throw new System.ArgumentNullException(nameof(deserializer));
-    }
+    public OutboxStore(DBContext dbContext) => this.dbContext = dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
 
-    public async Task<IEnumerable<GetUnpublishedDomainEvents.Response>> Handle(GetUnpublishedDomainEvents query, CancellationToken cancellationToken)
+    public async Task<IEnumerable<GetDomainEvents.Response>> Handle(GetDomainEvents query, CancellationToken cancellationToken)
     {
+        var offset = await CalculateOffsetId(query.EventIdOffset);
+
         var events = await dbContext.DomainEvents
-            .Where(e => e.Published.HasValue.Equals(false))
-            .OrderBy(e => e.Created)
+            .OrderBy(e => e.Id)
+            .Where(e => e.Id > offset)
             .Take(query.BatchSize)
             .ToListAsync();
 
         return events
-            .Select(e => new GetUnpublishedDomainEvents.Response(e.AggregateRootId, e.EventId, Type.GetType(e.Type), e.Event));
+            .Select(e => new GetDomainEvents.Response(e.EventId, Type.GetType(e.Type), e.Event));
     }
 
-    public async Task Handle(SetDomainEventPublished command, CancellationToken cancellationToken)
-    {
-        var model = await dbContext.DomainEvents.FirstOrDefaultAsync(e =>
-            e.AggregateRootId == command.AggregateRootId &&
-            e.EventId == command.EventId);
-
+    public async Task Handle(SetLastPublishedEventId command, CancellationToken cancellationToken)
+    {       
+        
+        var model = await dbContext.LastPublishedEvent.FirstOrDefaultAsync();
         if (model == null)
-            throw new KeyNotFoundException($"DomainEvent not found for aggregate root {command.AggregateRootId} with id {command.EventId}.");
+        {
+            model.EventId = command.EventId;
+            model.Published = DateTime.UtcNow;
 
-        if (model.Published.HasValue)
-            return;
+            await dbContext.SaveChangesAsync();
+        }
+        else
+        {
+            await dbContext.LastPublishedEvent.AddAsync(new LastPublishedEventModel()
+            {
+                EventId = command.EventId,
+                Published = DateTime.UtcNow
+            });
+        }        
+    }
 
-        model.Published = DateTime.UtcNow;
-        await dbContext.SaveChangesAsync();
+    public async Task<Guid> Handle(GetLastPublishedEventId query, CancellationToken cancellationToken)
+    {
+        return await dbContext.LastPublishedEvent
+            .Select(e => e.EventId)
+            .FirstOrDefaultAsync();
+    }
+
+    private async Task<long> CalculateOffsetId(Guid eventIdOffset)
+    {
+        if(!eventIdOffset.Equals(default(Guid)))
+            return 0;
+
+        return await dbContext.DomainEvents
+            .Where(e => e.EventId.Equals(eventIdOffset))
+            .Select(e => e.Id)
+            .FirstAsync();
     }
 }
