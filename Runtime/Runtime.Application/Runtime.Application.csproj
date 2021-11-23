@@ -8,9 +8,12 @@
 
   <ItemGroup>    
     <ProjectReference Include="..\..\..\common-library\Common.CQRS\Common.CQRS.csproj" />
+    <ProjectReference Include="..\..\..\common-library\Common.CQRS.EF\Common.CQRS.EF.csproj" />
     <ProjectReference Include="..\..\..\common-library\Common.DDD\Common.DDD.csproj" />
+    <ProjectReference Include="..\..\..\common-library\Common.DDD.EF\Common.DDD.EF.csproj" />
     <ProjectReference Include="..\..\..\common-library\Common.IAM\Common.IAM.csproj" />
-    <ProjectReference Include="..\..\..\common-library\Common.UserTasks\Common.UserTasks.csproj" />    
+    <ProjectReference Include="..\..\..\common-library\Common.UserTasks\Common.UserTasks.csproj" />
+    <ProjectReference Include="..\..\..\common-library\Common.UserTasks.Zeebe\Common.UserTasks.Zeebe.csproj" />   
 
     <ProjectReference Include="..\..\Domain\Domain.Core\Domain.Core.csproj" />
     <ProjectReference Include="..\..\Domain\Domain.UseCases\Domain.UseCases.csproj" />

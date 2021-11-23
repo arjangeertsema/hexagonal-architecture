@@ -6,7 +6,6 @@ global using Common.IAM.Abstractions.Commands;
 
 global using Domain.Abstractions;
 global using Domain.Abstractions.Events;
-global using Domain.Abstractions.Ports;
 global using Domain.Abstractions.UseCases;
 
 global using Adapters.Zeebe.Jobs;

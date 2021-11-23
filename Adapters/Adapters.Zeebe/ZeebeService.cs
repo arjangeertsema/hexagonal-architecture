@@ -3,7 +3,6 @@ namespace Adapters.Zeebe;
 [ServiceLifetime(ServiceLifetime.Scoped)]
 public class ZeebeService :
     IDomainEventHandler<QuestionRecievedEvent, AnswerQuestionId>,
-    ICommandHandler<CompleteUserTask>,
     IAsyncJobHandler<SendAnswerJobV1>,
     IAsyncJobHandler<SendQuestionAnsweredEventJobV1>
 {
@@ -40,16 +39,6 @@ public class ZeebeService :
             .MessageId(@event.EventId.ToString())
             .State(state)
             .Send(options.Worker.RetryTimeout, cancellationToken);
-    }
-
-    public Task Handle(CompleteUserTask command, CancellationToken cancellationToken)
-    {
-        var builder = this.zeebeClient.NewCompleteJobCommand(long.Parse(command.UserTaskId));
-
-        if (command.State != null)
-            builder = builder.State(command.State);
-
-        return builder.SendWithRetry(options.Worker.RetryTimeout, cancellationToken);
     }
 
     public async Task HandleJob(SendAnswerJobV1 job, CancellationToken cancellationToken)

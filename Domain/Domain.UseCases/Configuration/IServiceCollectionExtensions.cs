@@ -6,7 +6,7 @@ namespace Domain.UseCases.Configuration
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddDomainUseCasesServices(this IServiceCollection services) 
+        public static IServiceCollection AddDUseCasesDomainServices(this IServiceCollection services) 
         {
             var assembly = typeof(IServiceCollectionExtensions).Assembly;
 
