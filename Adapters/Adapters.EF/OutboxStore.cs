@@ -4,10 +4,19 @@ namespace Adapters.EF;
 public class OutboxStore :
     IQueryHandler<GetDomainEvents, IEnumerable<GetDomainEvents.Response>>,
     IQueryHandler<GetLastPublishedEventId, Guid>,
-    ICommandHandler<SetLastPublishedEventId>
+    ICommandHandler<SetLastPublishedEventId>,
+    ICommandHandler<PublishDomainEvent>
 {
     private readonly DBContext dbContext;
-    public OutboxStore(DBContext dbContext) => this.dbContext = dbContext ?? throw new System.ArgumentNullException(nameof(dbContext));
+    private readonly IMediator mediator;
+    private readonly IDeserializer deserializer;
+
+    public OutboxStore(DBContext dbContext, IMediator mediator, IDeserializer deserializer)
+    {
+        this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        this.deserializer = deserializer ?? throw new ArgumentNullException(nameof(deserializer));
+    }
 
     public async Task<IEnumerable<GetDomainEvents.Response>> Handle(GetDomainEvents query, CancellationToken cancellationToken)
     {
@@ -49,6 +58,12 @@ public class OutboxStore :
         return await dbContext.LastPublishedEvent
             .Select(e => e.EventId)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task Handle(PublishDomainEvent command, CancellationToken cancellationToken)
+    {
+        var @event = await deserializer.Deserialize(command.EventType, command.Event);
+        await mediator.Notify((IEvent)@event, cancellationToken);
     }
 
     private async Task<long> CalculateOffsetId(Guid eventIdOffset)

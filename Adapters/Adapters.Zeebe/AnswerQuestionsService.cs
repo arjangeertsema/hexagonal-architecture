@@ -10,11 +10,13 @@ public class AnswerQuestionsService :
     private const string QUESTION_RECIEVED_MESSAGE = "Message_QuestionRecieved_V1";
     private readonly IZeebeClient zeebeClient;
     private readonly IMediator mediator;
+    private readonly ZeebeClientBootstrapOptions options;
 
-    public AnswerQuestionsService(IZeebeClient zeebeClient, IMediator mediator)
+    public AnswerQuestionsService(IZeebeClient zeebeClient, IMediator mediator, IOptions<ZeebeClientBootstrapOptions> options)
     {
         this.zeebeClient = zeebeClient ?? throw new ArgumentNullException(nameof(zeebeClient));
         this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        this.options = options?.Value ?? throw new ArgumentNullException(nameof(options));
     }
 
     public async Task Handle(QuestionRecievedEvent @event, CancellationToken cancellationToken)
@@ -37,7 +39,7 @@ public class AnswerQuestionsService :
             .CorrelationKey(@event.AggregateRootId.ToString())
             .MessageId(@event.EventId.ToString())
             .State(state)
-            .Send(cancellationToken);
+            .Send(options.Worker.RetryTimeout, cancellationToken);
     }
 
     public Task Handle(CompleteUserTask command, CancellationToken cancellationToken)
@@ -45,14 +47,14 @@ public class AnswerQuestionsService :
         var builder = this.zeebeClient.NewCompleteJobCommand(long.Parse(command.UserTaskId));
 
         if (command.State != null)
-            builder = builder.State<object>(command.State);
+            builder = builder.State(command.State);
 
-        return builder.SendWithRetry(null, cancellationToken);
+        return builder.SendWithRetry(options.Worker.RetryTimeout, cancellationToken);
     }
 
     public async Task HandleJob(SendAnswerJobV1 job, CancellationToken cancellationToken)
     {
-        await mediator.Send(new AuthenticateSystem(Guid.NewGuid()), cancellationToken);
+        await mediator.Send(new AuthenticateSystem(), cancellationToken);
 
         var command = new SendAnswerUseCase
         (
@@ -65,7 +67,7 @@ public class AnswerQuestionsService :
 
     public async Task HandleJob(SendQuestionAnsweredEventJobV1 job, CancellationToken cancellationToken)
     {
-        await mediator.Send(new AuthenticateSystem(Guid.NewGuid()), cancellationToken);
+        await mediator.Send(new AuthenticateSystem(), cancellationToken);
 
         var command = new PublishQuestionAnsweredEventUseCase
         (
@@ -74,27 +76,5 @@ public class AnswerQuestionsService :
         );
 
         await mediator.Send(command, cancellationToken);
-    }
-}
-
-public class SendAnswerJobV1 : AbstractJob<SendAnswerJobV1.JobState>
-{
-    public SendAnswerJobV1(IJob job, SendAnswerJobV1.JobState state) : base(job, state) { }
-
-    public class JobState
-    {
-        public AnswerQuestionId QuestionId { get; set; }
-        public Guid SendAnswerCommandId { get; set; }
-    }
-}
-
-public class SendQuestionAnsweredEventJobV1 : AbstractJob<SendQuestionAnsweredEventJobV1.JobState>
-{
-    public SendQuestionAnsweredEventJobV1(IJob job, SendQuestionAnsweredEventJobV1.JobState state) : base(job, state) { }
-
-    public class JobState
-    {
-        public AnswerQuestionId QuestionId { get; set; }
-        public Guid SendQuestionAnsweredEventCommandId { get; set; }
     }
 }
