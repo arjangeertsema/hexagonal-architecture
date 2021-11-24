@@ -2,9 +2,8 @@ namespace Adapters.Zeebe;
 
 [ServiceLifetime(ServiceLifetime.Scoped)]
 public class ZeebeService :
-    IDomainEventHandler<QuestionRecievedEvent, AnswerQuestionId>,
-    IAsyncJobHandler<SendAnswerJobV1>,
-    IAsyncJobHandler<SendQuestionAnsweredEventJobV1>
+    AnswerQuestionsHandlers,
+    IDomainEventHandler<QuestionRecievedEvent, AnswerQuestionId>
 {
     private const string QUESTION_RECIEVED_MESSAGE = "Message_QuestionRecieved_V1";
     private readonly IZeebeClient zeebeClient;
@@ -41,7 +40,7 @@ public class ZeebeService :
             .Send(options.Worker.RetryTimeout, cancellationToken);
     }
 
-    public async Task HandleJob(SendAnswerJobV1 job, CancellationToken cancellationToken)
+    public override async Task HandleJob(SendAnswerJobV1 job, CancellationToken cancellationToken)
     {
         await mediator.Send(new AuthenticateSystem(), cancellationToken);
 
@@ -54,7 +53,7 @@ public class ZeebeService :
         await this.mediator.Send(command, cancellationToken);
     }
 
-    public async Task HandleJob(SendQuestionAnsweredEventJobV1 job, CancellationToken cancellationToken)
+    public override async Task HandleJob(SendQuestionAnsweredEventJobV1 job, CancellationToken cancellationToken)
     {
         await mediator.Send(new AuthenticateSystem(), cancellationToken);
 

@@ -8,7 +8,8 @@ global using Domain.Abstractions;
 global using Domain.Abstractions.Events;
 global using Domain.Abstractions.UseCases;
 
-global using Adapters.Zeebe.Jobs;
+global using Adapters.Zeebe.Generated.JobHandlers;
+global using Adapters.Zeebe.Generated.Jobs;
 
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
