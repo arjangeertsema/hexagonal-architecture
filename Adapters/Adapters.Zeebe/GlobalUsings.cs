@@ -2,7 +2,7 @@ global using Common.CQRS.Abstractions;
 global using Common.CQRS.Abstractions.Attributes;
 
 global using Common.DDD.Abstractions;
-global using Common.IAM.Abstractions.Commands;
+global using Common.IAM.Abstractions.UseCases;
 
 global using Domain.Abstractions;
 global using Domain.Abstractions.Events;
