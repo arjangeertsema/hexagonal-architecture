@@ -22,24 +22,24 @@ public class ProcessStepDefintions
         this.step1 = testBuilder.FromUri(Adapters.Zeebe.ZeebeService.BPMN_FILE);
     }
 
-    [When(@"the bot answers the question with a probability greater or equal the (.*)% and smaller then (.*)%")]
-    public void WhenTheBotAnswersTheQuestionWithAProbabilityGreaterOrEqualTheAndSmallerThen(int p0, int p1)
+    [When(@"the bot answers the question with a probability greater or equal to (.*)% and smaller than (.*)%")]
+    public void WhenTheBotAnswersTheQuestionWithAProbabilityGreaterOrEqualToAndSmallerThan(int p0, int p1)
     {
         this.step1.Should().NotBeNull();
         this.step1 = IsNotNull(this.step1)
             .SetState(CreateState(random.Next(p0, p1 - 1)));
     }
 
-    [When(@"the bot answers the question with a probability smaller then (.*)%")]
-    public void WhenTheBotAnswersTheQuestionWithAProbabilitySmallerThen(int p0)
+    [When(@"the bot answers the question with a probability smaller than (.*)%")]
+    public void WhenTheBotAnswersTheQuestionWithAProbabilitySmallerThan(int p0)
     {
         this.step1.Should().NotBeNull();
         this.step1 = IsNotNull(this.step1)
             .SetState(CreateState(random.Next(0, p0 - 1)));
     }
 
-    [When(@"the bot answers the question with a probability greater or equal then (.*)%")]
-    public void WhenTheBotAnswersTheQuestionWithAProbabilityGreaterOrEqualThen(int p0)
+    [When(@"the bot answers the question with a probability greater or equal to (.*)%")]
+    public void WhenTheBotAnswersTheQuestionWithAProbabilityGreaterOrEqualTo(int p0)
     {
         this.step1.Should().NotBeNull();
         this.step1 = IsNotNull(this.step1)
