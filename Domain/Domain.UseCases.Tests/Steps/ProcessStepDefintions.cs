@@ -1,7 +1,3 @@
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Domain.UseCases.Tests.Steps;
 
 [Binding]
@@ -50,7 +46,6 @@ public class ProcessStepDefintions
         this.step2 = IsNotNull(this.step1).SetState(CreateState(random.Next(p0, 100)));
     }
 
-
     [When(@"the gateway ""(.*)"" is executed")]
     public void WhenTheGatewayIsExecuted(string p0)
     {
@@ -64,6 +59,8 @@ public class ProcessStepDefintions
         var test = IsNotNull(this.step3).ExpectFlowActivated(p0).Build();
         test.Execute().Should().BeTrue();
     }
+
+    #region Private
 
     private static object CreateState(int probability)
     {
@@ -88,4 +85,6 @@ public class ProcessStepDefintions
             return reader.ReadToEndAsync();
         }
     }
+
+    #endregion
 }
