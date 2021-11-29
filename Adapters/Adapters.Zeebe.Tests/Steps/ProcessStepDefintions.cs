@@ -8,6 +8,7 @@ public class ProcessStepDefintions
     private readonly IBPMNTestBuilder testBuilder;
     private readonly Random random;
     private IBPMNTestBuilderStep1? step1;    private IBPMNTestBuilderStepGateway? stepGateway;
+    
     public ProcessStepDefintions(IBPMNTestBuilder testBuilder)
     {
         this.testBuilder = testBuilder ?? throw new System.ArgumentNullException(nameof(testBuilder));
