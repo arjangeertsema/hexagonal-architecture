@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk" InitialTargets="DownloadFiles">
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <ProcessFeature>https://raw.githubusercontent.com/synionnl/website/e02568c5d528b593d08949967e6102b9f2f53faa/docs/blog/bizdevops/living-documentation/process.feature</ProcessFeature>
+        <ProcessBPMN>https://raw.githubusercontent.com/synionnl/website/e02568c5d528b593d08949967e6102b9f2f53faa/docs/blog/bizdevops/living-documentation/process.bpmn</ProcessBPMN>
+    </PropertyGroup>
+    
+    <Target Name="DownloadFiles">
+        <DownloadFile SourceUrl="$(ProcessFeature)" DestinationFolder="$(MSBuildProjectDirectory)/Generated/Features">
+            <Output TaskParameter="DownloadedFile" ItemName="Features" />
+        </DownloadFile>
+        <DownloadFile SourceUrl="$(ProcessBPMN)" DestinationFolder="$(MSBuildProjectDirectory)/Generated/Resources">
+            <Output TaskParameter="DownloadedFile" ItemName="Resources" />
+        </DownloadFile>
+    </Target>
+
+    <ItemGroup>
+        <Content Remove="Generated\Resources\*" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="6.2.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+        <PackageReference Include="SpecFlow.xUnit" Version="3.9.40" />
+        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="coverlet.collector" Version="3.1.0">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <EmbeddedResource Include="Generated\Resources\*" />
+    </ItemGroup>
+</Project>
