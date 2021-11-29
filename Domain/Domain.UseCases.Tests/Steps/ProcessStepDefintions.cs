@@ -53,7 +53,7 @@ public class ProcessStepDefintions
         this.step3 = IsNotNull(this.step2).ExecuteGateway(p0);
     }
 
-    [Then(@"the flow with id  ""(.*)"" must be activated")]
+    [Then(@"the flow with id ""(.*)"" must be activated")]
     public void ThenTheFlowWithIdMustBeActivated(string p0)
     {
         var test = IsNotNull(this.step3).ExpectFlowActivated(p0).Build();
