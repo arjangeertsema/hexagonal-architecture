@@ -2,7 +2,7 @@ namespace Adapters.Zeebe;
 
 [ServiceLifetime(ServiceLifetime.Scoped)]
 public class ZeebeService :
-    AnswerQuestionsHandlers,
+    AnswerQuestionsJobHandlers,
     IDomainEventHandler<QuestionRecievedEvent, AnswerQuestionId>
 {
     public static Uri BPMN_FILE = new Uri("https://raw.githubusercontent.com/synionnl/website/e9ad47f6849c6de9ccb61baec6709acada754d52/docs/blog/bizdevops/living-documentation/process.bpmn");
