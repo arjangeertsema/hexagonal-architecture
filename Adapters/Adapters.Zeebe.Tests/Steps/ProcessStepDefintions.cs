@@ -1,5 +1,7 @@
 namespace Adapters.Zeebe.Tests.Steps;
 
+/// TODO: move this implementation to the living documentation build pipeline. Linting and Testing BPMN files is a business responsability.
+
 [Binding]
 public class ProcessStepDefintions
 {
