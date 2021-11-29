@@ -46,15 +46,15 @@ public class ProcessStepDefintions
         this.step2 = IsNotNull(this.step1).SetState(CreateState(random.Next(p0, 100)));
     }
 
-    [When(@"the gateway ""(.*)"" is executed")]
-    public void WhenTheGatewayIsExecuted(string p0)
+    [When(@"the gateway with id ""(.*)"" is executed")]
+    public void WhenTheGatewayWithIdIsExecuted(string p0)
     {
         this.step3.Should().BeNull();
         this.step3 = IsNotNull(this.step2).ExecuteGateway(p0);
     }
 
-    [Then(@"the flow ""(.*)"" must be activated")]
-    public void ThenTheFlowMustBeActivated(string p0)
+    [Then(@"the flow with id  ""(.*)"" must be activated")]
+    public void ThenTheFlowWithIdMustBeActivated(string p0)
     {
         var test = IsNotNull(this.step3).ExpectFlowActivated(p0).Build();
         test.Execute().Should().BeTrue();
