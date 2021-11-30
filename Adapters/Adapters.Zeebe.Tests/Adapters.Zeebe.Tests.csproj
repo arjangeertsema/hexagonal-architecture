@@ -1,9 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk" InitialTargets="DownloadFeatures">
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <ProcessFeature>https://raw.githubusercontent.com/synionnl/website/e9ad47f6849c6de9ccb61baec6709acada754d52/docs/blog/bizdevops/living-documentation/process.feature</ProcessFeature>
+        <ProcessFeature>https://raw.githubusercontent.com/synionnl/website/feature/bot/docs/blog/bizdevops/living-documentation/process.feature</ProcessFeature>
     </PropertyGroup>
     
     <Target Name="DownloadFeatures">

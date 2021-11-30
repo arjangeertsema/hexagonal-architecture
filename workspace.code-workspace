@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../zeebe/zeebe-client-csharp-bootstrap/src/Zeebe.Client.Bootstrap"
+		},
+		{
+			"path": "../common-library"
+		},
+		{
+			"path": "../../zeebe/zeebe-client-csharp/Client"
+		}
+	],
+	"settings": {}
+}
