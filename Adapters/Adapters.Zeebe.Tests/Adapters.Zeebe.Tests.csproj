@@ -2,7 +2,7 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <IsPackable>false</IsPackable>
-        <ProcessFeature>https://raw.githubusercontent.com/synionnl/website/feature/bot/docs/blog/bizdevops/living-documentation/process.feature</ProcessFeature>
+        <ProcessFeature>https://raw.githubusercontent.com/synionnl/website/v0.0.1-alpha/docs/blog/bizdevops/living-documentation/process.feature</ProcessFeature>
     </PropertyGroup>
     
     <Target Name="DownloadFeatures">
