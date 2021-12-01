@@ -200,7 +200,7 @@ public class AnswerQuestionsAggregateRoot : EventSourcedAggregateRoot<AnswerQues
         Sent = @event.Sent;
     }
 
-    public void SendQuestionAnsweredEvent()
+    public QuestionAnswerdIntegrationEvent SendQuestionAnsweredEvent()
     {
         throw new NotImplementedException();
     }

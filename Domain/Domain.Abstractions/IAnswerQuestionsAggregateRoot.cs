@@ -8,5 +8,5 @@ public interface IAnswerQuestionsAggregateRoot : IEventSourcedAggregateRoot<Answ
     void ModifyAnswer(IUserTask userTask, string answer, string modifiedBy);
     void RejectAnswer(IUserTask userTask, string rejection, string rejectedBy);
     Message SendAnswer();
-    void SendQuestionAnsweredEvent();
+    QuestionAnswerdIntegrationEvent SendQuestionAnsweredEvent();
 }
