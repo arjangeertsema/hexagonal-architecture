@@ -2,7 +2,7 @@
 
 namespace Adapters.Rest;
 
-public class AnswerQuestionTasksApi : AnswerQuestionTasksApiController
+public class AnswerQuestionTasksApi : Generated.Controllers.AnswerQuestionTasksApiController
 {
     private readonly IMediator mediator;
 

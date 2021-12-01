@@ -2,10 +2,9 @@ namespace Adapters.Zeebe;
 
 [ServiceLifetime(ServiceLifetime.Scoped)]
 public class ZeebeService :
-    AnswerQuestionsJobHandlers,
+    Generated.JobHandlers.AnswerQuestionsJobHandlers,
     IDomainEventHandler<QuestionRecievedEvent, AnswerQuestionId>
 {
-    public static Uri BPMN_FILE = new Uri("https://raw.githubusercontent.com/synionnl/website/e9ad47f6849c6de9ccb61baec6709acada754d52/docs/blog/bizdevops/living-documentation/process.bpmn");
     private const string QUESTION_RECIEVED_MESSAGE = "Message_QuestionRecieved_V1";
     private readonly IZeebeClient zeebeClient;
     private readonly IMediator mediator;

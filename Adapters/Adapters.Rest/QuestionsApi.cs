@@ -1,6 +1,6 @@
 namespace Adapters.Rest;
 
-public class QuestionsApi : QuestionsApiController
+public class QuestionsApi : Generated.Controllers.QuestionsApiController
 {
     private readonly IMediator mediator;
 

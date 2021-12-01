@@ -1,6 +1,6 @@
 namespace Adapters.Rest;
 
-public class ReviewAnswerTasksApi : ReviewAnswerTasksApiController
+public class ReviewAnswerTasksApi : Generated.Controllers.ReviewAnswerTasksApiController
 {
     private readonly IMediator mediator;
 
