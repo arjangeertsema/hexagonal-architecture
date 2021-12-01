@@ -7,5 +7,5 @@ public class EndQuestionUseCase : Command
         QuestionId = questionId;
     }
 
-    public AnswerQuestionId QuestionId { get; set; }
+    public AnswerQuestionId QuestionId { get; }
 }

@@ -25,7 +25,7 @@ public class RegisterQuestionUseCase : Command
         AskedBy = askedBy;
     }
 
-    public AnswerQuestionId QuestionId { get; set; }
+    public AnswerQuestionId QuestionId { get; }
     public string Subject { get; }
     public string Question { get; }
     public string AskedBy { get; }

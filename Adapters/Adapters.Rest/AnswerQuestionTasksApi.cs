@@ -1,5 +1,3 @@
-
-
 namespace Adapters.Rest;
 
 public class AnswerQuestionTasksApi : Generated.Controllers.AnswerQuestionTasksApiController
@@ -10,33 +8,38 @@ public class AnswerQuestionTasksApi : Generated.Controllers.AnswerQuestionTasksA
 
     public override async Task<IActionResult> GetAnswerQuestionTask([FromRoute(Name = "task_id"), Required] string userTaskId)
     {
+        var userTask = await mediator.Ask(new MapToUserTask(userTaskId));
+
         var query = new GetAnswerQuestionTaskUseCase
         (
-            userTaskId: userTaskId
+            userTask: userTask
         );
 
         var response = await this.mediator.Ask(query);
-        return Ok(Map(response));
+        return Ok(Map(query.UserTask, response));
     }
-
+    
     public override async Task<IActionResult> AnswerQuestion([FromRoute(Name = "task_id"), Required] string userTaskId, [FromBody] AnswerQuestion answerQuestion)
     {
+        var userTask = await mediator.Ask(new MapToUserTask(userTaskId));
+
         var command = new AnswerQuestionUseCase
         (
             commandId: answerQuestion.CommandId,
             questionId: new AnswerQuestionId(answerQuestion.QuestionId),
-            userTaskId: userTaskId, answer: answerQuestion.Answer
+            userTask: userTask, 
+            answer: answerQuestion.Answer
         );
 
         await this.mediator.Send(command);
         return this.Accepted();
     }
 
-    private AnswerQuestionTask Map(GetAnswerQuestionTaskUseCase.Response response)
+    private AnswerQuestionTask Map(IUserTask userTask, GetAnswerQuestionTaskUseCase.Response response)
     {
         return new AnswerQuestionTask()
         {
-            UserTaskId = response.UserTaskId,
+            UserTaskId = userTask.UserTaskId,
             QuestionId = response.QuestionId.Id,
             RecievedOn = response.AskedOn,
             Subject = response.Subject,

@@ -1,17 +1,17 @@
 namespace Domain.Abstractions.UseCases;
 
-public class GetAnswerQuestionTaskUseCase : IQuery<GetAnswerQuestionTaskUseCase.Response>, IUserTaskId
+public class GetAnswerQuestionTaskUseCase : IQuery<GetAnswerQuestionTaskUseCase.Response>, IHasUserTask
 {
-    public GetAnswerQuestionTaskUseCase(string userTaskId)
+    public GetAnswerQuestionTaskUseCase(IUserTask userTask)
     {
-        UserTaskId = userTaskId;
+        UserTask = userTask;
     }
 
-    public string UserTaskId { get; }
+    public IUserTask UserTask { get; }
 
-    public class Response
+    public class Response : IHasUserTaskClaim
     {
-        public Response(AnswerQuestionId QuestionId, string userTaskId, DateTime askedOn, string askedBy, string subject, string question)
+        public Response(AnswerQuestionId QuestionId, IUserTaskClaim userTask, DateTime askedOn, string askedBy, string subject, string question)
         {
             if (string.IsNullOrEmpty(askedBy))
             {
@@ -29,15 +29,15 @@ public class GetAnswerQuestionTaskUseCase : IQuery<GetAnswerQuestionTaskUseCase.
             }
 
             this.QuestionId = QuestionId;
-            UserTaskId = userTaskId;
-            AskedOn = askedOn;
-            AskedBy = askedBy;
-            Subject = subject;
-            Question = question;
+            this.UserTaskClaim = userTask;
+            this.AskedOn = askedOn;
+            this.AskedBy = askedBy;
+            this.Subject = subject;
+            this.Question = question;
         }
 
         public AnswerQuestionId QuestionId { get; }
-        public string UserTaskId { get; }
+        public IUserTaskClaim UserTaskClaim { get; }
         public DateTime AskedOn { get; }
         public string AskedBy { get; }
         public string Subject { get; }

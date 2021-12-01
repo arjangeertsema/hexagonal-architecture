@@ -1,13 +1,13 @@
 ﻿namespace Domain.Abstractions.UseCases;
 
-public class AcceptAnswerUseCase : Command, IUserTaskId
+public class AcceptAnswerUseCase : Command, IHasUserTask
 {
-    public AcceptAnswerUseCase(Guid commandId, AnswerQuestionId questionId, string userTaskId) : base(commandId)
+    public AcceptAnswerUseCase(Guid commandId, AnswerQuestionId questionId, IUserTask userTask) : base(commandId)
     {
         QuestionId = questionId;
-        UserTaskId = userTaskId;
+        UserTask = userTask;
     }
 
     public AnswerQuestionId QuestionId { get; }
-    public string UserTaskId { get; }
+    public IUserTask UserTask { get; }
 }

@@ -1,19 +1,19 @@
 namespace Domain.Abstractions.UseCases;
 
-public class GetModifyAnswerTaskUseCase : IQuery<GetModifyAnswerTaskUseCase.Response>, IUserTaskId
+public class GetModifyAnswerTaskUseCase : IQuery<GetModifyAnswerTaskUseCase.Response>, IHasUserTask
 {
-    public GetModifyAnswerTaskUseCase(string userTaskId)
+    public GetModifyAnswerTaskUseCase(IUserTask userTask)
     {
-        this.UserTaskId = userTaskId;
+        this.UserTask = userTask;
     }
 
-    public string UserTaskId { get; }
+    public IUserTask UserTask { get; }
 
-    public class Response
+    public class Response : IHasUserTaskClaim
     {
         public AnswerQuestionId QuestionId { get; }
 
-        public Response(AnswerQuestionId questionId, string userTaskId, DateTime askedOn, string askedBy, string subject, string question, string answer, string rejection)
+        public Response(AnswerQuestionId questionId, IUserTaskClaim userTask, DateTime askedOn, string askedBy, string subject, string question, string answer, string rejection)
         {
             if (string.IsNullOrEmpty(askedBy))
             {
@@ -41,7 +41,7 @@ public class GetModifyAnswerTaskUseCase : IQuery<GetModifyAnswerTaskUseCase.Resp
             }
 
             QuestionId = questionId;
-            UserTaskId = userTaskId;
+            UserTaskClaim = userTask;
             AskedOn = askedOn;
             AskedBy = askedBy;
             Subject = subject;
@@ -50,7 +50,7 @@ public class GetModifyAnswerTaskUseCase : IQuery<GetModifyAnswerTaskUseCase.Resp
             Rejection = rejection;
         }
 
-        public string UserTaskId { get; }
+        public IUserTaskClaim UserTaskClaim { get; }
         public DateTime AskedOn { get; }
         public string Subject { get; }
         public string Question { get; }

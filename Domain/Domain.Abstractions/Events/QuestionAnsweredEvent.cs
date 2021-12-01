@@ -1,8 +1,8 @@
 namespace Domain.Abstractions.Events
 {
-    public class QuestionAnsweredEvent : VersionedDomainEvent<AnswerQuestionId>, IUserTaskId
+    public class QuestionAnsweredEvent : VersionedDomainEvent<AnswerQuestionId>, IHasUserTask
     {
-        public QuestionAnsweredEvent(AnswerQuestionId aggregateId, string userTaskId, string answer, string answeredBy, DateTime answered)
+        public QuestionAnsweredEvent(AnswerQuestionId aggregateId, IUserTask userTask, string answer, string answeredBy, DateTime answered)
             : base(aggregateId)
 
         {
@@ -16,13 +16,13 @@ namespace Domain.Abstractions.Events
                 throw new ArgumentException($"'{nameof(answeredBy)}' cannot be null or whitespace.", nameof(answeredBy));
             }
 
-            UserTaskId = userTaskId;
+            UserTask = userTask;
             Answer = answer;
             AnsweredBy = answeredBy;
             Answered = answered;
         }
 
-        public string UserTaskId { get; }
+        public IUserTask UserTask { get; }
         public string Answer { get; }
         public string AnsweredBy { get; }
         public DateTime Answered { get; }

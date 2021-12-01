@@ -8,22 +8,26 @@ public class ModifyAnswerTasksApi : Generated.Controllers.ModifyAnswerTasksApiCo
 
     public override async Task<IActionResult> GetModifyAnswerTask([FromRoute(Name = "task_id"), Required] string userTaskId)
     {
+        var userTask = await mediator.Ask(new MapToUserTask(userTaskId));
+
         var query = new GetModifyAnswerTaskUseCase
         (
-            userTaskId: userTaskId
+            userTask: userTask
         );
 
         var response = await this.mediator.Ask(query);
-        return Ok(Map(response));
+        return Ok(Map(query.UserTask, response));
     }
 
     public override async Task<IActionResult> ModifyAnswer([FromRoute(Name = "task_id"), Required] string userTaskId, [FromBody] ModifyAnswer modifyAnswer)
     {
+        var userTask = await mediator.Ask(new MapToUserTask(userTaskId));
+
         var command = new ModifyAnswerUseCase
         (
             commandId: modifyAnswer.CommandId,
             questionId: new AnswerQuestionId(modifyAnswer.QuestionId),
-            userTaskId: userTaskId,
+            userTask: userTask,
             answer: modifyAnswer.Answer
         );
 
@@ -31,12 +35,12 @@ public class ModifyAnswerTasksApi : Generated.Controllers.ModifyAnswerTasksApiCo
         return this.Accepted();
     }
 
-    private ModifyAnswerTask Map(GetModifyAnswerTaskUseCase.Response response)
+    private ModifyAnswerTask Map(IUserTask userTask, GetModifyAnswerTaskUseCase.Response response)
     {
         return new ModifyAnswerTask()
         {
             QuestionId = response.QuestionId.Id,
-            UserTaskId = response.UserTaskId,
+            UserTaskId = userTask.UserTaskId,
             RecievedOn = response.AskedOn,
             Subject = response.Subject,
             Question = response.Question,

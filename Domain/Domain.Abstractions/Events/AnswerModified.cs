@@ -1,8 +1,8 @@
 namespace Domain.Abstractions.Events;
 
-public class AnswerModifiedEvent : VersionedDomainEvent<AnswerQuestionId>, IUserTaskId
+public class AnswerModifiedEvent : VersionedDomainEvent<AnswerQuestionId>, IHasUserTask
 {
-    public AnswerModifiedEvent(AnswerQuestionId aggregateId, string userTaskId, string answer, string modifiedBy, DateTime modified)
+    public AnswerModifiedEvent(AnswerQuestionId aggregateId, IUserTask userTask, string answer, string modifiedBy, DateTime modified)
         : base(aggregateId)
 
     {
@@ -16,13 +16,13 @@ public class AnswerModifiedEvent : VersionedDomainEvent<AnswerQuestionId>, IUser
             throw new ArgumentException($"'{nameof(modifiedBy)}' cannot be null or whitespace.", nameof(modifiedBy));
         }
 
-        UserTaskId = userTaskId;
+        UserTask = userTask;
         Answer = answer;
         ModifiedBy = modifiedBy;
         Modified = modified;
     }
 
-    public string UserTaskId { get; }
+    public IUserTask UserTask { get; }
     public string Answer { get; }
     public string ModifiedBy { get; }
     public DateTime Modified { get; }

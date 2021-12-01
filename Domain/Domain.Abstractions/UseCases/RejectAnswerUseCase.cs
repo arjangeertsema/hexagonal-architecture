@@ -1,8 +1,8 @@
 ﻿namespace Domain.Abstractions.UseCases;
 
-public class RejectAnswerUseCase : Command, IUserTaskId
+public class RejectAnswerUseCase : Command, IHasUserTask
 {
-    public RejectAnswerUseCase(Guid commandId, AnswerQuestionId questionId, string userTaskId, string rejection) : base(commandId)
+    public RejectAnswerUseCase(Guid commandId, AnswerQuestionId questionId, IUserTask userTask, string rejection) : base(commandId)
     {
         if (string.IsNullOrWhiteSpace(rejection))
         {
@@ -10,10 +10,10 @@ public class RejectAnswerUseCase : Command, IUserTaskId
         }
 
         QuestionId = questionId;
-        UserTaskId = userTaskId;
+        UserTask = userTask;
     }
 
     public AnswerQuestionId QuestionId { get; }
-    public string UserTaskId { get; set; }
-    public string Rejection { get; set; }
+    public IUserTask UserTask { get; }
+    public string Rejection { get; }
 }

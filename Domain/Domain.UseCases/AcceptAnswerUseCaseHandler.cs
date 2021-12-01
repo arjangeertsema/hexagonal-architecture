@@ -19,11 +19,11 @@ public class AcceptAnswerUseCaseHandler : ICommandHandler<AcceptAnswerUseCase>
 
         aggregateRoot.AcceptAnswer
         (
-            userTaskId: command.UserTaskId,
+            userTask: command.UserTask,
             acceptedBy: userId
         );
  
         await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRoot), cancellationToken);
-        await mediator.Send(new CompleteUserTask(command.UserTaskId, new { ReviewResult = "Accepted" }), cancellationToken);
+        await mediator.Send(new CompleteUserTask(command.UserTask, new { ReviewResult = "Accepted" }), cancellationToken);
     }
 }

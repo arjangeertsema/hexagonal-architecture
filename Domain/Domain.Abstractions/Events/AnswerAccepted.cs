@@ -1,8 +1,8 @@
 namespace Domain.Abstractions.Events;
 
-public class AnswerAcceptedEvent : VersionedDomainEvent<AnswerQuestionId>, IUserTaskId
+public class AnswerAcceptedEvent : VersionedDomainEvent<AnswerQuestionId>, IHasUserTask
 {
-    public AnswerAcceptedEvent(AnswerQuestionId aggregateId, string userTaskId, string acceptedBy, DateTime accepted)
+    public AnswerAcceptedEvent(AnswerQuestionId aggregateId, IUserTask userTask, string acceptedBy, DateTime accepted)
         : base(aggregateId)
     {
         if (string.IsNullOrWhiteSpace(acceptedBy))
@@ -10,12 +10,12 @@ public class AnswerAcceptedEvent : VersionedDomainEvent<AnswerQuestionId>, IUser
             throw new ArgumentException($"'{nameof(acceptedBy)}' cannot be null or whitespace.", nameof(acceptedBy));
         }
 
-        UserTaskId = userTaskId;
+        UserTask = userTask;
         AcceptedBy = acceptedBy;
         Accepted = accepted;
     }
 
-    public string UserTaskId { get; }
+    public IUserTask UserTask { get; }
     public string AcceptedBy { get; }
     public DateTime Accepted { get; }
 }

@@ -1,19 +1,19 @@
 namespace Domain.Abstractions.UseCases;
 
-public class GetReviewAnswerTaskUseCase : IQuery<GetReviewAnswerTaskUseCase.Response>, IUserTaskId
+public class GetReviewAnswerTaskUseCase : IQuery<GetReviewAnswerTaskUseCase.Response>, IHasUserTask
 {
-    public GetReviewAnswerTaskUseCase(string userTaskId)
+    public GetReviewAnswerTaskUseCase(IUserTask userTask)
     {
-        UserTaskId = userTaskId;
+        UserTask = userTask;
     }
 
-    public string UserTaskId { get; }
+    public IUserTask UserTask { get; }
 
-    public class Response
+    public class Response : IHasUserTaskClaim
     {
         public AnswerQuestionId QuestionId { get; }
 
-        public Response(AnswerQuestionId questionId, string userTaskId, DateTime askedOn, string askedBy, string subject, string question, string answer)
+        public Response(AnswerQuestionId questionId, IUserTaskClaim userTask, DateTime askedOn, string askedBy, string subject, string question, string answer)
         {
             if (string.IsNullOrEmpty(askedBy))
             {
@@ -36,7 +36,7 @@ public class GetReviewAnswerTaskUseCase : IQuery<GetReviewAnswerTaskUseCase.Resp
             }
 
             QuestionId = questionId;
-            UserTaskId = userTaskId;
+            UserTaskClaim = userTask;
             AskedOn = askedOn;
             AskedBy = askedBy;
             Subject = subject;
@@ -44,7 +44,7 @@ public class GetReviewAnswerTaskUseCase : IQuery<GetReviewAnswerTaskUseCase.Resp
             Answer = answer;
         }
 
-        public string UserTaskId { get; }
+        public IUserTaskClaim UserTaskClaim { get; }
         public DateTime AskedOn { get; }
         public string Subject { get; }
         public string Question { get; }
