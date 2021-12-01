@@ -8,7 +8,7 @@ public class QuestionsApi : Generated.Controllers.QuestionsApiController
 
     public override async Task<IActionResult> RegisterQuestion([FromBody] RegisterQuestion registerQuestion)
     {
-        var command = new RegisterQuestionUseCase
+        var command = new AskQuestionUseCase
         (
             commandId: registerQuestion.CommandId,
             questionId: new AnswerQuestionId(registerQuestion.QuestionId),

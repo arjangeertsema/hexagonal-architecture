@@ -13,18 +13,18 @@ public class RejectAnswerUseCaseHandler : ICommandHandler<RejectAnswerUseCase>
     [MakeIdempotent]
     public async Task Handle(RejectAnswerUseCase command, CancellationToken cancellationToken)
     {
-        var aggregateRoot = await mediator.Ask(new GetAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(command.QuestionId), cancellationToken);
+        var aggregateRootTask = mediator.Ask(new GetAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(command.QuestionId), cancellationToken);
+        var userIdTask = mediator.Ask(new GetUserId(), cancellationToken);
+        await Task.WhenAll(aggregateRootTask, userIdTask);
 
-        var userId = await mediator.Ask(new GetUserId(), cancellationToken);
-
-        aggregateRoot.RejectAnswer
+        aggregateRootTask.Result.RejectAnswer
         (
             userTask: command.UserTask,
             rejection: command.Rejection,
-            rejectedBy: userId
+            rejectedBy: userIdTask.Result
         );
 
-        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRoot), cancellationToken);
+        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRootTask.Result), cancellationToken);
         await mediator.Send(new CompleteUserTask(command.UserTask, new { ReviewResult = "Accepted" }), cancellationToken);        
     }
 }

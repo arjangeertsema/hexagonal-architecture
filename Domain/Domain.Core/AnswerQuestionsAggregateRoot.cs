@@ -2,7 +2,7 @@ namespace Domain.Core;
 
 public class AnswerQuestionsAggregateRoot : EventSourcedAggregateRoot<AnswerQuestionId>, IAnswerQuestionsAggregateRoot
 {
-    public static AnswerQuestionsAggregateRoot Start(AnswerQuestionId questionId, string subject, string question, string askedBy)
+    public static AnswerQuestionsAggregateRoot Create(AnswerQuestionId questionId, string subject, string question, string askedBy)
     {
         return new AnswerQuestionsAggregateRoot
         (
@@ -200,7 +200,7 @@ public class AnswerQuestionsAggregateRoot : EventSourcedAggregateRoot<AnswerQues
         Sent = @event.Sent;
     }
 
-    public QuestionAnswerdIntegrationEvent SendQuestionAnsweredEvent()
+    public QuestionAnswerdIntegrationEvent SendEvent()
     {
         throw new NotImplementedException();
     }

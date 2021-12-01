@@ -1,8 +1,8 @@
 namespace Domain.Abstractions.UseCases;
 
-public class RegisterQuestionUseCase : Command
+public class AskQuestionUseCase : Command
 {
-    public RegisterQuestionUseCase(Guid commandId, AnswerQuestionId questionId, string subject, string question, string askedBy) : base(commandId)
+    public AskQuestionUseCase(Guid commandId, AnswerQuestionId questionId, string subject, string question, string askedBy) : base(commandId)
     {
         if (string.IsNullOrWhiteSpace(subject))
         {

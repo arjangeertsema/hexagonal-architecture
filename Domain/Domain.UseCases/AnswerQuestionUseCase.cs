@@ -13,18 +13,19 @@ public class AnswerQuestionUseCaseHandler : ICommandHandler<AnswerQuestionUseCas
     [MakeIdempotent]
     public async Task Handle(AnswerQuestionUseCase command, CancellationToken cancellationToken)
     {
-        var aggregateRoot = await mediator.Ask(new GetAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(command.QuestionId), cancellationToken);
+        var aggregateRootTask = mediator.Ask(new GetAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(command.QuestionId), cancellationToken);
+        var userIdTask = mediator.Ask(new GetUserId(), cancellationToken);
 
-        var userId = await mediator.Ask(new GetUserId(), cancellationToken);
+        await Task.WhenAll(aggregateRootTask, userIdTask);
 
-        aggregateRoot.AnswerQuestion
+        aggregateRootTask.Result.AnswerQuestion
         (
             userTask: command.UserTask,
             answer: command.Answer,
-            answeredBy: userId
+            answeredBy: userIdTask.Result
         );
 
-        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRoot), cancellationToken);
+        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRootTask.Result), cancellationToken);
         await mediator.Send(new CompleteUserTask(command.UserTask), cancellationToken);
     }
 }

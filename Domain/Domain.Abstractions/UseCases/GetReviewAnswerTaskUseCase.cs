@@ -13,7 +13,7 @@ public class GetReviewAnswerTaskUseCase : IQuery<GetReviewAnswerTaskUseCase.Resp
     {
         public AnswerQuestionId QuestionId { get; }
 
-        public Response(AnswerQuestionId questionId, IUserTaskClaim userTask, DateTime askedOn, string askedBy, string subject, string question, string answer)
+        public Response(AnswerQuestionId questionId, IUserTaskClaim userTaskClaim, DateTime askedOn, string askedBy, string subject, string question, string answer)
         {
             if (string.IsNullOrEmpty(askedBy))
             {
@@ -36,7 +36,7 @@ public class GetReviewAnswerTaskUseCase : IQuery<GetReviewAnswerTaskUseCase.Resp
             }
 
             QuestionId = questionId;
-            UserTaskClaim = userTask;
+            UserTaskClaim = userTaskClaim;
             AskedOn = askedOn;
             AskedBy = askedBy;
             Subject = subject;

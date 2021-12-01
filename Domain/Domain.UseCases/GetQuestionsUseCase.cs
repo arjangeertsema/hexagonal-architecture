@@ -1,7 +1,9 @@
 namespace Domain.UseCases;
 
 [ServiceLifetime(ServiceLifetime.Singleton)]
-public class GetQuestionsUseCaseHandler : IQueryHandler<GetQuestionsUseCase, GetQuestionsUseCase.Response>
+public class GetQuestionsUseCaseHandler : 
+    IQueryHandler<GetQuestionsUseCase, GetQuestionsUseCase.Response>,
+    IQueryAuthorization<GetQuestionsUseCase, GetQuestionsUseCase.Response>
 {
     private readonly IMediator mediator;
 
@@ -14,6 +16,11 @@ public class GetQuestionsUseCaseHandler : IQueryHandler<GetQuestionsUseCase, Get
         var instance = await mediator.Ask(new GetAnswerQuestions(query.Limit, query.Offset));
 
         return Map(instance);
+    }
+
+    public Task Authorize(string identity, GetQuestionsUseCase query, GetQuestionsUseCase.Response response)
+    {
+        throw new NotImplementedException();
     }
 
     private GetQuestionsUseCase.Response Map(GetAnswerQuestions.Response instance)

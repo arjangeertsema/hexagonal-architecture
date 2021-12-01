@@ -11,7 +11,7 @@ public class GetAnswerQuestionTaskUseCase : IQuery<GetAnswerQuestionTaskUseCase.
 
     public class Response : IHasUserTaskClaim
     {
-        public Response(AnswerQuestionId QuestionId, IUserTaskClaim userTask, DateTime askedOn, string askedBy, string subject, string question)
+        public Response(AnswerQuestionId QuestionId, IUserTaskClaim userTaskClaim, DateTime askedOn, string askedBy, string subject, string question)
         {
             if (string.IsNullOrEmpty(askedBy))
             {
@@ -29,7 +29,7 @@ public class GetAnswerQuestionTaskUseCase : IQuery<GetAnswerQuestionTaskUseCase.
             }
 
             this.QuestionId = QuestionId;
-            this.UserTaskClaim = userTask;
+            this.UserTaskClaim = userTaskClaim;
             this.AskedOn = askedOn;
             this.AskedBy = askedBy;
             this.Subject = subject;

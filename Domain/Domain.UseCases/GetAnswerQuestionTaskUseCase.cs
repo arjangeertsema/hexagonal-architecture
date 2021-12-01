@@ -18,7 +18,7 @@ public class GetAnswerQuestionTaskUseCaseHandler : IQueryHandler<GetAnswerQuesti
         return Map(task, instance);
     }
 
-    private GetAnswerQuestionTaskUseCase.Response Map(GetUserTask.Response task, object instance)
+    private GetAnswerQuestionTaskUseCase.Response Map(GetUserTask.Response task, GetAnswerQuestion.Response instance)
     {
         throw new NotImplementedException();
     }

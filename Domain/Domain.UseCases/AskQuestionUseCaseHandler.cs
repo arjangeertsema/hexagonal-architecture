@@ -1,12 +1,12 @@
 ﻿namespace UseCases;
 
 [ServiceLifetime(ServiceLifetime.Singleton)]
-public class RegisterQuestionUseCaseHandler : ICommandHandler<RegisterQuestionUseCase>
+public class AskQuestionUseCaseHandler : ICommandHandler<AskQuestionUseCase>
 {
     private readonly IMediator mediator;
     private readonly IAnswerQuestionsAggregateRootFactory aggregateRootFactory;
 
-    public RegisterQuestionUseCaseHandler(IMediator mediator, IAnswerQuestionsAggregateRootFactory aggregateRootFactory)
+    public AskQuestionUseCaseHandler(IMediator mediator, IAnswerQuestionsAggregateRootFactory aggregateRootFactory)
     {
         this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         this.aggregateRootFactory = aggregateRootFactory ?? throw new ArgumentNullException(nameof(aggregateRootFactory));
@@ -15,7 +15,7 @@ public class RegisterQuestionUseCaseHandler : ICommandHandler<RegisterQuestionUs
     [HasPermission("ASK_QUESTION")]
     [Transactional]
     [MakeIdempotent]
-    public async Task Handle(RegisterQuestionUseCase command, CancellationToken cancellationToken)
+    public async Task Handle(AskQuestionUseCase command, CancellationToken cancellationToken)
     {
         var aggregateRoot = aggregateRootFactory.Create
         (

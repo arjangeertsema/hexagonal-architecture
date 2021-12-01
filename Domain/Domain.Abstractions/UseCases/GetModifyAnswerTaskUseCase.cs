@@ -13,7 +13,7 @@ public class GetModifyAnswerTaskUseCase : IQuery<GetModifyAnswerTaskUseCase.Resp
     {
         public AnswerQuestionId QuestionId { get; }
 
-        public Response(AnswerQuestionId questionId, IUserTaskClaim userTask, DateTime askedOn, string askedBy, string subject, string question, string answer, string rejection)
+        public Response(AnswerQuestionId questionId, IUserTaskClaim userTaskClaim, DateTime askedOn, string askedBy, string subject, string question, string answer, string rejection)
         {
             if (string.IsNullOrEmpty(askedBy))
             {
@@ -41,7 +41,7 @@ public class GetModifyAnswerTaskUseCase : IQuery<GetModifyAnswerTaskUseCase.Resp
             }
 
             QuestionId = questionId;
-            UserTaskClaim = userTask;
+            UserTaskClaim = userTaskClaim;
             AskedOn = askedOn;
             AskedBy = askedBy;
             Subject = subject;

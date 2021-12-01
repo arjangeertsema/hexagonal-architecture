@@ -13,17 +13,18 @@ public class AcceptAnswerUseCaseHandler : ICommandHandler<AcceptAnswerUseCase>
     [MakeIdempotent]
     public async Task Handle(AcceptAnswerUseCase command, CancellationToken cancellationToken)
     {
-        var aggregateRoot = await mediator.Ask(new GetAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(command.QuestionId), cancellationToken);
+        var aggregateRootTask = mediator.Ask(new GetAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(command.QuestionId), cancellationToken);
+        var userIdTask = mediator.Ask(new GetUserId(), cancellationToken);
 
-        var userId = await mediator.Ask(new GetUserId(), cancellationToken);
+        await Task.WhenAll(aggregateRootTask, userIdTask);
 
-        aggregateRoot.AcceptAnswer
+        aggregateRootTask.Result.AcceptAnswer
         (
             userTask: command.UserTask,
-            acceptedBy: userId
+            acceptedBy: userIdTask.Result
         );
  
-        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRoot), cancellationToken);
+        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRootTask.Result), cancellationToken);
         await mediator.Send(new CompleteUserTask(command.UserTask, new { ReviewResult = "Accepted" }), cancellationToken);
     }
 }

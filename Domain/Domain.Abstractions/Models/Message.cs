@@ -1,4 +1,4 @@
-namespace Domain.Abstractions.ValueTypes;
+namespace Domain.Abstractions.Models;
 
 public struct Message
 {
