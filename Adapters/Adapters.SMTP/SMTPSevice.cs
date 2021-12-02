@@ -1,4 +1,6 @@
-﻿namespace Adapters.SMTP;
+﻿using Domain.Abstractions.Models;
+
+namespace Adapters.SMTP;
 
 public class SMTPService : ICommandHandler<SendMessage>
 {
@@ -15,7 +17,7 @@ public class SMTPService : ICommandHandler<SendMessage>
 
     public async Task Handle(SendMessage command, CancellationToken cancellationToken)
     {
-        var message = Map(command);
+        var message = Map(command.Message);
 
         using (var client = new SmtpClient())
         {
@@ -27,12 +29,27 @@ public class SMTPService : ICommandHandler<SendMessage>
         }
     }
 
-    private MimeKit.MimeMessage Map(SendMessage command)
+    private MimeKit.MimeMessage Map(Message message)
     {
-        var message = new MimeKit.MimeMessage();
+        var mimeKitMessage = new MimeKit.MimeMessage();
 
-        throw new NotImplementedException();
+        mimeKitMessage.From.Add(Map(message.From));
+        mimeKitMessage.To.Add(Map(message.To));
+        mimeKitMessage.Subject = message.Subject;
+        mimeKitMessage.Body = Map(message.Body);
 
-        return message;
+        return mimeKitMessage;
+    }
+
+    private MimeKit.InternetAddress Map(Recipient recipient)
+    {
+        return new MimeKit.MailboxAddress(System.Text.Encoding.UTF8, recipient.Name, recipient.EmailAddress);
+    }
+
+    private MimeKit.MimeEntity Map(string body)
+    {
+        var builder = new MimeKit.BodyBuilder();
+        builder.HtmlBody = body;
+        return builder.ToMessageBody();
     }
 }
