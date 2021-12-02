@@ -1,3 +1,5 @@
+export VERSION="v0.0.1-alpha"
+
 cd Adapters/Adapters.Rest
 bash generate.sh
 cd ../..
