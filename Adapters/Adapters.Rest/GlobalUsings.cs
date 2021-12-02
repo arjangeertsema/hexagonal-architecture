@@ -3,7 +3,8 @@ global using Domain.Abstractions.UseCases;
 global using Common.CQRS.Abstractions;
 global using Common.CQRS.Abstractions.Exceptions;
 global using Common.UserTasks.Abstractions.UseCases;
-global using Common.UserTasks.Abstractions;
+
+global using Common.IAM.Abstractions.Exceptions;
 
 global using Common.DDD.Abstractions.Exceptions;
 
