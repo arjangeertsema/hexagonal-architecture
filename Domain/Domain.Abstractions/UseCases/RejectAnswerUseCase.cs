@@ -9,8 +9,8 @@ public class RejectAnswerUseCase : Command, IHasUserTaskId
             throw new ArgumentException($"'{nameof(rejection)}' cannot be null or whitespace.", nameof(rejection));
         }
 
-        QuestionId = questionId;
-        UserTaskId = userTaskId;
+        QuestionId = questionId ?? throw new ArgumentNullException(nameof(questionId));
+        UserTaskId = userTaskId ?? throw new ArgumentNullException(nameof(userTaskId));
     }
 
     public AnswerQuestionId QuestionId { get; }

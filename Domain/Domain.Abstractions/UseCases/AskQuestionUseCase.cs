@@ -19,7 +19,7 @@ public class AskQuestionUseCase : Command
             throw new ArgumentException($"'{nameof(askedBy)}' cannot be null or empty.", nameof(askedBy));
         }
 
-        QuestionId = questionId;
+        QuestionId = questionId ?? throw new ArgumentNullException(nameof(questionId));
         Subject = subject;
         Question = question;
         AskedBy = askedBy;

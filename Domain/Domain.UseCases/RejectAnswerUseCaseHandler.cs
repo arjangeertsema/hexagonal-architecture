@@ -25,6 +25,6 @@ public class RejectAnswerUseCaseHandler : ICommandHandler<RejectAnswerUseCase>
         );
 
         await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRootTask.Result), cancellationToken);
-        await mediator.Send(new CompleteUserTask(command.UserTaskId, new { ReviewResult = "Accepted" }), cancellationToken);        
+        await mediator.Send(new CompleteUserTask(command.UserTaskId, new KeyValuePair<string, object>("ReviewResult", "Rejected")), cancellationToken);        
     }
 }

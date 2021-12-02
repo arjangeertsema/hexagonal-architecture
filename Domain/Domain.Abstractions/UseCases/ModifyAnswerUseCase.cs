@@ -9,8 +9,8 @@ public class ModifyAnswerUseCase : Command, IHasUserTaskId
             throw new ArgumentException($"'{nameof(answer)}' cannot be null or whitespace.", nameof(answer));
         }
 
-        QuestionId = questionId;
-        UserTaskId = userTaskId;
+        QuestionId = questionId ?? throw new ArgumentNullException(nameof(questionId));
+        UserTaskId = userTaskId ?? throw new ArgumentNullException(nameof(userTaskId));
         Answer = answer;
     }
 

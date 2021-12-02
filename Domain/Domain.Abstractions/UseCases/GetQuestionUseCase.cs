@@ -4,7 +4,7 @@ public class GetQuestionUseCase : IQuery<GetQuestionUseCase.Response>
 {
     public GetQuestionUseCase(AnswerQuestionId questionId)
     {
-        this.QuestionId = questionId;
+        this.QuestionId = questionId ?? throw new ArgumentNullException(nameof(questionId));
     }
     public AnswerQuestionId QuestionId { get; }
 
