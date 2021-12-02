@@ -7,7 +7,7 @@ public static class IServiceCollectionExtensions
         services
             .AddControllers(config =>
             {
-
+                config.Filters.Add(new NotImplExceptionFilterAttribute());
             });
 
         return services

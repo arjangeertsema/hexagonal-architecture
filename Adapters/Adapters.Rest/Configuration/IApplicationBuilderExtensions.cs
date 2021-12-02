@@ -14,7 +14,7 @@ public static class IApplicationBuilderExtensions
 
         return app
             .UseHttpsRedirection()
-            .UseRouting()
+            .UseRouting()            
 
             .UseEndpoints(endpoints =>
             {

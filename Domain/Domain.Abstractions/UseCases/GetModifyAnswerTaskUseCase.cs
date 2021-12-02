@@ -2,18 +2,26 @@ namespace Domain.Abstractions.UseCases;
 
 public class GetModifyAnswerTaskUseCase : IQuery<GetModifyAnswerTaskUseCase.Response>, IHasUserTaskId
 {
-    public GetModifyAnswerTaskUseCase(IUserTaskId userTaskId)
-    {
-        this.UserTaskId = userTaskId;
-    }
-
     public IUserTaskId UserTaskId { get; }
 
-    public class Response : IHasUserTaskClaim
+    public GetModifyAnswerTaskUseCase(IUserTaskId userTaskId)
+    {
+        UserTaskId = userTaskId ?? throw new ArgumentNullException(nameof(userTaskId));
+    }
+
+    public class Response : IHasUserTaskId, IHasUserTaskClaim
     {
         public AnswerQuestionId QuestionId { get; }
+        public IUserTaskId UserTaskId { get; }
+        public IUserTaskClaim UserTaskClaim { get; }
+        public DateTime AskedOn { get; }
+        public string Subject { get; }
+        public string Question { get; }
+        public string AskedBy { get; }
+        public string Answer { get; }
+        public string Rejection { get; }
 
-        public Response(AnswerQuestionId questionId, IUserTaskClaim userTaskClaim, DateTime askedOn, string askedBy, string subject, string question, string answer, string rejection)
+        public Response(AnswerQuestionId questionId, IUserTaskId userTaskId, IUserTaskClaim userTaskClaim, DateTime askedOn, string askedBy, string subject, string question, string answer, string rejection)
         {
             if (string.IsNullOrEmpty(askedBy))
             {
@@ -35,13 +43,14 @@ public class GetModifyAnswerTaskUseCase : IQuery<GetModifyAnswerTaskUseCase.Resp
                 throw new ArgumentException($"'{nameof(answer)}' cannot be null or empty.", nameof(answer));
             }
 
-            if (string.IsNullOrEmpty(rejection))
+            if (string.IsNullOrWhiteSpace(rejection))
             {
-                throw new ArgumentException($"'{nameof(rejection)}' cannot be null or empty.", nameof(rejection));
+                throw new ArgumentException($"'{nameof(rejection)}' cannot be null or whitespace.", nameof(rejection));
             }
 
-            QuestionId = questionId;
-            UserTaskClaim = userTaskClaim;
+            QuestionId = questionId ?? throw new ArgumentNullException(nameof(questionId));
+            UserTaskId = userTaskId ?? throw new ArgumentNullException(nameof(userTaskId));
+            UserTaskClaim = userTaskClaim ?? throw new ArgumentNullException(nameof(userTaskClaim));
             AskedOn = askedOn;
             AskedBy = askedBy;
             Subject = subject;
@@ -49,13 +58,5 @@ public class GetModifyAnswerTaskUseCase : IQuery<GetModifyAnswerTaskUseCase.Resp
             Answer = answer;
             Rejection = rejection;
         }
-
-        public IUserTaskClaim UserTaskClaim { get; }
-        public DateTime AskedOn { get; }
-        public string Subject { get; }
-        public string Question { get; }
-        public string AskedBy { get; }
-        public string Answer { get; }
-        public string Rejection { get; }
     }
 }

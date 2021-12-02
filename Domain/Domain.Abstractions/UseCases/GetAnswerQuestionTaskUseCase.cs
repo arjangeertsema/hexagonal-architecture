@@ -2,16 +2,15 @@ namespace Domain.Abstractions.UseCases;
 
 public class GetAnswerQuestionTaskUseCase : IQuery<GetAnswerQuestionTaskUseCase.Response>, IHasUserTaskId
 {
+    public IUserTaskId UserTaskId { get; }
     public GetAnswerQuestionTaskUseCase(IUserTaskId userTaskId)
     {
-        UserTaskId = userTaskId;
+        UserTaskId = userTaskId ?? throw new ArgumentNullException(nameof(userTaskId));
     }
-
-    public IUserTaskId UserTaskId { get; }
 
     public class Response : IHasUserTaskClaim
     {
-        public Response(AnswerQuestionId QuestionId, IUserTaskClaim userTaskClaim, DateTime askedOn, string askedBy, string subject, string question)
+        public Response(AnswerQuestionId questionId, IUserTaskId userTaskId, IUserTaskClaim userTaskClaim, DateTime asked, string askedBy, string subject, string question)
         {
             if (string.IsNullOrEmpty(askedBy))
             {
@@ -28,17 +27,19 @@ public class GetAnswerQuestionTaskUseCase : IQuery<GetAnswerQuestionTaskUseCase.
                 throw new ArgumentException($"'{nameof(question)}' cannot be null or empty.", nameof(question));
             }
 
-            this.QuestionId = QuestionId;
-            this.UserTaskClaim = userTaskClaim;
-            this.AskedOn = askedOn;
+            this.QuestionId = questionId ?? throw new ArgumentNullException(nameof(questionId));
+            this.UserTaskId = userTaskId ?? throw new ArgumentNullException(nameof(userTaskId));
+            this.UserTaskClaim = userTaskClaim ?? throw new ArgumentNullException(nameof(userTaskClaim));
+            this.Asked = asked;
             this.AskedBy = askedBy;
             this.Subject = subject;
             this.Question = question;
         }
 
         public AnswerQuestionId QuestionId { get; }
+        public IUserTaskId UserTaskId { get; }
         public IUserTaskClaim UserTaskClaim { get; }
-        public DateTime AskedOn { get; }
+        public DateTime Asked { get; }
         public string AskedBy { get; }
         public string Subject { get; }
         public string Question { get; }

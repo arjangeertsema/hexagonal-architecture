@@ -1,3 +1,5 @@
+using Domain.Abstractions.Enums;
+
 namespace Adapters.Rest;
 
 public class QuestionsApi : Generated.Controllers.QuestionsApiController
@@ -24,8 +26,8 @@ public class QuestionsApi : Generated.Controllers.QuestionsApiController
     {
         var query = new GetQuestionsUseCase
         (
-            offset: offset,
-            limit: limit
+            offset: offset ?? 0,
+            limit: limit ?? 10
         );
 
         var response = await mediator.Ask(query);
@@ -54,24 +56,24 @@ public class QuestionsApi : Generated.Controllers.QuestionsApiController
         return Accepted();
     }
 
-    private static QuestionsResponse Map(GetQuestionsUseCase.Response response)
+    private static QuestionsResponse Map(IEnumerable<GetQuestionsUseCase.Response> response)
     {
         return new QuestionsResponse()
         {
-            Items = response.Items.Select(Map).ToList()
+            Items = response.Select(Map).ToList()
         };
     }
 
-    private static QuestionsModel Map(GetQuestionsUseCase.Response.Item item)
+    private static QuestionsModel Map(GetQuestionsUseCase.Response item)
     {
         return new QuestionsModel()
         {
             QuestionId = item.QuestionId.Id,
-            RecievedOn = item.AskedOn,
-            LastActivityOn = item.LastActivityOn,
+            RecievedOn = item.Asked,
+            LastActivityOn = item.LastActivity,
             Subject = item.Subject,
             Sender = item.AskedBy,
-            Status = (QuestionsModel.StatusEnum)Enum.Parse(typeof(QuestionsModel.StatusEnum), item.Status.ToString())
+            Status = Map(item.Status)
         };
     }
 
@@ -79,7 +81,28 @@ public class QuestionsApi : Generated.Controllers.QuestionsApiController
     {
         return new QuestionResponse()
         {
-            Question = Map((GetQuestionsUseCase.Response.Item)response)
+            Question = Map((GetQuestionsUseCase.Response)response)
         };
+    }
+
+    private static QuestionsModel.StatusEnum Map(AnswerQuestionStatus status)
+    {
+        switch(status)
+        {
+            case AnswerQuestionStatus.ASKED:
+                return QuestionsModel.StatusEnum.ProcessStartedEnum;
+            case AnswerQuestionStatus.ANSWERED:
+                return QuestionsModel.StatusEnum.QuestionAnsweredEnum;
+            case AnswerQuestionStatus.REJECTED:
+                return QuestionsModel.StatusEnum.AnswerRejectedEnum;
+            case AnswerQuestionStatus.MODIFIED:
+                return QuestionsModel.StatusEnum.AnswerModifiedEnum;
+            case AnswerQuestionStatus.ACCEPTED:
+                return QuestionsModel.StatusEnum.AnswerAcceptedEnum;
+            case AnswerQuestionStatus.SENT:
+                return QuestionsModel.StatusEnum.AnswerSendEnum;
+            default:
+                throw new NotImplementedException();
+        }
     }
 }

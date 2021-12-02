@@ -6,6 +6,6 @@ public static class IServiceCollectionExtensions
     {
         return services
             .AutowireCQRS(typeof(IServiceCollectionExtensions).Assembly)
-            .AddDbContext<DBContext>(options => options.UseSqlServer(configuration.GetConnectionString("Default")));
+            .AddDbContext<DbContextAdapter>(options => options.UseSqlServer(configuration.GetConnectionString("Default")));
     }
 }

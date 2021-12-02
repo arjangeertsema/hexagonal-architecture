@@ -8,10 +8,10 @@ public class GetQuestionUseCase : IQuery<GetQuestionUseCase.Response>
     }
     public AnswerQuestionId QuestionId { get; }
 
-    public class Response : GetQuestionsUseCase.Response.Item
+    public class Response : GetQuestionsUseCase.Response
     {
-        public Response(AnswerQuestionId questionId, string subject, string question, string askedBy, DateTime askedOn, DateTime lastActivityOn, int status)
-            : base(questionId, subject, question, askedBy, askedOn, lastActivityOn, status)
+        public Response(AnswerQuestionId questionId, string subject, string question, DateTime asked, string askedBy, DateTime lastActivity, AnswerQuestionStatus status)
+            : base(questionId, subject, question, asked, askedBy, lastActivity, status)
         { }
     }
 }

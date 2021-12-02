@@ -2,18 +2,25 @@ namespace Domain.Abstractions.UseCases;
 
 public class GetReviewAnswerTaskUseCase : IQuery<GetReviewAnswerTaskUseCase.Response>, IHasUserTaskId
 {
-    public GetReviewAnswerTaskUseCase(IUserTaskId userTaskId)
-    {
-        UserTaskId = userTaskId;
-    }
-
     public IUserTaskId UserTaskId { get; }
 
-    public class Response : IHasUserTaskClaim
+    public GetReviewAnswerTaskUseCase(IUserTaskId userTaskId)
+    {
+        UserTaskId = userTaskId ?? throw new ArgumentNullException(nameof(userTaskId));
+    }
+
+    public class Response : IHasUserTaskId, IHasUserTaskClaim
     {
         public AnswerQuestionId QuestionId { get; }
+        public IUserTaskId UserTaskId { get; }
+        public IUserTaskClaim UserTaskClaim { get; }
+        public DateTime AskedOn { get; }
+        public string Subject { get; }
+        public string Question { get; }
+        public string AskedBy { get; }
+        public string Answer { get; }
 
-        public Response(AnswerQuestionId questionId, IUserTaskClaim userTaskClaim, DateTime askedOn, string askedBy, string subject, string question, string answer)
+        public Response(AnswerQuestionId questionId, IUserTaskId userTaskId, IUserTaskClaim userTaskClaim, DateTime askedOn, string askedBy, string subject, string question, string answer)
         {
             if (string.IsNullOrEmpty(askedBy))
             {
@@ -35,20 +42,14 @@ public class GetReviewAnswerTaskUseCase : IQuery<GetReviewAnswerTaskUseCase.Resp
                 throw new ArgumentException($"'{nameof(answer)}' cannot be null or empty.", nameof(answer));
             }
 
-            QuestionId = questionId;
-            UserTaskClaim = userTaskClaim;
+            QuestionId = questionId ?? throw new ArgumentNullException(nameof(questionId));
+            UserTaskId = userTaskId ?? throw new ArgumentNullException(nameof(userTaskId));
+            UserTaskClaim = userTaskClaim ?? throw new ArgumentNullException(nameof(userTaskClaim));
             AskedOn = askedOn;
             AskedBy = askedBy;
             Subject = subject;
             Question = question;
             Answer = answer;
         }
-
-        public IUserTaskClaim UserTaskClaim { get; }
-        public DateTime AskedOn { get; }
-        public string Subject { get; }
-        public string Question { get; }
-        public string AskedBy { get; }
-        public string Answer { get; }
     }
 }

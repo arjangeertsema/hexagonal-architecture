@@ -16,7 +16,7 @@ public class ReviewAnswerTasksApi : Generated.Controllers.ReviewAnswerTasksApiCo
         );
 
         var response = await mediator.Ask(query);
-        return Ok(Map(query.UserTaskId, response));
+        return Ok(Map(response));
     }
 
     public override async Task<IActionResult> AcceptAnswer([FromRoute(Name = "task_id"), Required] string userTaskId, [FromBody] AcceptAnswer acceptAnswer)
@@ -50,12 +50,12 @@ public class ReviewAnswerTasksApi : Generated.Controllers.ReviewAnswerTasksApiCo
         return this.Accepted();
     }
 
-    private ReviewAnswerTask Map(IUserTaskId userTaskId, GetReviewAnswerTaskUseCase.Response response)
+    private ReviewAnswerTask Map(GetReviewAnswerTaskUseCase.Response response)
     {
         return new ReviewAnswerTask()
         {
             QuestionId = response.QuestionId.Id,
-            UserTaskId = userTaskId.Id,
+            UserTaskId = response.UserTaskId.Id,
             RecievedOn = response.AskedOn,
             Subject = response.Subject,
             Question = response.Question,
