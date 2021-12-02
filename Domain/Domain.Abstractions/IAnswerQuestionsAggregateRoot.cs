@@ -2,10 +2,10 @@ namespace Domain.Abstractions;
 
 public interface IAnswerQuestionsAggregateRoot : IEventSourcedAggregateRoot<AnswerQuestionId>
 {
-    void AnswerQuestion(IUserTask userTask, string answer, string answeredBy);
-    void AcceptAnswer(IUserTask userTask, string acceptedBy);
-    void RejectAnswer(IUserTask userTask, string rejection, string rejectedBy);    
-    void ModifyAnswer(IUserTask userTask, string answer, string modifiedBy);    
+    void AnswerQuestion(IUserTaskId userTaskId, string answer, string answeredBy);
+    void AcceptAnswer(IUserTaskId userTaskId, string acceptedBy);
+    void RejectAnswer(IUserTaskId userTaskId, string rejection, string rejectedBy);    
+    void ModifyAnswer(IUserTaskId userTaskId, string answer, string modifiedBy);    
     Message SendAnswer();
     QuestionAnswerdIntegrationEvent SendEvent();
     void EndQuestion(string endedBy);

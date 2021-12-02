@@ -5,7 +5,7 @@ builder.Services
     .AddCQRSCommonServices()    
     .AddDDDCommonServices()    
     .AddIAMCommonServices(builder.Configuration)
-    .AddUserTasksCommonServices()
+    .AddUserTasksCommonServices(builder.Configuration)
 
     // Add common adapters
     .AddEFCQRSCommonServices(builder.Configuration)

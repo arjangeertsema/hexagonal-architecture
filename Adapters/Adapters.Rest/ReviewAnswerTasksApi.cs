@@ -8,26 +8,26 @@ public class ReviewAnswerTasksApi : Generated.Controllers.ReviewAnswerTasksApiCo
 
     public override async Task<IActionResult> GetReviewAnswerTask([FromRoute(Name = "task_id"), Required] string userTaskId)
     {
-        var userTask = await mediator.Ask(new MapToUserTask(userTaskId));
+        var _userTaskId = await mediator.Ask(new GetUserTaskId(userTaskId));
 
         var query = new GetReviewAnswerTaskUseCase
         (
-            userTask: userTask
+            userTaskId: _userTaskId
         );
 
         var response = await mediator.Ask(query);
-        return Ok(Map(query.UserTask, response));
+        return Ok(Map(query.UserTaskId, response));
     }
 
     public override async Task<IActionResult> AcceptAnswer([FromRoute(Name = "task_id"), Required] string userTaskId, [FromBody] AcceptAnswer acceptAnswer)
     {
-        var userTask = await mediator.Ask(new MapToUserTask(userTaskId));
+        var _userTaskId = await mediator.Ask(new GetUserTaskId(userTaskId));
 
         var command = new AcceptAnswerUseCase
         (
             commandId: acceptAnswer.CommandId,
             questionId: new AnswerQuestionId(acceptAnswer.QuestionId),
-            userTask: userTask
+            userTaskId: _userTaskId
         );
 
         await mediator.Send(command);
@@ -36,13 +36,13 @@ public class ReviewAnswerTasksApi : Generated.Controllers.ReviewAnswerTasksApiCo
 
     public override async Task<IActionResult> RejectAnswer([FromRoute(Name = "task_id"), Required] string userTaskId, [FromBody] RejectAnswer rejectAnswer)
     {
-        var userTask = await mediator.Ask(new MapToUserTask(userTaskId));
+        var _userTaskId = await mediator.Ask(new GetUserTaskId(userTaskId));
 
         var command = new RejectAnswerUseCase
         (
             commandId: rejectAnswer.CommandId,
             questionId: new AnswerQuestionId(rejectAnswer.QuestionId),
-            userTask: userTask,
+            userTaskId: _userTaskId,
             rejection: rejectAnswer.Rejection
         );
 
@@ -50,12 +50,12 @@ public class ReviewAnswerTasksApi : Generated.Controllers.ReviewAnswerTasksApiCo
         return this.Accepted();
     }
 
-    private ReviewAnswerTask Map(IUserTask userTask, GetReviewAnswerTaskUseCase.Response response)
+    private ReviewAnswerTask Map(IUserTaskId userTaskId, GetReviewAnswerTaskUseCase.Response response)
     {
         return new ReviewAnswerTask()
         {
             QuestionId = response.QuestionId.Id,
-            UserTaskId = userTask.UserTaskId,
+            UserTaskId = userTaskId.Id,
             RecievedOn = response.AskedOn,
             Subject = response.Subject,
             Question = response.Question,

@@ -11,7 +11,7 @@ public class GetReviewAnswerTaskUseCaseHandler : IQueryHandler<GetReviewAnswerTa
     [IsUserTaskOwner]
     public async Task<GetReviewAnswerTaskUseCase.Response> Handle(GetReviewAnswerTaskUseCase query, CancellationToken cancellationToken)
     {
-        var task = await mediator.Ask(new GetUserTask(query.UserTask));
+        var task = await mediator.Ask(new GetUserTask(query.UserTaskId));
         var questionId = new AnswerQuestionId(task.ReferenceId);
         var instance = await mediator.Ask(new GetAnswerQuestion(questionId));
 

@@ -1,13 +1,13 @@
 namespace Domain.Abstractions.UseCases;
 
-public class GetReviewAnswerTaskUseCase : IQuery<GetReviewAnswerTaskUseCase.Response>, IHasUserTask
+public class GetReviewAnswerTaskUseCase : IQuery<GetReviewAnswerTaskUseCase.Response>, IHasUserTaskId
 {
-    public GetReviewAnswerTaskUseCase(IUserTask userTask)
+    public GetReviewAnswerTaskUseCase(IUserTaskId userTaskId)
     {
-        UserTask = userTask;
+        UserTaskId = userTaskId;
     }
 
-    public IUserTask UserTask { get; }
+    public IUserTaskId UserTaskId { get; }
 
     public class Response : IHasUserTaskClaim
     {

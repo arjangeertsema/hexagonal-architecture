@@ -1,8 +1,8 @@
 namespace Domain.Abstractions.Events;
 
-public class AnswerRejectedEvent : VersionedDomainEvent<AnswerQuestionId>, IHasUserTask
+public class AnswerRejectedEvent : VersionedDomainEvent<AnswerQuestionId>, IHasUserTaskId
 {
-    public AnswerRejectedEvent(AnswerQuestionId aggregateId, IUserTask userTask, string rejection, string rejectedBy, DateTime rejected)
+    public AnswerRejectedEvent(AnswerQuestionId aggregateId, IUserTaskId userTaskId, string rejection, string rejectedBy, DateTime rejected)
         : base(aggregateId)
 
     {
@@ -16,13 +16,13 @@ public class AnswerRejectedEvent : VersionedDomainEvent<AnswerQuestionId>, IHasU
             throw new ArgumentException($"'{nameof(rejectedBy)}' cannot be null or whitespace.", nameof(rejectedBy));
         }
 
-        UserTask = userTask;
+        UserTaskId = userTaskId;
         Rejection = rejection;
         RejectedBy = rejectedBy;
         Rejected = rejected;
     }
 
-    public IUserTask UserTask { get; }
+    public IUserTaskId UserTaskId { get; }
     public string Rejection { get; }
     public string RejectedBy { get; }
     public DateTime Rejected { get; }

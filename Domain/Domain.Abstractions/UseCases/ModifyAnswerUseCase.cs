@@ -1,8 +1,8 @@
 ﻿namespace Domain.Abstractions.UseCases;
 
-public class ModifyAnswerUseCase : Command, IHasUserTask
+public class ModifyAnswerUseCase : Command, IHasUserTaskId
 {
-    public ModifyAnswerUseCase(Guid commandId, AnswerQuestionId questionId, IUserTask userTask, string answer) : base(commandId)
+    public ModifyAnswerUseCase(Guid commandId, AnswerQuestionId questionId, IUserTaskId userTaskId, string answer) : base(commandId)
     {
         if (string.IsNullOrWhiteSpace(answer))
         {
@@ -10,11 +10,11 @@ public class ModifyAnswerUseCase : Command, IHasUserTask
         }
 
         QuestionId = questionId;
-        UserTask = userTask;
+        UserTaskId = userTaskId;
         Answer = answer;
     }
 
     public AnswerQuestionId QuestionId { get; }
-    public IUserTask UserTask { get; }
+    public IUserTaskId UserTaskId { get; }
     public string Answer { get; }
 }

@@ -20,12 +20,12 @@ public class ModifyAnswerUseCaseHandler : ICommandHandler<ModifyAnswerUseCase>
 
         aggregateRootTask.Result.ModifyAnswer
         (
-            userTask: command.UserTask,
+            userTaskId: command.UserTaskId,
             answer: command.Answer,
             modifiedBy: userIdTask.Result
         );
 
         await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRootTask.Result), cancellationToken);
-        await mediator.Send(new CompleteUserTask(command.UserTask), cancellationToken);
+        await mediator.Send(new CompleteUserTask(command.UserTaskId), cancellationToken);
     }
 }

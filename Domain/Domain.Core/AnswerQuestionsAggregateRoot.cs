@@ -41,7 +41,7 @@ public class AnswerQuestionsAggregateRoot : EventSourcedAggregateRoot<AnswerQues
         Asked = @event.Asked;
     }
 
-    public void AnswerQuestion(IUserTask userTask, string answer, string answeredBy)
+    public void AnswerQuestion(IUserTaskId userTaskId, string answer, string answeredBy)
     {
         if (string.IsNullOrWhiteSpace(answer))
         {
@@ -58,7 +58,7 @@ public class AnswerQuestionsAggregateRoot : EventSourcedAggregateRoot<AnswerQues
             throw new AnswerQuestionsException("Question is already answered.");
         }
 
-        RaiseEvent(new QuestionAnsweredEvent(Id, userTask, answer, answeredBy, DateTime.Now));
+        RaiseEvent(new QuestionAnsweredEvent(Id, userTaskId, answer, answeredBy, DateTime.Now));
     }
 
     internal void Apply(QuestionAnsweredEvent @event)
@@ -68,7 +68,7 @@ public class AnswerQuestionsAggregateRoot : EventSourcedAggregateRoot<AnswerQues
         Answered = @event.Answered;
     }
 
-    public void AcceptAnswer(IUserTask userTask, string acceptedBy)
+    public void AcceptAnswer(IUserTaskId userTaskId, string acceptedBy)
     {
         if (string.IsNullOrWhiteSpace(acceptedBy))
         {
@@ -90,7 +90,7 @@ public class AnswerQuestionsAggregateRoot : EventSourcedAggregateRoot<AnswerQues
             throw new AnswerQuestionsException("Answer may not be reviewed by the same person.");
         }
 
-        RaiseEvent(new AnswerAcceptedEvent(Id, userTask, acceptedBy, DateTime.Now));
+        RaiseEvent(new AnswerAcceptedEvent(Id, userTaskId, acceptedBy, DateTime.Now));
     }
 
     internal void Apply(AnswerAcceptedEvent @event)
@@ -99,7 +99,7 @@ public class AnswerQuestionsAggregateRoot : EventSourcedAggregateRoot<AnswerQues
         Accepted = @event.Accepted;
     }
 
-    public void RejectAnswer(IUserTask userTask, string rejection, string rejectedBy)
+    public void RejectAnswer(IUserTaskId userTaskId, string rejection, string rejectedBy)
     {
         if (string.IsNullOrWhiteSpace(rejection))
         {
@@ -126,7 +126,7 @@ public class AnswerQuestionsAggregateRoot : EventSourcedAggregateRoot<AnswerQues
             throw new AnswerQuestionsException("Answer may not be reviewed by the same person.");
         }
 
-        RaiseEvent(new AnswerRejectedEvent(Id, userTask, rejection, rejectedBy, DateTime.Now));
+        RaiseEvent(new AnswerRejectedEvent(Id, userTaskId, rejection, rejectedBy, DateTime.Now));
     }
 
     internal void Apply(AnswerRejectedEvent @event)
@@ -136,7 +136,7 @@ public class AnswerQuestionsAggregateRoot : EventSourcedAggregateRoot<AnswerQues
         Rejected = @event.Rejected;
     }
 
-    public void ModifyAnswer(IUserTask userTask, string answer, string modifiedBy)
+    public void ModifyAnswer(IUserTaskId userTaskId, string answer, string modifiedBy)
     {
         if (string.IsNullOrWhiteSpace(answer))
         {
@@ -168,7 +168,7 @@ public class AnswerQuestionsAggregateRoot : EventSourcedAggregateRoot<AnswerQues
             throw new AnswerQuestionsException("Answer must be modified by the same person.");
         }
 
-        RaiseEvent(new AnswerModifiedEvent(Id, userTask, answer, modifiedBy, DateTime.Now));
+        RaiseEvent(new AnswerModifiedEvent(Id, userTaskId, answer, modifiedBy, DateTime.Now));
     }
 
     internal void Apply(AnswerModifiedEvent @event)

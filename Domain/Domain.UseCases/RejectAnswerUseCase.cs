@@ -19,12 +19,12 @@ public class RejectAnswerUseCaseHandler : ICommandHandler<RejectAnswerUseCase>
 
         aggregateRootTask.Result.RejectAnswer
         (
-            userTask: command.UserTask,
+            userTaskId: command.UserTaskId,
             rejection: command.Rejection,
             rejectedBy: userIdTask.Result
         );
 
         await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRootTask.Result), cancellationToken);
-        await mediator.Send(new CompleteUserTask(command.UserTask, new { ReviewResult = "Accepted" }), cancellationToken);        
+        await mediator.Send(new CompleteUserTask(command.UserTaskId, new { ReviewResult = "Accepted" }), cancellationToken);        
     }
 }
