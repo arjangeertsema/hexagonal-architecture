@@ -1,15 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk" InitialTargets="DownloadFeatures">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <IsPackable>false</IsPackable>
-        <ProcessFeature>https://raw.githubusercontent.com/synionnl/website/v0.0.1-alpha/docs/blog/bizdevops/living-documentation/process.feature</ProcessFeature>
     </PropertyGroup>
-    
-    <Target Name="DownloadFeatures">
-        <DownloadFile SourceUrl="$(ProcessFeature)" DestinationFolder="$(MSBuildProjectDirectory)/Generated/Features">
-            <Output TaskParameter="DownloadedFile" ItemName="Features" />
-        </DownloadFile>
-    </Target>
 
     <ItemGroup>
         <ProjectReference Include="..\Adapters.Zeebe\Adapters.Zeebe.csproj" />
