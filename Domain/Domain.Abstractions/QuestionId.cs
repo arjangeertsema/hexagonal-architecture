@@ -1,12 +1,12 @@
 namespace Domain.Abstractions;
 
-public class AnswerQuestionId : EntityId
+public class QuestionId : EntityId
 {
     public Guid Id { get; private set; }
 
-    public AnswerQuestionId(Guid id) => this.Id = id;
+    public QuestionId(Guid id) => this.Id = id;
 
-    public AnswerQuestionId(string id) : base(id) { }
+    public QuestionId(string id) : base(id) { }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

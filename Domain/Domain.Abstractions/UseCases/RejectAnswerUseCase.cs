@@ -2,7 +2,7 @@
 
 public class RejectAnswerUseCase : Command, IHasUserTaskId
 {
-    public RejectAnswerUseCase(Guid commandId, AnswerQuestionId questionId, IUserTaskId userTaskId, string rejection) : base(commandId)
+    public RejectAnswerUseCase(Guid commandId, QuestionId questionId, IUserTaskId userTaskId, string rejection) : base(commandId)
     {
         if (string.IsNullOrWhiteSpace(rejection))
         {
@@ -13,7 +13,7 @@ public class RejectAnswerUseCase : Command, IHasUserTaskId
         UserTaskId = userTaskId ?? throw new ArgumentNullException(nameof(userTaskId));
     }
 
-    public AnswerQuestionId QuestionId { get; }
+    public QuestionId QuestionId { get; }
     public IUserTaskId UserTaskId { get; }
     public string Rejection { get; }
 }

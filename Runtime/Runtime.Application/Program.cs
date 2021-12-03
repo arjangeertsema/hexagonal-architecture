@@ -14,7 +14,7 @@ builder.Services
 
     // Add Domain implementations
     .AddDCoreDomainServices()
-    .AddDUseCasesDomainServices()
+    .AddUseCasesDomainServices()
 
     // Add Adapter implementations
     .AddEFAdapterServices(builder.Configuration)

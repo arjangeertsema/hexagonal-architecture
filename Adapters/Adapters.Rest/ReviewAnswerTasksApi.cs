@@ -8,45 +8,51 @@ public class ReviewAnswerTasksApi : Generated.Controllers.ReviewAnswerTasksApiCo
 
     public override async Task<IActionResult> GetReviewAnswerTask([FromRoute(Name = "task_id"), Required] string userTaskId)
     {
-        var _userTaskId = await mediator.Ask(new GetUserTaskId(userTaskId));
+        var cancellationToken = HttpContext.RequestAborted;
+        var _userTaskId = await mediator.Ask(new GetUserTaskId(userTaskId), cancellationToken);
 
         var query = new GetReviewAnswerTaskUseCase
         (
             userTaskId: _userTaskId
         );
 
-        var response = await mediator.Ask(query);
+        var response = await mediator.Ask(query, cancellationToken);
+        
         return Ok(Map(response));
     }
 
     public override async Task<IActionResult> AcceptAnswer([FromRoute(Name = "task_id"), Required] string userTaskId, [FromBody] AcceptAnswer acceptAnswer)
     {
-        var _userTaskId = await mediator.Ask(new GetUserTaskId(userTaskId));
+        var cancellationToken = HttpContext.RequestAborted;
+        var _userTaskId = await mediator.Ask(new GetUserTaskId(userTaskId), cancellationToken);
 
         var command = new AcceptAnswerUseCase
         (
             commandId: acceptAnswer.CommandId,
-            questionId: new AnswerQuestionId(acceptAnswer.QuestionId),
+            questionId: new QuestionId(acceptAnswer.QuestionId),
             userTaskId: _userTaskId
         );
 
-        await mediator.Send(command);
+        await mediator.Send(command, cancellationToken);
+
         return this.Accepted();
     }
 
     public override async Task<IActionResult> RejectAnswer([FromRoute(Name = "task_id"), Required] string userTaskId, [FromBody] RejectAnswer rejectAnswer)
     {
-        var _userTaskId = await mediator.Ask(new GetUserTaskId(userTaskId));
+        var cancellationToken = HttpContext.RequestAborted;
+        var _userTaskId = await mediator.Ask(new GetUserTaskId(userTaskId), cancellationToken);
 
         var command = new RejectAnswerUseCase
         (
             commandId: rejectAnswer.CommandId,
-            questionId: new AnswerQuestionId(rejectAnswer.QuestionId),
+            questionId: new QuestionId(rejectAnswer.QuestionId),
             userTaskId: _userTaskId,
             rejection: rejectAnswer.Rejection
         );
 
-        await mediator.Send(command);
+        await mediator.Send(command, cancellationToken);
+
         return this.Accepted();
     }
 

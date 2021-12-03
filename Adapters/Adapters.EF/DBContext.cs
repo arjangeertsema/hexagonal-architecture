@@ -1,10 +1,8 @@
-using Adapters.EF.Models;
-
 namespace Adapters.EF;
 
-public class DbContextAdapter : Microsoft.EntityFrameworkCore.DbContext
+public class DBContext : Microsoft.EntityFrameworkCore.DbContext
 {
-    public DbContextAdapter(DbContextOptions<DbContextAdapter> options) : base(options) { }
+    public DBContext(DbContextOptions<DBContext> options) : base(options) { }
 
     public DbSet<AnswerQuestion> AnswerQuestions { get; set; }
     

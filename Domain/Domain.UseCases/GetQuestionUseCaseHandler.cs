@@ -14,9 +14,9 @@ public class GetQuestionUseCaseHandler :
     [ResponseNotDefault]
     public async Task<GetQuestionUseCase.Response> Handle(GetQuestionUseCase query, CancellationToken cancellationToken)
     {
-        var answerQuestion = await mediator.Ask(new GetAnswerQuestion(query.QuestionId));
+        var question = await mediator.Ask(new GetQuestion(query.QuestionId));
 
-        return Map(answerQuestion);
+        return Map(question);
     }
 
     public Task Authorize(string identity, GetQuestionUseCase query, GetQuestionUseCase.Response response)
@@ -24,7 +24,7 @@ public class GetQuestionUseCaseHandler :
         throw new NotImplementedException();
     }
 
-    private GetQuestionUseCase.Response Map(GetAnswerQuestion.Response answerQuestion)
+    private GetQuestionUseCase.Response Map(GetQuestion.Response answerQuestion)
     {
         return new GetQuestionUseCase.Response
         (

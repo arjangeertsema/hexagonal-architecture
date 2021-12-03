@@ -13,7 +13,7 @@ public class GetQuestionsUseCase : IQuery<IEnumerable<GetQuestionsUseCase.Respon
 
     public class Response
     {
-        public Response(AnswerQuestionId questionId, string subject, string question, DateTime asked, string askedBy, DateTime lastActivity, AnswerQuestionStatus status)
+        public Response(QuestionId questionId, string subject, string question, DateTime asked, string askedBy, DateTime lastActivity, AnswerQuestionStatus status)
         {
             if (string.IsNullOrEmpty(subject))
             {
@@ -39,7 +39,7 @@ public class GetQuestionsUseCase : IQuery<IEnumerable<GetQuestionsUseCase.Respon
             Status = status;
         }
 
-        public AnswerQuestionId QuestionId { get; }
+        public QuestionId QuestionId { get; }
         public string Subject { get; }
         public string Question { get; }
         public DateTime Asked { get; }

@@ -1,9 +1,9 @@
 namespace Adapters.Zeebe;
 
 [ServiceLifetime(ServiceLifetime.Scoped)]
-public class ZeebeService :
+public class ZeebeService :    
     Generated.JobHandlers.AnswerQuestionsJobHandlers,
-    IDomainEventHandler<QuestionRecievedEvent, AnswerQuestionId>
+    IDomainEventHandler<QuestionRecievedEvent, QuestionId>
 {
     private const string QUESTION_RECIEVED_MESSAGE = "Message_QuestionRecieved_V1";
     private readonly IZeebeClient zeebeClient;
@@ -26,7 +26,7 @@ public class ZeebeService :
 
         var state = new
         {
-            @event.AggregateRootId,
+            ReferenceId = @event.AggregateRootId.ToString(),
             SendAnswerCommandId = Guid.NewGuid(),
             SendQuestionAnsweredEventCommandId = Guid.NewGuid()
         };

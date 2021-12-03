@@ -2,7 +2,7 @@ namespace Domain.Abstractions.UseCases;
 
 public class AskQuestionUseCase : Command
 {
-    public AskQuestionUseCase(Guid commandId, AnswerQuestionId questionId, string subject, string question, string askedBy) : base(commandId)
+    public AskQuestionUseCase(Guid commandId, QuestionId questionId, string subject, string question, string askedBy) : base(commandId)
     {
         if (string.IsNullOrWhiteSpace(subject))
         {
@@ -25,7 +25,7 @@ public class AskQuestionUseCase : Command
         AskedBy = askedBy;
     }
 
-    public AnswerQuestionId QuestionId { get; }
+    public QuestionId QuestionId { get; }
     public string Subject { get; }
     public string Question { get; }
     public string AskedBy { get; }

@@ -1,7 +1,13 @@
 namespace Domain.Abstractions.Models;
 
-public struct Recipient
+public class Recipient : ValueObject
 {
     public string Name { get; }
     public string EmailAddress { get; }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Name;
+        yield return EmailAddress;
+    }
 }

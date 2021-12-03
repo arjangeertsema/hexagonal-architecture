@@ -10,7 +10,7 @@ public class GetAnswerQuestionTaskUseCase : IQuery<GetAnswerQuestionTaskUseCase.
 
     public class Response : IHasUserTaskClaim
     {
-        public Response(AnswerQuestionId questionId, IUserTaskId userTaskId, IUserTaskClaim userTaskClaim, DateTime asked, string askedBy, string subject, string question)
+        public Response(QuestionId questionId, IUserTaskId userTaskId, IUserTaskClaim userTaskClaim, DateTime asked, string askedBy, string subject, string question)
         {
             if (string.IsNullOrEmpty(askedBy))
             {
@@ -36,7 +36,7 @@ public class GetAnswerQuestionTaskUseCase : IQuery<GetAnswerQuestionTaskUseCase.
             this.Question = question;
         }
 
-        public AnswerQuestionId QuestionId { get; }
+        public QuestionId QuestionId { get; }
         public IUserTaskId UserTaskId { get; }
         public IUserTaskClaim UserTaskClaim { get; }
         public DateTime Asked { get; }

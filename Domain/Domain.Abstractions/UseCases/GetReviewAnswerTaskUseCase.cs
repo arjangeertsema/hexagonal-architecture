@@ -11,7 +11,7 @@ public class GetReviewAnswerTaskUseCase : IQuery<GetReviewAnswerTaskUseCase.Resp
 
     public class Response : IHasUserTaskId, IHasUserTaskClaim
     {
-        public AnswerQuestionId QuestionId { get; }
+        public QuestionId QuestionId { get; }
         public IUserTaskId UserTaskId { get; }
         public IUserTaskClaim UserTaskClaim { get; }
         public DateTime AskedOn { get; }
@@ -20,7 +20,7 @@ public class GetReviewAnswerTaskUseCase : IQuery<GetReviewAnswerTaskUseCase.Resp
         public string AskedBy { get; }
         public string Answer { get; }
 
-        public Response(AnswerQuestionId questionId, IUserTaskId userTaskId, IUserTaskClaim userTaskClaim, DateTime askedOn, string askedBy, string subject, string question, string answer)
+        public Response(QuestionId questionId, IUserTaskId userTaskId, IUserTaskClaim userTaskClaim, DateTime askedOn, string askedBy, string subject, string question, string answer)
         {
             if (string.IsNullOrEmpty(askedBy))
             {

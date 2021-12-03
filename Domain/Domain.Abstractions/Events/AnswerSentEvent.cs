@@ -1,9 +1,9 @@
 namespace Domain.Abstractions.Events;
 
-public class AnswerSentEvent : VersionedDomainEvent<AnswerQuestionId>
+public class AnswerSentEvent : VersionedDomainEvent<QuestionId>
 {
 
-    public AnswerSentEvent(AnswerQuestionId aggregateId, DateTime sent)
+    public AnswerSentEvent(QuestionId aggregateId, DateTime sent)
         : base(aggregateId)
 
     {

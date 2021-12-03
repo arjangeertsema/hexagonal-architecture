@@ -4,8 +4,13 @@ namespace Domain.UseCases;
 public class AcceptAnswerUseCaseHandler : ICommandHandler<AcceptAnswerUseCase>
 {
     private readonly IMediator mediator;
+    private readonly IQuestionService questionService;
 
-    public AcceptAnswerUseCaseHandler(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+    public AcceptAnswerUseCaseHandler(IMediator mediator, IQuestionService questionService)
+    {
+        this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        this.questionService = questionService ?? throw new ArgumentNullException(nameof(questionService));
+    }
 
     [HasPermission("REVIEW_ANSWER")]
     [IsUserTaskOwner]
@@ -13,18 +18,15 @@ public class AcceptAnswerUseCaseHandler : ICommandHandler<AcceptAnswerUseCase>
     [MakeIdempotent]
     public async Task Handle(AcceptAnswerUseCase command, CancellationToken cancellationToken)
     {
-        var aggregateRootTask = mediator.Ask(new GetAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(command.QuestionId), cancellationToken);
-        var userIdTask = mediator.Ask(new GetUserId(), cancellationToken);
-
-        await Task.WhenAll(aggregateRootTask, userIdTask);
-
-        aggregateRootTask.Result.AcceptAnswer
+        var (question, userId) = await TaskUtil.WhenAll
         (
-            userTaskId: command.UserTaskId,
-            acceptedBy: userIdTask.Result
+            questionService.Get(command.QuestionId, cancellationToken),
+            mediator.Ask(new GetUserId(), cancellationToken)
         );
- 
-        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRootTask.Result), cancellationToken);
+
+        question.DraftAnswer.Accept(userId);
+
+        await questionService.Save(question, cancellationToken);
         await mediator.Send(new CompleteUserTask(command.UserTaskId, new KeyValuePair<string, object>("ReviewResult", "Accepted")), cancellationToken);
     }
 }

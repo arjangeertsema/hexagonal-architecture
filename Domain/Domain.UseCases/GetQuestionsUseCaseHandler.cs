@@ -13,9 +13,9 @@ public class GetQuestionsUseCaseHandler :
     [IsAuthorized]
     public async Task<IEnumerable<GetQuestionsUseCase.Response>> Handle(GetQuestionsUseCase query, CancellationToken cancellationToken)
     {
-        var answerQuestions = await mediator.Ask(new GetAnswerQuestions(query.Limit, query.Offset));
+        var questions = await mediator.Ask(new GetQuestions(query.Limit, query.Offset));
 
-        return answerQuestions.Select(q => Map(q));
+        return questions.Select(q => Map(q));
     }
 
     public Task Authorize(string identity, GetQuestionsUseCase query, IEnumerable<GetQuestionsUseCase.Response> response)
@@ -23,7 +23,7 @@ public class GetQuestionsUseCaseHandler :
         throw new NotImplementedException();
     }
 
-    private GetQuestionsUseCase.Response Map(GetAnswerQuestions.Response answerQuestion)
+    private GetQuestionsUseCase.Response Map(GetQuestions.Response answerQuestion)
     {
         return new GetQuestionUseCase.Response
         (

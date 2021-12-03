@@ -4,12 +4,12 @@
 public class AskQuestionUseCaseHandler : ICommandHandler<AskQuestionUseCase>
 {
     private readonly IMediator mediator;
-    private readonly IAnswerQuestionsAggregateRootFactory aggregateRootFactory;
+    private readonly IQuestionService questionService;
 
-    public AskQuestionUseCaseHandler(IMediator mediator, IAnswerQuestionsAggregateRootFactory aggregateRootFactory)
+    public AskQuestionUseCaseHandler(IMediator mediator, IQuestionService questionService)
     {
         this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        this.aggregateRootFactory = aggregateRootFactory ?? throw new ArgumentNullException(nameof(aggregateRootFactory));
+        this.questionService = questionService ?? throw new ArgumentNullException(nameof(questionService));
     }
 
     [HasPermission("ASK_QUESTION")]
@@ -17,7 +17,7 @@ public class AskQuestionUseCaseHandler : ICommandHandler<AskQuestionUseCase>
     [MakeIdempotent]
     public async Task Handle(AskQuestionUseCase command, CancellationToken cancellationToken)
     {
-        var aggregateRoot = aggregateRootFactory.Create
+        var question = questionService.Create
         (
             questionId: command.QuestionId,
             subject: command.Subject,
@@ -25,6 +25,6 @@ public class AskQuestionUseCaseHandler : ICommandHandler<AskQuestionUseCase>
             askedBy: command.AskedBy
         );
 
-        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRoot), cancellationToken);
+        await questionService.Save(question, cancellationToken);
     }
 }

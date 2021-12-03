@@ -10,49 +10,58 @@ public class QuestionsApi : Generated.Controllers.QuestionsApiController
 
     public override async Task<IActionResult> RegisterQuestion([FromBody] RegisterQuestion registerQuestion)
     {
+        var cancellationToken = HttpContext.RequestAborted;
+
         var command = new AskQuestionUseCase
         (
             commandId: registerQuestion.CommandId,
-            questionId: new AnswerQuestionId(registerQuestion.QuestionId),
+            questionId: new QuestionId(registerQuestion.QuestionId),
             subject: registerQuestion.Subject,
             question: registerQuestion.Question,
             askedBy: registerQuestion.Sender
         );
-        await this.mediator.Send(command);
+        await this.mediator.Send(command, cancellationToken);
+
         return CreatedAtAction(nameof(GetQuestion), new { question_id = registerQuestion.QuestionId });
     }
 
     public override async Task<IActionResult> GetQuestions([FromQuery(Name = "offset")] int? offset, [FromQuery(Name = "limit")] int? limit)
     {
+        var cancellationToken = HttpContext.RequestAborted;
         var query = new GetQuestionsUseCase
         (
             offset: offset ?? 0,
             limit: limit ?? 10
         );
 
-        var response = await mediator.Ask(query);
+        var response = await mediator.Ask(query, cancellationToken);
+
         return Ok(Map(response));
     }
     public override async Task<IActionResult> GetQuestion([FromRoute(Name = "question_id"), Required] Guid questionId)
     {
+        var cancellationToken = HttpContext.RequestAborted;
         var query = new GetQuestionUseCase
         (
-            questionId: new AnswerQuestionId(questionId)
+            questionId: new QuestionId(questionId)
         );
 
-        var response = await mediator.Ask(query);
+        var response = await mediator.Ask(query, cancellationToken);
+
         return Ok(Map(response));
     }
 
     public override async Task<IActionResult> EndQuestion([FromRoute(Name = "question_id"), Required] Guid questionId, [FromBody] EndQuestion endQuestion)
     {
+        var cancellationToken = HttpContext.RequestAborted;
         var command = new EndQuestionUseCase
         (
             commandId: endQuestion.CommandId,
-            questionId: new AnswerQuestionId(questionId)
+            questionId: new QuestionId(questionId)
         );
 
-        await this.mediator.Send(command);
+        await this.mediator.Send(command, cancellationToken);
+
         return Accepted();
     }
 

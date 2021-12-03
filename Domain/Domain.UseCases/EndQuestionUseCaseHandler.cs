@@ -4,23 +4,27 @@ namespace Domain.UseCases;
 public class EndQuestionUseCaseHandler : ICommandHandler<EndQuestionUseCase>
 {
     private readonly IMediator mediator;
+    private readonly IQuestionService questionService;
 
-    public EndQuestionUseCaseHandler(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-
+    public EndQuestionUseCaseHandler(IMediator mediator, IQuestionService questionService)
+    {
+        this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        this.questionService = questionService ?? throw new ArgumentNullException(nameof(questionService));
+    }
+    
     [HasPermission("END_QUESTION")]
     [Transactional]
     [MakeIdempotent]
     public async Task Handle(EndQuestionUseCase command, CancellationToken cancellationToken)
     {
-        var aggregateRoot = await mediator.Ask(new GetAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(command.QuestionId), cancellationToken);
-
-        var userId = await mediator.Ask(new GetUserId(), cancellationToken);
-
-        aggregateRoot.EndQuestion
+        var (question, userId) = await TaskUtil.WhenAll
         (
-            endedBy: userId
+            questionService.Get(command.QuestionId, cancellationToken),
+            mediator.Ask(new GetUserId(), cancellationToken)
         );
 
-        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRoot), cancellationToken);
+        question.Revoke(userId);
+
+        await questionService.Save(question, cancellationToken);
     }
 }

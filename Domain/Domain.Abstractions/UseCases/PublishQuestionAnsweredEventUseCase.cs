@@ -2,10 +2,10 @@ namespace Domain.Abstractions.UseCases;
 
 public class PublishQuestionAnsweredEventUseCase : Command
 {
-    public PublishQuestionAnsweredEventUseCase(Guid commandId, AnswerQuestionId questionId) : base(commandId)
+    public PublishQuestionAnsweredEventUseCase(Guid commandId, QuestionId questionId) : base(commandId)
     {
         QuestionId = questionId ?? throw new ArgumentNullException(nameof(questionId));
     }
     
-    public AnswerQuestionId QuestionId { get; }
+    public QuestionId QuestionId { get; }
 }

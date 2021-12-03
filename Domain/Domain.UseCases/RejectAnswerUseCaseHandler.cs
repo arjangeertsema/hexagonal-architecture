@@ -4,27 +4,29 @@ namespace Domain.UseCases;
 public class RejectAnswerUseCaseHandler : ICommandHandler<RejectAnswerUseCase>
 {
     private readonly IMediator mediator;
+    private readonly IQuestionService questionService;
 
-    public RejectAnswerUseCaseHandler(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-
+    public RejectAnswerUseCaseHandler(IMediator mediator, IQuestionService questionService)
+    {
+        this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        this.questionService = questionService ?? throw new ArgumentNullException(nameof(questionService));
+    }
+    
     [HasPermission("REVIEW_ANSWER")]
     [IsUserTaskOwner]
     [Transactional]
     [MakeIdempotent]
     public async Task Handle(RejectAnswerUseCase command, CancellationToken cancellationToken)
     {
-        var aggregateRootTask = mediator.Ask(new GetAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(command.QuestionId), cancellationToken);
-        var userIdTask = mediator.Ask(new GetUserId(), cancellationToken);
-        await Task.WhenAll(aggregateRootTask, userIdTask);
-
-        aggregateRootTask.Result.RejectAnswer
+        var (question, userId) = await TaskUtil.WhenAll
         (
-            userTaskId: command.UserTaskId,
-            rejection: command.Rejection,
-            rejectedBy: userIdTask.Result
+            questionService.Get(command.QuestionId, cancellationToken),
+            mediator.Ask(new GetUserId(), cancellationToken)
         );
 
-        await mediator.Send(new SaveAggregateRoot<IAnswerQuestionsAggregateRoot, AnswerQuestionId>(aggregateRootTask.Result), cancellationToken);
+        question.DraftAnswer.Reject(command.Rejection, userId);
+
+        await questionService.Save(question, cancellationToken);
         await mediator.Send(new CompleteUserTask(command.UserTaskId, new KeyValuePair<string, object>("ReviewResult", "Rejected")), cancellationToken);        
     }
 }

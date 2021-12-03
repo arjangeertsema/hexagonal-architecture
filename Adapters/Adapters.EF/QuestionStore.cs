@@ -1,21 +1,21 @@
 namespace Adapters.EF;
 
 [ServiceLifetime(ServiceLifetime.Scoped)]
-public class AnswerQuestionStore :
+public class QuestionStore :
     IEventHandler<QuestionRecievedEvent>,
     IEventHandler<QuestionAnsweredEvent>,
     IEventHandler<AnswerRejectedEvent>,
     IEventHandler<AnswerAcceptedEvent>,
     IEventHandler<AnswerModifiedEvent>,
     IEventHandler<AnswerSentEvent>,
-    IQueryHandler<GetAnswerQuestion, GetAnswerQuestion.Response>,
-    IQueryHandler<GetAnswerQuestions, IEnumerable<GetAnswerQuestions.Response>>
+    IQueryHandler<GetQuestion, GetQuestion.Response>,
+    IQueryHandler<GetQuestions, IEnumerable<GetQuestions.Response>>
 {
     private readonly DbContextAdapter context;
 
-    public AnswerQuestionStore(DbContextAdapter context) => this.context = context ?? throw new ArgumentNullException(nameof(context));
+    public QuestionStore(DbContextAdapter context) => this.context = context ?? throw new ArgumentNullException(nameof(context));
 
-    public Task<GetAnswerQuestion.Response> Handle(GetAnswerQuestion query, CancellationToken cancellationToken)
+    public Task<GetQuestion.Response> Handle(GetQuestion query, CancellationToken cancellationToken)
     {
         return context.AnswerQuestions
             .Where(m => m.Id.Equals(query.QuestionId.ToString()))
@@ -23,7 +23,7 @@ public class AnswerQuestionStore :
             .SingleOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<GetAnswerQuestions.Response>> Handle(GetAnswerQuestions query, CancellationToken cancellationToken)
+    public async Task<IEnumerable<GetQuestions.Response>> Handle(GetQuestions query, CancellationToken cancellationToken)
     {
         var results = await context.AnswerQuestions
             .Skip(query.Offset)
@@ -36,11 +36,6 @@ public class AnswerQuestionStore :
 
     public async Task Handle(QuestionRecievedEvent @event, CancellationToken cancellationToken)
     {
-        if (@event is null)
-        {
-            throw new ArgumentNullException(nameof(@event));
-        }
-
         var model = new AnswerQuestion()
         {
             Id = @event.AggregateRootId.ToString(),
@@ -61,7 +56,7 @@ public class AnswerQuestionStore :
         model.Answered = @event.Answered;
         model.AnsweredBy = @event.AnsweredBy;
 
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task Handle(AnswerRejectedEvent @event, CancellationToken cancellationToken)
@@ -72,7 +67,7 @@ public class AnswerQuestionStore :
         model.Rejected = @event.Rejected;
         model.RejectedBy = @event.RejectedBy;
 
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task Handle(AnswerAcceptedEvent @event, CancellationToken cancellationToken)
@@ -82,7 +77,7 @@ public class AnswerQuestionStore :
         model.Accepted = @event.Accepted;
         model.AcceptedBy = @event.AcceptedBy;
 
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     public async  Task Handle(AnswerModifiedEvent @event, CancellationToken cancellationToken)
@@ -93,7 +88,7 @@ public class AnswerQuestionStore :
         model.Modified = @event.Modified;
         model.ModifiedBy = @event.ModifiedBy;
 
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task Handle(AnswerSentEvent @event, CancellationToken cancellationToken)
@@ -102,17 +97,17 @@ public class AnswerQuestionStore :
 
         model.Sent = @event.Sent;
 
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
     }
 
-    private GetAnswerQuestion.Response MapToAnswerQuestion(AnswerQuestion answerQuestion)
+    private GetQuestion.Response MapToAnswerQuestion(AnswerQuestion answerQuestion)
     {
         if (answerQuestion == null)
             return null;
 
-        return new GetAnswerQuestion.Response
+        return new GetQuestion.Response
         (
-            questionId: new Domain.Abstractions.AnswerQuestionId(Guid.Parse(answerQuestion.Id)),
+            questionId: new Domain.Abstractions.QuestionId(Guid.Parse(answerQuestion.Id)),
             asked: answerQuestion.Asked,
             askedBy: answerQuestion.AskedBy,
             subject: answerQuestion.Subject,
@@ -124,14 +119,14 @@ public class AnswerQuestionStore :
         );
     }
 
-    private GetAnswerQuestions.Response MapToAnswerQuestions(AnswerQuestion answerQuestion)
+    private GetQuestions.Response MapToAnswerQuestions(AnswerQuestion answerQuestion)
     {
         if(answerQuestion == null)
             return null;
 
-        return new GetAnswerQuestions.Response
+        return new GetQuestions.Response
         (
-            questionId: new Domain.Abstractions.AnswerQuestionId(Guid.Parse(answerQuestion.Id)),
+            questionId: new Domain.Abstractions.QuestionId(Guid.Parse(answerQuestion.Id)),
             asked: answerQuestion.Asked,
             askedBy: answerQuestion.AskedBy,
             subject: answerQuestion.Subject,
@@ -164,11 +159,11 @@ public class AnswerQuestionStore :
         return new Dictionary<AnswerQuestionStatus, DateTime?>()
         {
             { AnswerQuestionStatus.ASKED, answerQuestion.Asked },
-            { AnswerQuestionStatus.ASKED, answerQuestion.Answered },
-            { AnswerQuestionStatus.ASKED, answerQuestion.Rejected },
-            { AnswerQuestionStatus.ASKED, answerQuestion.Accepted },
-            { AnswerQuestionStatus.ASKED, answerQuestion.Modified },
-            { AnswerQuestionStatus.ASKED, answerQuestion.Sent },
+            { AnswerQuestionStatus.ANSWERED, answerQuestion.Answered },
+            { AnswerQuestionStatus.REJECTED, answerQuestion.Rejected },
+            { AnswerQuestionStatus.ACCEPTED, answerQuestion.Accepted },
+            { AnswerQuestionStatus.MODIFIED, answerQuestion.Modified },
+            { AnswerQuestionStatus.SENT, answerQuestion.Sent },
         }
         .Where(kvp => kvp.Value.HasValue)
         .OrderByDescending(kvp => kvp.Value)

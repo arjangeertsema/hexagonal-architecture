@@ -1,3 +1,5 @@
+global using Common;
+
 global using Common.CQRS.Abstractions;
 global using Common.CQRS.Abstractions.Attributes;
 global using Common.CQRS.Abstractions.UseCases;
