@@ -14,9 +14,7 @@ public class QuestionService :
 
     public Task<IQuestion> Handle(GetQuestionAggregate query, CancellationToken cancellationToken)
         => mediator.Ask(new GetAggregateRoot<IQuestion, QuestionId>(query.QuestionId), cancellationToken);
-
-    public Task Handle(SaveQuestionAggregate command, CancellationToken cancellationToken)
-        => mediator.Send(new SaveAggregateRoot<IQuestion, QuestionId>(command.Question), cancellationToken);
-
     
+    public Task Handle(SaveQuestionAggregate command, CancellationToken cancellationToken)
+        => mediator.Send(new SaveAggregateRoot<IQuestion, QuestionId>(command.Question), cancellationToken);    
 }
