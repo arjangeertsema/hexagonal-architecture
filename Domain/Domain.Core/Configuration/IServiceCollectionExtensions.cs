@@ -7,7 +7,7 @@ public static class IServiceCollectionExtensions
         var assembly = typeof(IServiceCollectionExtensions).Assembly;
 
         return services
-            .AutowireDDD(assembly)
-            .AddSingleton<IQuestionService, QuestionService>();
+            .AutowireCQRS(assembly)
+            .AutowireDDD(assembly);
     }
 }

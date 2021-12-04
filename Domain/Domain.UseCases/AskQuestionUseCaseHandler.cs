@@ -4,27 +4,14 @@
 public class AskQuestionUseCaseHandler : ICommandHandler<AskQuestionUseCase>
 {
     private readonly IMediator mediator;
-    private readonly IQuestionService questionService;
 
-    public AskQuestionUseCaseHandler(IMediator mediator, IQuestionService questionService)
-    {
-        this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        this.questionService = questionService ?? throw new ArgumentNullException(nameof(questionService));
-    }
+    public AskQuestionUseCaseHandler(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
     [HasPermission("ASK_QUESTION")]
     [Transactional]
     [MakeIdempotent]
-    public async Task Handle(AskQuestionUseCase command, CancellationToken cancellationToken)
+    public Task Handle(AskQuestionUseCase command, CancellationToken cancellationToken)
     {
-        var question = questionService.Create
-        (
-            questionId: command.QuestionId,
-            subject: command.Subject,
-            question: command.Question,
-            askedBy: command.AskedBy
-        );
-
-        await questionService.Save(question, cancellationToken);
+        return mediator.Send(new CreateQuestionAggregate(command.QuestionId, command.Subject, command.Question, command.AskedBy), cancellationToken);
     }
 }

@@ -1,17 +1,22 @@
 namespace Domain.Core;
 
-public class QuestionService : IQuestionService
+public class QuestionService : 
+    IQueryHandler<GetQuestionAggregate, IQuestion>,
+    ICommandHandler<CreateQuestionAggregate>,
+    ICommandHandler<SaveQuestionAggregate>
 {
     private readonly IMediator mediator;
     
     public QuestionService(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     
-    public Task<IQuestion> Get(QuestionId questionId, CancellationToken cancellationToken)
-        => mediator.Ask(new GetAggregateRoot<IQuestion, QuestionId>(questionId), cancellationToken);
+    public Task Handle(CreateQuestionAggregate command, CancellationToken cancellationToken)
+        => Task.FromResult(Question.Create(command.QuestionId, command.Subject, command.Question, command.AskedBy));
 
-    public Task Save(IQuestion question, CancellationToken cancellationToken)
-        => mediator.Send(new SaveAggregateRoot<IQuestion, QuestionId>(question), cancellationToken);
+    public Task<IQuestion> Handle(GetQuestionAggregate query, CancellationToken cancellationToken)
+        => mediator.Ask(new GetAggregateRoot<IQuestion, QuestionId>(query.QuestionId), cancellationToken);
 
-    public IQuestion Create(QuestionId questionId, string subject, string question, string askedBy)
-        => Question.Create(questionId, subject, question, askedBy);
+    public Task Handle(SaveQuestionAggregate command, CancellationToken cancellationToken)
+        => mediator.Send(new SaveAggregateRoot<IQuestion, QuestionId>(command.Question), cancellationToken);
+
+    
 }

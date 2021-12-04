@@ -4,24 +4,19 @@ namespace Domain.UseCases;
 public class SendAnswerUseCaseHandler : ICommandHandler<SendAnswerUseCase>
 {
     private readonly IMediator mediator;
-    private readonly IQuestionService questionService;
 
-    public SendAnswerUseCaseHandler(IMediator mediator, IQuestionService questionService)
-    {
-        this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        this.questionService = questionService ?? throw new ArgumentNullException(nameof(questionService));
-    }
+    public SendAnswerUseCaseHandler(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     
     [HasPermission("SEND_ANSWER")]
     [Transactional]
     [MakeIdempotent]
     public async Task Handle(SendAnswerUseCase command, CancellationToken cancellationToken)
     {
-        var question = await questionService.Get(command.QuestionId, cancellationToken);
+        var question = await mediator.Ask(new GetQuestionAggregate(command.QuestionId), cancellationToken);
 
         var message = question.DraftAnswer.Send();
 
-        await questionService.Save(question, cancellationToken);
+        await mediator.Send(new SaveQuestionAggregate(question), cancellationToken);
         await mediator.Send(new SendMessage(message));
     }
 }

@@ -11,9 +11,9 @@ public class QuestionStore :
     IQueryHandler<GetQuestion, GetQuestion.Response>,
     IQueryHandler<GetQuestions, IEnumerable<GetQuestions.Response>>
 {
-    private readonly DbContextAdapter context;
+    private readonly DBContext context;
 
-    public QuestionStore(DbContextAdapter context) => this.context = context ?? throw new ArgumentNullException(nameof(context));
+    public QuestionStore(DBContext context) => this.context = context ?? throw new ArgumentNullException(nameof(context));
 
     public Task<GetQuestion.Response> Handle(GetQuestion query, CancellationToken cancellationToken)
     {

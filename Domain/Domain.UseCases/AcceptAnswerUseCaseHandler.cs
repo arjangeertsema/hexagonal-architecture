@@ -4,13 +4,8 @@ namespace Domain.UseCases;
 public class AcceptAnswerUseCaseHandler : ICommandHandler<AcceptAnswerUseCase>
 {
     private readonly IMediator mediator;
-    private readonly IQuestionService questionService;
 
-    public AcceptAnswerUseCaseHandler(IMediator mediator, IQuestionService questionService)
-    {
-        this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        this.questionService = questionService ?? throw new ArgumentNullException(nameof(questionService));
-    }
+    public AcceptAnswerUseCaseHandler(IMediator mediator) => this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
     [HasPermission("REVIEW_ANSWER")]
     [IsUserTaskOwner]
@@ -20,13 +15,13 @@ public class AcceptAnswerUseCaseHandler : ICommandHandler<AcceptAnswerUseCase>
     {
         var (question, userId) = await TaskUtil.WhenAll
         (
-            questionService.Get(command.QuestionId, cancellationToken),
+            mediator.Ask(new GetQuestionAggregate(command.QuestionId), cancellationToken),
             mediator.Ask(new GetUserId(), cancellationToken)
         );
 
         question.DraftAnswer.Accept(userId);
 
-        await questionService.Save(question, cancellationToken);
+        await mediator.Send(new SaveQuestionAggregate(question), cancellationToken);
         await mediator.Send(new CompleteUserTask(command.UserTaskId, new KeyValuePair<string, object>("ReviewResult", "Accepted")), cancellationToken);
     }
 }
