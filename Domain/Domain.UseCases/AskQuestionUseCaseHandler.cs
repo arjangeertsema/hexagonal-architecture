@@ -12,6 +12,13 @@ public class AskQuestionUseCaseHandler : ICommandHandler<AskQuestionUseCase>
     [MakeIdempotent]
     public Task Handle(AskQuestionUseCase command, CancellationToken cancellationToken)
     {
-        return mediator.Send(new CreateQuestionAggregate(command.QuestionId, command.Subject, command.Question, command.AskedBy), cancellationToken);
+        return mediator.Send(
+            new CreateQuestionAggregate
+            (
+                questionId: command.QuestionId,
+                subject: command.Subject,
+                question: command.Question,
+                askedBy: command.AskedBy
+            ), cancellationToken);
     }
 }
