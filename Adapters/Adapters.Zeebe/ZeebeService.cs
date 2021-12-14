@@ -65,9 +65,4 @@ public class ZeebeService :
 
         await mediator.Send(command, cancellationToken);
     }
-
-    public override Task<AnswerQuestionJobV1.Response> HandleJob(AnswerQuestionJobV1 job, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
 }
